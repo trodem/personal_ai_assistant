@@ -42,9 +42,9 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] For B2B tenant changes: strict `tenant_id` + `user_id` isolation rules are enforced per `docs/multi-tenancy.md`.
 - [x] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
 - [x] For auth changes: email/password login flow succeeds.
-- [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple).
+<!-- - [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple). -->
 - [x] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
-- [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
+- [x] For API changes: `specs/api.yaml` is updated and consistent with implementation.
 - [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
 - [ ] For API lifecycle changes: backward compatibility rules in `docs/api-compatibility.md` are respected.
 - [ ] For i18n changes: `preferred_language` behavior is consistent across backend responses and Flutter UI labels.

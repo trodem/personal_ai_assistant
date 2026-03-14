@@ -7,6 +7,8 @@ servers:
   - url: http://localhost:8000
 
 tags:
+  - name: Health
+  - name: Metrics
   - name: Voice
   - name: Memory
   - name: Attachments
@@ -19,6 +21,48 @@ tags:
   - name: Feedback
 
 paths:
+  /health/live:
+    get:
+      tags: [Health]
+      summary: Liveness probe
+      responses:
+        "200":
+          description: Service is alive.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Readiness probe
+      responses:
+        "200":
+          description: Service is ready.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+
+  /metrics:
+    get:
+      tags: [Metrics]
+      summary: Prometheus-style runtime and LLMOps metrics
+      responses:
+        "200":
+          description: Metrics payload.
+          content:
+            text/plain:
+              schema:
+                type: string
+
   /api/v1/voice/memory:
     post:
       tags: [Voice]
@@ -224,6 +268,12 @@ paths:
       security:
         - bearerAuth: []
       parameters:
+        - in: header
+          name: x-tenant-id
+          required: false
+          schema:
+            type: string
+          description: Required for tenant-aware tokens; must match token tenant claim.
         - in: query
           name: memory_type
           schema:
@@ -250,6 +300,8 @@ paths:
                       $ref: "#/components/schemas/MemoryRecord"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Tenant mismatch/missing tenant context for tenant-aware token.
 
   /api/v1/attachments:
     post:
@@ -741,6 +793,13 @@ paths:
       summary: List users (admin/author)
       security:
         - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-tenant-id
+          required: false
+          schema:
+            type: string
+          description: Required for tenant-aware tokens; must match token tenant claim.
       responses:
         "200":
           description: User list.
@@ -756,7 +815,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
-          description: Forbidden. Admin or Author role required.
+          description: Forbidden. Admin/Author role required, tenant mismatch, or MFA required for privileged role.
 
   /api/v1/admin/users/{id}/status:
     patch:
