@@ -12,13 +12,16 @@ def _build_settings_response(user: AuthenticatedUser) -> UserSettingsResponse:
     effective_language = get_preferred_language(user.tenant_id, user.user_id)
     billing_exempt = user.role in {"admin", "author"}
     role: Literal["user", "admin", "author"] = cast(Literal["user", "admin", "author"], user.role)
+    status: Literal["active", "suspended", "canceled"] = cast(
+        Literal["active", "suspended", "canceled"], user.status
+    )
     return UserSettingsResponse(
         user_id=user.user_id,
         email="",
         preferred_language=effective_language,
         auth_provider="password",
         role=role,
-        status="active",
+        status=status,
         mfa_enabled=user.mfa_enabled,
         subscription_plan="premium" if billing_exempt else "free",
         billing_exempt=billing_exempt,

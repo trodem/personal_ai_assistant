@@ -22,6 +22,7 @@ class AuthenticatedUser:
     tenant_id: str
     role: str
     mfa_enabled: bool
+    status: str
 
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -60,6 +61,7 @@ def build_dev_token(
     tenant_id: str | None = "tenant-default",
     role: str = "user",
     mfa_enabled: bool = False,
+    status: str = "active",
     ttl_seconds: int = 3600,
 ) -> str:
     secret = _dev_hs256_secret()
@@ -67,6 +69,7 @@ def build_dev_token(
         "sub": user_id,
         "role": role,
         "mfa_enabled": mfa_enabled,
+        "status": status,
         "exp": int(time.time()) + ttl_seconds,
     }
     if tenant_id:
@@ -193,6 +196,19 @@ def get_current_user(
     user_id = str(payload["sub"])
     role = str(payload.get("role", "user"))
     mfa_enabled = bool(payload.get("mfa_enabled", False))
+    account_status = str(payload.get("status", "active")).lower()
+    if account_status not in {"active", "suspended", "canceled"}:
+        raise AppError(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            code="auth.invalid_token",
+            message="Token account status is invalid.",
+        )
+    if account_status in {"suspended", "canceled"}:
+        raise AppError(
+            status_code=status.HTTP_403_FORBIDDEN,
+            code="auth.forbidden",
+            message="Account is not active.",
+        )
     token_tenant_id = str(payload.get("tenant_id", "")).strip()
     if token_tenant_id:
         if not x_tenant_id:
@@ -226,6 +242,7 @@ def get_current_user(
         tenant_id=effective_tenant,
         role=role,
         mfa_enabled=mfa_enabled,
+        status=account_status,
     )
 
 
