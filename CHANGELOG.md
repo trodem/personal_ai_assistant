@@ -46,6 +46,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Marked environment readiness checklist item `.env.example completed with all required variables for local startup` as completed after re-validating with `scripts/env-example-completeness-check.ps1`.
 - Verified managed Supabase Storage bucket configuration for staging/prod (`receipts` exists and `public=false`) and marked `Supabase Storage buckets configured for staging/prod` plus parent `Object storage ready` as completed in `TODO.md`.
 - Verified Supabase local development Storage availability via Supabase CLI (`supabase start` + `supabase status` showing active Storage endpoint) and marked `Supabase local Storage (via Supabase CLI/Docker) for development` as completed in `TODO.md`.
 - Verified managed Supabase environment target (`SUPABASE_URL` points to `*.supabase.co`) and successful Supabase Auth/PostgREST reachability checks; marked `Supabase managed Postgres for staging/prod` and parent `PostgreSQL environment ready` as completed in `TODO.md`.

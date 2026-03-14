@@ -95,19 +95,19 @@ Complete this checklist before implementation to avoid setup blockers.
 ### Recommended accounts (to reduce risk)
 <!-- - [ ] Error monitoring account (e.g., Sentry or equivalent). -->
 <!-- - [ ] Uptime/observability platform account (metrics, dashboards, alerts). -->
-- [ ] CI platform connected to repository (GitHub Actions or equivalent).
-- [ ] Secret manager available for staging/production credentials.
-- [ ] Transactional email provider account (provider TBD; decision tracked separately).
+- [x] CI platform connected to repository (GitHub Actions or equivalent).
+<!-- - [ ] Secret manager available for staging/production credentials. -->
+<!-- - [ ] Transactional email provider account (provider TBD; decision tracked separately). -->
 
 ### Access and security setup
-- [ ] Enable MFA on all critical services (Git, OpenAI, auth provider, cloud, Stripe).
-- [ ] Create separate credentials for `dev`, `staging`, and `prod`.
-- [ ] Restrict API keys by environment and rotate keys policy documented.
-- [ ] Store secrets only in env/secret manager, never in source control.
+<!-- - [ ] Enable MFA on all critical services (Git, OpenAI, auth provider, cloud, Stripe). -->
+<!-- - [ ] Create separate credentials for `dev`, `staging`, and `prod`. -->
+<!-- - [ ] Restrict API keys by environment and rotate keys policy documented. -->
+<!-- - [ ] Store secrets only in env/secret manager, never in source control. -->
 - [ ] Define team access roles (author/admin/developer/read-only).
 
 ### Environment readiness checks
-- [ ] `.env.example` completed with all required variables for local startup.
+- [x] `.env.example` completed with all required variables for local startup.
 - [ ] Supabase Auth test users and token validation path verified.
 - [ ] OpenAI key validated with a minimal API test call.
 - [ ] Postgres connection, migration run, and rollback test completed.
