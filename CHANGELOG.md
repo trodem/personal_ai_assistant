@@ -82,6 +82,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Updated `docs/model-registry.md` with concrete active runtime mappings (`memory_extraction`, `receipt_ocr_extraction`, `answer_generation`) and explicit rollback entries aligned with current backend telemetry identifiers and versions.
 - Added active AI cost controls in LLMOps runtime metrics: token budget tracking by plan (usage/utilization/breaches), per-user cost visibility via hashed user metrics, and daily spend spike alert gauges (`warning`/`critical`) based on 7-day baseline comparison.
 - Enabled browser CORS preflight support for protected APIs by adding FastAPI `CORSMiddleware` configuration and automated coverage for `OPTIONS` on `/api/v1/memories` with expected CORS headers.
+- Added Flutter UI design-system baseline with centralized theme tokens (`colors`, `spacing`, `radii`, `shadows`), reusable widgets (`AppPrimaryButton`, `AppSurfaceCard`), and app bootstrap wired to shared theme to prevent scattered hardcoded style usage; added Flutter analyze/test coverage for the new UI baseline.
 - Auth planning language normalized to include both email/password and OAuth SSO (Google/Apple) for MVP.
 - Database schema clarified for user isolation scope (`user_id` required on user-scoped tables) and extended with `qa_interactions` as canonical source for Q/A export history.
 - Trial lifecycle removed from planning/contracts by product decision; billing model is now strictly `free/premium` plus coupon/discount management.
