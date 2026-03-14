@@ -323,6 +323,15 @@ vector indexing
 
 AI workloads are handled by external AI APIs.
 
+Infrastructure scaling baseline (required for staging/prod):
+
+- cloud deployment with at least two backend instances per environment
+- managed load balancer in front of backend instances
+- health-check based routing using `/health/live` and `/health/ready`
+- horizontal autoscaling policy based on CPU, memory, and request latency
+- zero-downtime rollout strategy (rolling or blue/green)
+- rate limiting and timeout policy enforced at edge/load-balancer layer
+
 ---
 
 # Security Principles

@@ -446,6 +446,11 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P13 - Production Readiness and Launch
 
 - [ ] Automated staging deployment.
+- [ ] Deploy backend in cloud with minimum 2 instances for staging/prod.
+- [ ] Configure managed load balancer with health-check routing (`/health/live`, `/health/ready`).
+- [ ] Define and implement autoscaling policy (CPU/memory/latency thresholds + min/max replicas).
+- [ ] Configure zero-downtime rollout strategy (rolling update or blue/green).
+- [ ] Enforce edge timeout/rate-limit baseline at load balancer or API gateway layer.
 - [ ] Automated post-deploy smoke tests.
 - [ ] Full monitoring:
 - [ ] uptime

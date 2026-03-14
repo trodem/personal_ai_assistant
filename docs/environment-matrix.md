@@ -73,6 +73,9 @@ Requirements:
 | Storage | Supabase local Storage | Supabase managed Storage | Supabase managed Storage |
 | Billing | disabled or mocked | Stripe test mode | Stripe live mode |
 | AI provider | OpenAI dev key | OpenAI staging key | OpenAI prod key |
+| Backend runtime | local Docker | cloud runtime (min 2 instances) | cloud runtime (min 2 instances) |
+| Load balancing | local direct access | managed LB + health checks | managed LB + health checks |
+| Autoscaling | optional/manual | enabled with bounded min/max | enabled with bounded min/max |
 | Observability | local logs | full metrics + alerts | full metrics + alerts |
 
 ---

@@ -232,6 +232,10 @@ Goal: Prepare for deployment.
 Tasks:
 
 * Dockerize backend
+* Deploy backend to cloud runtime with at least 2 instances in staging/prod
+* Configure managed load balancer with health-check routing (`/health/live`, `/health/ready`)
+* Configure autoscaling thresholds (CPU/memory/latency) and scale limits
+* Configure zero-downtime rollout strategy (rolling or blue/green)
 * Configure environment secrets
 * Setup monitoring
 * Setup deployment pipeline
