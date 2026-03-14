@@ -139,3 +139,6 @@ allure-results/
 *.tar.gz
 *.rar
 *.7z
+
+
+archive/

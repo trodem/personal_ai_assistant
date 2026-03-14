@@ -7,6 +7,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
+- Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
+- Added `scripts/quality-check.ps1` plus backend baseline test (`backend/tests/test_compose_baseline.py`) to run lint/test/build checks for touched components.
+- Added runtime smoke verification for local stack (Invoke-WebRequest http://localhost:8000 expecting 200) and validated running healthy services via docker compose ps.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
@@ -60,3 +64,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Update this file whenever a change is user-visible or developer-relevant.
 - Prefer updating `Unreleased` in the same PR/iteration as the change.
 - If a changelog update is skipped, document the reason in the PR notes.
+
+
+
+

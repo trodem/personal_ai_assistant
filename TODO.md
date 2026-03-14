@@ -26,10 +26,10 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - Keep docs and implementation aligned in the same milestone.
 
 ## Global quality gates (single Definition of Done)
-- [ ] `docker compose config` passes.
-- [ ] Required services are `healthy` in `docker compose ps`.
-- [ ] Lint/tests/build pass for touched components.
-- [ ] At least one runtime smoke check passes (not only unit tests).
+- [x] `docker compose config` passes.
+- [x] Required services are `healthy` in `docker compose ps`.
+- [x] Lint/tests/build pass for touched components.
+- [x] At least one runtime smoke check passes (not only unit tests).
 - [ ] `.env.example`, compose config, and setup docs are aligned.
 - [ ] `CHANGELOG.md` is updated for relevant behavior/contract/process changes.
 - [ ] Every feature includes automated tests (unit + integration where needed).
