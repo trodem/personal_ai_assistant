@@ -77,7 +77,7 @@ Rules:
 - scan/upload alone must not persist a memory record
 - persistence is allowed only after explicit `Confirm`
 - OCR output is treated as candidate text and can be edited via `Modify`
-- attachment lifecycle state must be tracked (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `failed`)
+- attachment lifecycle state must be tracked (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `persisted`, `failed`)
 - failed OCR must return a retry path and never auto-save partial/uncertain memory
 - uploaded images should be normalized before OCR (orientation/quality) and sensitive EXIF metadata removed before long-term storage
 

@@ -1,4 +1,4 @@
-﻿# PROJECT BOOTSTRAP
+# PROJECT BOOTSTRAP
 
 This file instructs the AI agent how to start working on the Personal AI Assistant project.
 
@@ -114,24 +114,39 @@ All calculations must be performed in the backend.
 
 Required endpoints:
 
-POST /voice/memory
-POST /voice/question
-POST /memory
-GET /memories
-DELETE /memory/{id}
-POST /attachments
-GET /dashboard
-GET /admin/users
-PATCH /admin/users/{id}/status
-GET /author/dashboard
-PATCH /author/users/{id}/role
-GET /me/settings
-PATCH /me/settings/profile
-PATCH /me/settings/security
-POST /billing/subscription/change-plan
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
+POST /api/v1/question
+POST /api/v1/memory
+GET /api/v1/memories
+DELETE /api/v1/memory/{id}
+POST /api/v1/attachments
+GET /api/v1/dashboard
+GET /api/v1/admin/users
+PATCH /api/v1/admin/users/{id}/status
+GET /api/v1/author/dashboard
+PATCH /api/v1/author/users/{id}/role
+GET /api/v1/me/settings
+PATCH /api/v1/me/settings/profile
+PATCH /api/v1/me/settings/security
+POST /api/v1/billing/subscription/change-plan
 
 The API must enforce user authentication.
 Role and permission enforcement must follow `docs/rbac-matrix.md`.
+
+---
+
+# HARD START BLOCKERS
+
+Do not start implementation until these are true:
+
+Supabase project is reachable (Auth + Postgres + Storage)
+OpenAI API key is valid and billing-enabled
+.env.example is complete for local boot
+Owner and backup owner are assigned in the operational registry
+MFA is enabled on critical provider accounts
+
+If any blocker is unresolved, stop and report it before coding.
 
 ---
 

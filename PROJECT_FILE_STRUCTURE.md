@@ -186,45 +186,46 @@ backend/app/api/
 
 voice.py
 
-POST /voice/memory
-POST /voice/question
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
 
 memory.py
 
-POST /memory
-DELETE /memory/{id}
+POST /api/v1/memory
+DELETE /api/v1/memory/{id}
 
 query.py
 
-GET /memories
+GET /api/v1/memories
+POST /api/v1/question
 
 attachments.py
 
-POST /attachments
+POST /api/v1/attachments
 
 dashboard.py
 
-GET /dashboard
+GET /api/v1/dashboard
 
 settings.py
 
-GET /me/settings
-PATCH /me/settings/profile
-PATCH /me/settings/security
+GET /api/v1/me/settings
+PATCH /api/v1/me/settings/profile
+PATCH /api/v1/me/settings/security
 
 admin.py
 
-GET /admin/users
-PATCH /admin/users/{id}/status
+GET /api/v1/admin/users
+PATCH /api/v1/admin/users/{id}/status
 
 author.py
 
-GET /author/dashboard
-PATCH /author/users/{id}/role
+GET /api/v1/author/dashboard
+PATCH /api/v1/author/users/{id}/role
 
 billing.py
 
-POST /billing/subscription/change-plan
+POST /api/v1/billing/subscription/change-plan
 
 ---
 

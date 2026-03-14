@@ -73,20 +73,21 @@ Goal: Build backend APIs.
 
 Endpoints:
 
-POST /voice/memory
-POST /voice/question
-POST /memory
-GET /memories
-DELETE /memory/{id}
-POST /attachments
-GET /dashboard
-GET /me/settings
-PATCH /me/settings/profile
-PATCH /me/settings/security
-GET /admin/users
-PATCH /admin/users/{id}/status
-PATCH /author/users/{id}/role
-GET /author/dashboard
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
+POST /api/v1/question
+POST /api/v1/memory
+GET /api/v1/memories
+DELETE /api/v1/memory/{id}
+POST /api/v1/attachments
+GET /api/v1/dashboard
+GET /api/v1/me/settings
+PATCH /api/v1/me/settings/profile
+PATCH /api/v1/me/settings/security
+GET /api/v1/admin/users
+PATCH /api/v1/admin/users/{id}/status
+PATCH /api/v1/author/users/{id}/role
+GET /api/v1/author/dashboard
 
 Deliverable:
 

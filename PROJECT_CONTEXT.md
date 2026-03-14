@@ -105,9 +105,9 @@ Memory stored in database
 
 Question pipeline:
 
-Audio
+Audio or text
 ->
-Whisper transcription
+Whisper transcription (voice only)
 ->
 Intent detection
 ->
@@ -302,7 +302,9 @@ Attachment lifecycle must be deterministic:
 uploaded
 ocr_processing
 proposal_ready
-confirmed or failed
+confirmed
+persisted
+failed
 
 Orphan uploads (never confirmed) must be cleaned by retention policy.
 
@@ -352,24 +354,25 @@ Voice endpoints are separated.
 
 Endpoints:
 
-POST /voice/memory
-POST /voice/question
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
+POST /api/v1/question
 
 Other endpoints:
 
-POST /memory
-GET /memories
-DELETE /memory/{id}
-POST /attachments
-GET /dashboard
-GET /me/settings
-PATCH /me/settings/profile
-PATCH /me/settings/security
-POST /billing/subscription/change-plan
-GET /admin/users
-PATCH /admin/users/{id}/status
-PATCH /author/users/{id}/role
-GET /author/dashboard
+POST /api/v1/memory
+GET /api/v1/memories
+DELETE /api/v1/memory/{id}
+POST /api/v1/attachments
+GET /api/v1/dashboard
+GET /api/v1/me/settings
+PATCH /api/v1/me/settings/profile
+PATCH /api/v1/me/settings/security
+POST /api/v1/billing/subscription/change-plan
+GET /api/v1/admin/users
+PATCH /api/v1/admin/users/{id}/status
+PATCH /api/v1/author/users/{id}/role
+GET /api/v1/author/dashboard
 
 ---
 

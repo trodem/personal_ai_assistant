@@ -206,10 +206,27 @@ The AI model generates only the final natural language response.
 
 Separate endpoints are used for voice processing.
 
-POST /voice/memory
-POST /voice/question
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
+POST /api/v1/question
 
 This avoids ambiguity and simplifies backend logic.
+
+---
+
+# API Versioning Policy
+
+All HTTP endpoints must be exposed under a versioned prefix.
+
+Current version:
+
+/api/v1
+
+Rules:
+
+- new endpoints must be published under `/api/v1/...`
+- docs, OpenAPI spec, and implementation must stay aligned on the same versioned paths
+- unversioned aliases are out of scope for MVP
 
 ---
 

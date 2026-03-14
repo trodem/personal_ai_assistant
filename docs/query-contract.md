@@ -14,7 +14,7 @@ This document complements:
 
 ## Scope
 
-This contract applies to question answering features (`/voice/question` and text-question equivalent endpoint).
+This contract applies to question answering features (`/api/v1/voice/question` and `/api/v1/question`).
 
 ---
 

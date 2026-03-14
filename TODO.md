@@ -61,6 +61,13 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 
 Complete this checklist before implementation to avoid setup blockers.
 
+### Hard blockers before Sprint 1 start
+- [ ] Supabase project is created and reachable (Auth + Postgres + Storage).
+- [ ] OpenAI API key is valid and billing is enabled.
+- [ ] `.env.example` values are complete for local boot.
+- [ ] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
+- [ ] MFA is enabled on Git hosting, OpenAI, Supabase, and Stripe accounts.
+
 ### Required accounts (MVP)
 - [ ] Git hosting account and repository access configured.
 - [ ] OpenAI account with active API billing and API key.
@@ -201,7 +208,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P3 - AI Memory Ingestion Pipeline
 
-- [ ] Endpoint `POST /voice/memory` with robust audio upload handling.
+- [ ] Endpoint `POST /api/v1/voice/memory` with robust audio upload handling.
 - [ ] Whisper integration with timeout and controlled retry.
 - [ ] Versioned extraction prompt (`specs/memory-extraction.md`).
 - [ ] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
@@ -223,21 +230,22 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P4 - API Endpoints and Contracts
 
 - [ ] Implement and wire endpoint handlers:
-- [ ] `POST /voice/memory`
-- [ ] `POST /voice/question`
-- [ ] `POST /memory`
-- [ ] `GET /memories`
-- [ ] `DELETE /memory/{id}`
-- [ ] `POST /attachments`
-- [ ] `GET /dashboard`
-- [ ] `GET /admin/users` (admin/author)
-- [ ] `PATCH /admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
-- [ ] `PATCH /author/users/{id}/role` (author only: `user` <-> `admin`)
-- [ ] `GET /author/dashboard` (author only global supervision)
-- [ ] `GET /me/settings`
-- [ ] `PATCH /me/settings/profile`
-- [ ] `PATCH /me/settings/security` (password/email change flow trigger)
-- [ ] `POST /billing/subscription/change-plan` (`free` <-> `premium`)
+- [ ] `POST /api/v1/voice/memory`
+- [ ] `POST /api/v1/voice/question`
+- [ ] `POST /api/v1/question`
+- [ ] `POST /api/v1/memory`
+- [ ] `GET /api/v1/memories`
+- [ ] `DELETE /api/v1/memory/{id}`
+- [ ] `POST /api/v1/attachments`
+- [ ] `GET /api/v1/dashboard`
+- [ ] `GET /api/v1/admin/users` (admin/author)
+- [ ] `PATCH /api/v1/admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
+- [ ] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
+- [ ] `GET /api/v1/author/dashboard` (author only global supervision)
+- [ ] `GET /api/v1/me/settings`
+- [ ] `PATCH /api/v1/me/settings/profile`
+- [ ] `PATCH /api/v1/me/settings/security` (password/email change flow trigger)
+- [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
@@ -328,8 +336,8 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P8 - Dashboard and Insights
 
-- [ ] Endpoint `GET /dashboard` with core metrics.
-- [ ] Endpoint `GET /author/dashboard` with global supervision metrics (author only).
+- [ ] Endpoint `GET /api/v1/dashboard` with core metrics.
+- [ ] Endpoint `GET /api/v1/author/dashboard` with global supervision metrics (author only).
 - [ ] MVP blocks:
 - [ ] current-month expenses vs previous month
 - [ ] latest memory events
@@ -343,9 +351,9 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P9 - Attachments
 
 - [ ] Integrate Supabase Storage.
-- [ ] Endpoint `POST /attachments` with strict file type/size validation (receipt photos only).
+- [ ] Endpoint `POST /api/v1/attachments` with strict file type/size validation (receipt photos only).
 - [ ] Link attachment <-> memory with user ownership checks.
-- [ ] Introduce attachment lifecycle state machine (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `failed`) with deterministic transitions.
+- [ ] Introduce attachment lifecycle state machine (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `persisted`, `failed`) with deterministic transitions.
 - [ ] Run OCR on uploaded receipt photo and expose preview text for memory proposal flow.
 - [ ] Normalize receipt photo before OCR (orientation/rotation, optional compression, quality guardrails).
 - [ ] Parse and normalize OCR fields (amount/currency/date/vendor candidates) with explicit uncertainty flags.

@@ -189,7 +189,9 @@ Attachment lifecycle states:
 - uploaded
 - ocr_processing
 - proposal_ready
-- confirmed or failed
+- confirmed
+- persisted
+- failed
 
 ---
 

@@ -24,6 +24,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Non-goals wording aligned with receipt-photo-only attachment policy.
 - Documentation text normalized to ASCII-safe formatting (pipeline arrows, quotes, currency and dash notation) for consistent readability across environments.
 - README completed with operational onboarding sections (official stack, owner checklist, local start, document routing, and governance links).
+- API contracts, roadmap, bootstrap, RBAC matrix, and OpenAPI spec aligned on versioned endpoint namespace (`/api/v1/...`) with explicit versioning policy in architecture decisions.
+- Added explicit text-question API contract (`POST /api/v1/question`) and aligned roadmap, architecture, RBAC matrix, and query contract references.
+- Attachment lifecycle state machine normalized across docs and OpenAPI to include `persisted` state.
+- Added explicit "Hard blockers before Sprint 1 start" checklist in `TODO.md` for external account/access prerequisites.
 
 ---
 

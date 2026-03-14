@@ -65,7 +65,7 @@ Receipt photo ingestion contract:
 Attachment lifecycle contract:
 
 - each attachment must expose a deterministic status:
-- `uploaded` -> `ocr_processing` -> `proposal_ready` -> (`confirmed` or `failed`)
+- `uploaded` -> `ocr_processing` -> `proposal_ready` -> `confirmed` -> `persisted` (or `failed`)
 - `failed` status must include machine-readable error reason and user-visible retry action
 - an attachment in `proposal_ready` can be canceled without persisting memory
 

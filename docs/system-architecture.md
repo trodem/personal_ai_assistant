@@ -99,18 +99,19 @@ author
 
 Example endpoints:
 
-POST /voice/memory
-POST /voice/question
-POST /memory
-GET /memories
-DELETE /memory/{id}
-GET /me/settings
-PATCH /me/settings/profile
-PATCH /me/settings/security
-GET /admin/users
-PATCH /admin/users/{id}/status
-PATCH /author/users/{id}/role
-GET /author/dashboard
+POST /api/v1/voice/memory
+POST /api/v1/voice/question
+POST /api/v1/question
+POST /api/v1/memory
+GET /api/v1/memories
+DELETE /api/v1/memory/{id}
+GET /api/v1/me/settings
+PATCH /api/v1/me/settings/profile
+PATCH /api/v1/me/settings/security
+GET /api/v1/admin/users
+PATCH /api/v1/admin/users/{id}/status
+PATCH /api/v1/author/users/{id}/role
+GET /api/v1/author/dashboard
 
 The backend controls all AI interactions.
 
@@ -152,9 +153,9 @@ Database storage
 
 Question pipeline:
 
-Audio question
+Audio or text question
 ->
-Whisper transcription
+Whisper transcription (voice only)
 ->
 Intent detection
 ->

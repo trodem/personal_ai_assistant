@@ -17,7 +17,7 @@ tags:
   - name: Billing
 
 paths:
-  /voice/memory:
+  /api/v1/voice/memory:
     post:
       tags: [Voice]
       summary: Upload voice memory
@@ -47,7 +47,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /voice/question:
+  /api/v1/voice/question:
     post:
       tags: [Voice]
       summary: Upload voice question
@@ -75,7 +75,32 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /memory:
+  /api/v1/question:
+    post:
+      tags: [Voice]
+      summary: Ask text question
+      description: Submit a text question and receive an answer based on stored memories.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextQuestionRequest"
+      responses:
+        "200":
+          description: Assistant response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/memory:
     post:
       tags: [Memory]
       summary: Save confirmed memory
@@ -101,7 +126,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /memory/{id}:
+  /api/v1/memory/{id}:
     delete:
       tags: [Memory]
       summary: Delete memory
@@ -126,7 +151,7 @@ paths:
         "404":
           description: Memory not found.
 
-  /memories:
+  /api/v1/memories:
     get:
       tags: [Memory]
       summary: List user memories
@@ -160,7 +185,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /attachments:
+  /api/v1/attachments:
     post:
       tags: [Attachments]
       summary: Upload receipt photo attachment
@@ -196,7 +221,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /dashboard:
+  /api/v1/dashboard:
     get:
       tags: [Dashboard]
       summary: Dashboard statistics
@@ -212,7 +237,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /me/settings:
+  /api/v1/me/settings:
     get:
       tags: [Settings]
       summary: Get current user settings
@@ -228,7 +253,7 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /me/settings/profile:
+  /api/v1/me/settings/profile:
     patch:
       tags: [Settings]
       summary: Update profile settings
@@ -252,7 +277,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /me/settings/security:
+  /api/v1/me/settings/security:
     patch:
       tags: [Settings]
       summary: Trigger security-sensitive settings change
@@ -280,7 +305,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /billing/subscription/change-plan:
+  /api/v1/billing/subscription/change-plan:
     post:
       tags: [Billing]
       summary: Change user subscription plan
@@ -307,7 +332,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /admin/users:
+  /api/v1/admin/users:
     get:
       tags: [Admin]
       summary: List users (admin/author)
@@ -330,7 +355,7 @@ paths:
         "403":
           description: Forbidden. Admin or Author role required.
 
-  /admin/users/{id}/status:
+  /api/v1/admin/users/{id}/status:
     patch:
       tags: [Admin]
       summary: Update user status (admin/author)
@@ -363,7 +388,7 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
-  /author/dashboard:
+  /api/v1/author/dashboard:
     get:
       tags: [Author]
       summary: Global supervision dashboard (author only)
@@ -381,7 +406,7 @@ paths:
         "403":
           description: Forbidden. Author role required.
 
-  /author/users/{id}/role:
+  /api/v1/author/users/{id}/role:
     patch:
       tags: [Author]
       summary: Update user role (author only)
@@ -522,6 +547,14 @@ components:
             type: string
             format: uuid
 
+    TextQuestionRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+          minLength: 1
+
     AttachmentResponse:
       type: object
       required: [id, file_url, file_type, status]
@@ -535,7 +568,7 @@ components:
           type: string
         status:
           type: string
-          enum: [uploaded, ocr_processing, proposal_ready, confirmed, failed]
+          enum: [uploaded, ocr_processing, proposal_ready, confirmed, persisted, failed]
         ocr_status:
           type: string
           enum: [pending, processing, completed, failed]
