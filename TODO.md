@@ -45,7 +45,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 <!-- - [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple). -->
 - [x] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [x] For API changes: `specs/api.yaml` is updated and consistent with implementation.
-- [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
+- [x] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
 - [ ] For API lifecycle changes: backward compatibility rules in `docs/api-compatibility.md` are respected.
 - [ ] For i18n changes: `preferred_language` behavior is consistent across backend responses and Flutter UI labels.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).

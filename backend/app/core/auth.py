@@ -8,7 +8,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 import jwt
-from fastapi import Header
+from fastapi import Header, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from starlette import status
 
 from app.core.errors import AppError
@@ -21,6 +22,9 @@ class AuthenticatedUser:
     tenant_id: str
     role: str
     mfa_enabled: bool
+
+
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def _dev_hs256_secret() -> str:
@@ -168,23 +172,23 @@ def _decode_with_jwks(token: str, algorithm: str) -> dict[str, object]:
 
 
 def get_current_user(
-    authorization: str | None = Header(default=None),
+    credentials: HTTPAuthorizationCredentials | None = Security(bearer_scheme),
     x_tenant_id: str | None = Header(default=None),
 ) -> AuthenticatedUser:
-    if not authorization:
+    if credentials is None:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
             code="auth.missing_token",
             message="Missing bearer token.",
         )
-    if not authorization.lower().startswith("bearer "):
+    if credentials.scheme.lower() != "bearer":
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
             code="auth.invalid_token",
             message="Authorization header must use Bearer scheme.",
         )
 
-    token = authorization.split(" ", maxsplit=1)[1].strip()
+    token = credentials.credentials.strip()
     payload = _decode_token(token)
     user_id = str(payload["sub"])
     role = str(payload.get("role", "user"))

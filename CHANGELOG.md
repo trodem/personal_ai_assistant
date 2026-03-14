@@ -25,6 +25,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Validated Supabase email/password login flow end-to-end via `scripts/supabase-auth-smoke.ps1`.
 - Added MFA policy enforcement for privileged roles (`admin`/`author`) on admin endpoints with explicit `auth.mfa_required` blocking and integration tests.
 - Aligned OpenAPI spec with implemented endpoints and auth guards (`/health/live`, `/health/ready`, `/metrics`, tenant header semantics on protected tenant-aware routes).
+- Hardened FastAPI Swagger/OpenAPI metadata for implemented endpoints (typed response models, operation summaries/descriptions, documented 401/403 responses, and bearer security scheme exposure) with automated `/openapi.json` regression tests.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.

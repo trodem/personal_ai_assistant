@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter, Depends
 
+from app.api.schemas import MemoryListResponse
 from app.core.auth import AuthenticatedUser, get_current_user
 
 router = APIRouter(prefix="/api/v1", tags=["Memory"])
@@ -47,8 +48,17 @@ _MEMORY_FIXTURES = [
 ]
 
 
-@router.get("/memories")
-async def list_memories(current_user: AuthenticatedUser = Depends(get_current_user)) -> dict[str, list[dict[str, object]]]:
+@router.get(
+    "/memories",
+    summary="List user memories",
+    description="Returns only memories scoped to the authenticated user and tenant context.",
+    response_model=MemoryListResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        403: {"description": "Forbidden. Missing tenant context or cross-tenant access attempt."},
+    },
+)
+async def list_memories(current_user: AuthenticatedUser = Depends(get_current_user)) -> MemoryListResponse:
     items = [
         {
             "id": item["id"],

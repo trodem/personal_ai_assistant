@@ -23,7 +23,11 @@ from app.core.middleware import RequestContextMiddleware
 configure_logging()
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Personal AI Assistant Backend", version="0.1.0")
+app = FastAPI(
+    title="Personal AI Assistant Backend",
+    version="0.1.0",
+    description="MVP backend APIs for health, metrics, authenticated memory access, and admin controls.",
+)
 app.add_middleware(RequestContextMiddleware)
 app.include_router(health_router)
 app.include_router(metrics_router)
@@ -31,7 +35,7 @@ app.include_router(memories_router)
 app.include_router(admin_router)
 
 
-@app.get("/")
+@app.get("/", summary="Service metadata", tags=["Health"])
 async def root() -> dict[str, str]:
     return {"service": "personal-ai-assistant-backend"}
 
