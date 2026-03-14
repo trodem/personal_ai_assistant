@@ -104,7 +104,11 @@ Complete this checklist before implementation to avoid setup blockers.
 <!-- - [ ] Create separate credentials for `dev`, `staging`, and `prod`. -->
 <!-- - [ ] Restrict API keys by environment and rotate keys policy documented. -->
 <!-- - [ ] Store secrets only in env/secret manager, never in source control. -->
-- [ ] Define team access roles (author/admin/developer/read-only).
+- [x] Define team access roles (author/admin/developer/read-only).
+  - `author`: full governance access (roles/status policy, high-risk configuration approvals).
+  - `admin`: operational administration access without author-only governance actions.
+  - `developer`: implementation and CI/runtime troubleshooting access in `dev` and controlled `staging`.
+  - `read-only`: audit/monitoring visibility without mutation permissions.
 
 ### Environment readiness checks
 - [x] `.env.example` completed with all required variables for local startup.
