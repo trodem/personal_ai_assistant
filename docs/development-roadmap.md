@@ -61,6 +61,7 @@ Tasks:
 * Implement clarification logic
 * Implement confirmation system
 * Define model/prompt mappings in `docs/model-registry.md` for extraction, clarification, question NLG, and embeddings
+* Add pre-LLM sanitization/redaction layer for sensitive data handling
 
 Deliverable:
 
@@ -136,6 +137,7 @@ Tasks:
 * Implement database-first query execution
 * Generate final natural-language response
 * Implement SSE streaming response path for text question endpoint with non-stream fallback
+* Enforce moderation checks before/after AI generation flow
 
 Deliverable:
 

@@ -189,6 +189,11 @@ AI is used only for language understanding and natural responses.
 
 Calculations are always handled by the backend.
 
+AI safety/privacy guards:
+
+- content moderation before and after generation (`docs/content-moderation.md`)
+- sensitive-data sanitization before provider calls (`docs/data-sanitization.md`)
+
 Query/answer language policy:
 
 - answer language should follow `preferred_language` when available

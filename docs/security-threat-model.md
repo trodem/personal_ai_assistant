@@ -135,6 +135,21 @@ Controls:
 - minimize prompt context
 - redact sensitive fields from logs
 - structured logging with secret filtering
+- enforce sanitization/redaction policy before AI-provider calls (`docs/data-sanitization.md`)
+
+---
+
+### Unsafe content generation or handling
+
+Risk:
+
+- harmful/illegal/inappropriate content accepted or generated without controls
+
+Controls:
+
+- moderation checks before and after AI generation (`docs/content-moderation.md`)
+- deterministic moderation decisions (`allow`/`warn`/`block`/`review`) with audit logs
+- block unsafe downstream generation when moderation decision is `block`
 
 ---
 

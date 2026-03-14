@@ -34,6 +34,8 @@ Precedence order when conflicts appear:
 - `docs/product-analytics.md`
 - `docs/model-registry.md`
 - `docs/llmops-dashboard-spec.md`
+- `docs/content-moderation.md`
+- `docs/data-sanitization.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -44,6 +46,7 @@ When to consult each document:
 - question-answering change: read `docs/query-contract.md`, `docs/ai-pipeline.md`, `docs/error-model.md`, `specs/api.yaml`
 - AI UX behavior change: read `docs/ai-ux-contract.md`, `docs/contract.md`, and `docs/error-model.md`
 - AI model/prompt change: read `docs/model-registry.md`, `docs/ai-cost-control.md`, and `specs/memory-extraction.md`
+- AI safety/privacy pipeline change: read `docs/content-moderation.md`, `docs/data-sanitization.md`, and `docs/security-threat-model.md`
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`

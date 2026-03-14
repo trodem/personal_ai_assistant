@@ -666,6 +666,17 @@ Operational AI monitoring and alert thresholds must follow `docs/llmops-dashboar
 
 ---
 
+# CONTENT SAFETY AND SANITIZATION
+
+AI safety and privacy controls must follow:
+
+`docs/content-moderation.md`
+`docs/data-sanitization.md`
+
+Unsafe content must be moderated (`allow/warn/block/review`), and sensitive data must be sanitized before provider calls.
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

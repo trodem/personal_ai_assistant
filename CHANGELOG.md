@@ -40,6 +40,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `docs/llmops-dashboard-spec.md` with required dashboards, metric dimensions, MVP alert thresholds, and runbook integration for AI operations; linked across AGENTS, TODO, operations, cost-control, architecture, and project context.
 - User settings panel planning completed with payment-method management scope (list masked methods, setup-intent flow, set default, remove), with aligned API contract, RBAC policy, roadmap, and architecture docs.
 - Added streaming question-response planning with SSE endpoint (`POST /api/v1/question/stream`), UX typing mode, fallback-to-non-stream behavior, RBAC alignment, and streaming-specific API test requirements.
+- Added explicit AI content safety and data sanitization governance via `docs/content-moderation.md` and `docs/data-sanitization.md`, with aligned TODO/security/error-model/architecture/analytics/document-routing updates.
 
 ---
 

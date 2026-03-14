@@ -109,6 +109,14 @@ Notifications:
 - `notification_opened`
 - `notification_marked_read`
 
+Safety and privacy:
+
+- `moderation_blocked`
+- `moderation_warned`
+- `moderation_review_flagged`
+- `prompt_sanitized`
+- `privacy_redaction_applied`
+
 ---
 
 ## Operational/Error Events (MVP)

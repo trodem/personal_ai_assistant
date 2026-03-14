@@ -60,6 +60,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Test scope is aligned with `docs/testing-strategy.md` for touched components.
 - [ ] Environment/config choices are aligned with `docs/environment-matrix.md`.
 - [ ] Security-sensitive changes are checked against `docs/security-threat-model.md`.
+- [ ] AI-input/output safety changes are aligned with `docs/content-moderation.md` and `docs/data-sanitization.md`.
 - [ ] Auth/role/permission changes are aligned with `docs/rbac-matrix.md`.
 
 ---
@@ -233,6 +234,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Generate embeddings only for confirmed create/update events.
 - [ ] Capture per-request AI telemetry (model, token usage, estimated cost, latency).
 - [ ] Add strict anti-hallucination guardrails for extraction output schema.
+- [ ] Apply input moderation and sensitive-data sanitization before LLM extraction call.
 - [ ] End-to-end test: voice -> extraction -> confirmation -> storage.
 
 ---
@@ -323,6 +325,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Semantic retrieval with pgvector for open-ended questions.
 - [ ] Minimal context builder to reduce token usage.
 - [ ] Natural-language response generation from structured backend result.
+- [ ] Add pre-generation and post-generation moderation checks on question flow.
 - [ ] Enforce retrieval priority: structured SQL first, semantic vector fallback.
 - [ ] Persist question-path AI telemetry for per-user/per-feature cost visibility.
 - [ ] Add answer confidence/provenance payload (source memory IDs used for response).
@@ -483,6 +486,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Minimal threat model + OWASP API Top 10 checklist.
 - [ ] Define GDPR-ready privacy baseline (consent, data export/delete SLA, retention policy enforcement).
 - [ ] Lightweight pre-release security test (manual + automated tooling).
+- [ ] Implement prompt sanitization/redaction layer before AI provider calls.
+- [ ] Implement content moderation policy enforcement (`allow/warn/block/review`) with deterministic logging.
 
 ---
 
