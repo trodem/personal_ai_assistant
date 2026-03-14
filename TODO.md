@@ -196,8 +196,8 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [x] Create modular FastAPI structure (`api`, `services`, `repositories`, `domain`).
 - [x] Implement typed config management (env validation).
-- [ ] Set up JSON logging with `request_id` and `user_id` (when available).
-- [ ] Add request tracing (`trace_id`) to support cross-service debugging.
+- [x] Set up JSON logging with `request_id` and `user_id` (when available).
+- [x] Add request tracing (`trace_id`) to support cross-service debugging.
 - [ ] Add error-handling middleware with standard error codes.
 - [ ] Define asynchronous job boundary (API request path vs background worker path).
 - [ ] Health endpoints:

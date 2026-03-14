@@ -45,6 +45,26 @@ class RuntimeIntegrationTests(unittest.TestCase):
             self.assertIn("app_request_errors_total", text)
             self.assertIn("llmops_alert_threshold", text)
 
+    def test_trace_id_header_is_propagated(self) -> None:
+        request = urllib.request.Request(
+            "http://localhost:8000/health/live",
+            headers={"x-request-id": "req-trace-test", "x-trace-id": "trace-custom-123"},
+        )
+        with urllib.request.urlopen(request, timeout=5) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get("x-request-id"), "req-trace-test")
+            self.assertEqual(response.headers.get("x-trace-id"), "trace-custom-123")
+
+    def test_trace_id_falls_back_to_request_id_when_missing(self) -> None:
+        request = urllib.request.Request(
+            "http://localhost:8000/health/live",
+            headers={"x-request-id": "req-fallback-123"},
+        )
+        with urllib.request.urlopen(request, timeout=5) as response:
+            self.assertEqual(response.status, 200)
+            self.assertEqual(response.headers.get("x-request-id"), "req-fallback-123")
+            self.assertEqual(response.headers.get("x-trace-id"), "req-fallback-123")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -33,6 +33,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added backend modular package scaffolding for `repositories` and `domain` (`backend/app/repositories`, `backend/app/domain`) plus `backend/tests/test_backend_structure.py` to validate required FastAPI package layout.
 - Added typed backend config loader `backend/app/core/settings.py` with fail-fast environment validation (`APP_ENV`, `LOG_LEVEL`, integer budget/port parsing, CORS origins parsing) and centralized settings access via `get_settings()`.
 - Added `backend/tests/test_settings_validation.py` covering valid typed config parsing and invalid env failure modes.
+- Added `backend/tests/test_logging_context_fields.py` to verify structured JSON logs always include context fields (`request_id`, `trace_id`, `user_id`, `tenant_id`) and default user placeholder behavior when unauthenticated.
+- Extended `backend/tests/test_runtime_integration.py` with request-tracing checks to verify `x-trace-id` propagation and deterministic fallback to `x-request-id` when trace header is missing.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -101,6 +103,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Updated local setup instructions in `README.md` to include pre-commit installation and full hook execution.
 - Marked P1 task `Create modular FastAPI structure (api, services, repositories, domain)` as completed in `TODO.md`.
 - Marked P1 task `Implement typed config management (env validation)` as completed in `TODO.md`.
+- Marked P1 task `Set up JSON logging with request_id and user_id (when available)` as completed in `TODO.md`.
+- Marked P1 task `Add request tracing (trace_id) to support cross-service debugging` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.
