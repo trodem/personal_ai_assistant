@@ -33,6 +33,9 @@ docker compose config -q
 Write-Host "[runtime] docker compose up -d"
 docker compose up -d
 
+Write-Host "[runtime] restart backend to load latest mounted code"
+docker compose restart backend
+
 Write-Host "[runtime] wait for healthy services"
 Wait-Healthy
 

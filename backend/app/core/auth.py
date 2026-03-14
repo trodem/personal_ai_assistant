@@ -10,12 +10,13 @@ from fastapi import Header
 from starlette import status
 
 from app.core.errors import AppError
-from app.core.request_context import user_id_ctx_var
+from app.core.request_context import tenant_id_ctx_var, user_id_ctx_var
 
 
 @dataclass(frozen=True)
 class AuthenticatedUser:
     user_id: str
+    tenant_id: str
 
 
 def _urlsafe_b64encode(value: bytes) -> str:
@@ -32,9 +33,9 @@ def _sign(payload_b64: str, secret: str) -> str:
     return _urlsafe_b64encode(digest)
 
 
-def build_dev_token(user_id: str, *, ttl_seconds: int = 3600) -> str:
+def build_dev_token(user_id: str, *, tenant_id: str = "tenant-default", ttl_seconds: int = 3600) -> str:
     secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
-    payload = {"sub": user_id, "exp": int(time.time()) + ttl_seconds}
+    payload = {"sub": user_id, "tenant_id": tenant_id, "exp": int(time.time()) + ttl_seconds}
     payload_b64 = _urlsafe_b64encode(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
     return f"{payload_b64}.{_sign(payload_b64, secret)}"
 
@@ -84,7 +85,10 @@ def _decode_token(token: str) -> dict[str, object]:
     return payload
 
 
-def get_current_user(authorization: str | None = Header(default=None)) -> AuthenticatedUser:
+def get_current_user(
+    authorization: str | None = Header(default=None),
+    x_tenant_id: str | None = Header(default=None),
+) -> AuthenticatedUser:
     if not authorization:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -101,5 +105,20 @@ def get_current_user(authorization: str | None = Header(default=None)) -> Authen
     token = authorization.split(" ", maxsplit=1)[1].strip()
     payload = _decode_token(token)
     user_id = str(payload["sub"])
+    token_tenant_id = str(payload.get("tenant_id", "")).strip()
+    if not x_tenant_id or not token_tenant_id:
+        raise AppError(
+            status_code=status.HTTP_403_FORBIDDEN,
+            code="auth.forbidden",
+            message="Tenant context is required.",
+        )
+    if x_tenant_id != token_tenant_id:
+        raise AppError(
+            status_code=status.HTTP_403_FORBIDDEN,
+            code="auth.forbidden",
+            message="Cross-tenant access is forbidden.",
+        )
+
     user_id_ctx_var.set(user_id)
-    return AuthenticatedUser(user_id=user_id)
+    tenant_id_ctx_var.set(token_tenant_id)
+    return AuthenticatedUser(user_id=user_id, tenant_id=token_tenant_id)

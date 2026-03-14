@@ -5,7 +5,7 @@ import re
 from datetime import datetime, timezone
 from typing import Any
 
-from app.core.request_context import request_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
+from app.core.request_context import request_id_ctx_var, tenant_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
 
 
 class JsonFormatter(logging.Formatter):
@@ -82,6 +82,7 @@ class JsonFormatter(logging.Formatter):
             "request_id": request_id_ctx_var.get(),
             "trace_id": trace_id_ctx_var.get(),
             "user_id": user_id_ctx_var.get(),
+            "tenant_id": tenant_id_ctx_var.get(),
         }
         if record.exc_info:
             payload["exception"] = self.formatException(record.exc_info)

@@ -7,7 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.analytics import emit_operational_event
 from app.core.metrics import metrics_registry
-from app.core.request_context import request_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
+from app.core.request_context import request_id_ctx_var, tenant_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
 
 
 logger = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         token_request = request_id_ctx_var.set(request_id)
         token_trace = trace_id_ctx_var.set(trace_id)
         token_user = user_id_ctx_var.set(user_id)
+        token_tenant = tenant_id_ctx_var.set("-")
 
         start = time.perf_counter()
         try:
@@ -61,3 +62,4 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
             request_id_ctx_var.reset(token_request)
             trace_id_ctx_var.reset(token_trace)
             user_id_ctx_var.reset(token_user)
+            tenant_id_ctx_var.reset(token_tenant)
