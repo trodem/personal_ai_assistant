@@ -29,6 +29,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added API backward-compatibility regression tests (`backend/tests/test_api_backward_compatibility.py`) to enforce v1 path stability and preserve required response fields for current and previously shipped clients.
 - Added preferred-language i18n baseline across backend and Flutter labels: `GET /api/v1/me/settings` + `PATCH /api/v1/me/settings/profile` now enforce `en/it/de` with fallback `en`, plus ARB label files (`mobile/lib/l10n/app_{en,it,de}.arb`) and contract tests for backend/UI locale consistency.
 - Aligned API error mapping with `docs/error-model.md`: removed undocumented error codes, standardized `404 -> memory.not_found`, `422 -> memory.missing_required_fields`, and added retryable policy for `429/502/503` plus dedicated error-model contract tests.
+- Added memory-ingestion E2E baseline with modular extraction service and protected endpoints (`POST /api/v1/voice/memory`, `POST /api/v1/memory`) enforcing clarification for missing fields, explicit confirmation before persistence, and persistence verification via `GET /api/v1/memories`.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.

@@ -21,6 +21,26 @@ class MemoryListResponse(BaseModel):
     items: list[MemoryRecordResponse]
 
 
+class MemoryProposalResponse(BaseModel):
+    transcript: str
+    memory_type: Literal["expense_event", "inventory_event", "loan_event", "note", "document"]
+    structured_data: dict[str, Any]
+    clarification_questions: list[str] = []
+    missing_required_fields: list[str] = []
+    needs_confirmation: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class SaveMemoryRequest(BaseModel):
+    memory_type: Literal["expense_event", "inventory_event", "loan_event", "note", "document"]
+    raw_text: str
+    structured_data: dict[str, Any]
+    confirmed: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class AdminUserResponse(BaseModel):
     id: str
     role: str
