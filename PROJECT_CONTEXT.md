@@ -74,11 +74,11 @@ Voice processing is performed in the backend.
 Pipeline:
 
 User Audio
-↓
+->
 Backend Upload
-↓
+->
 Whisper Speech-to-Text
-↓
+->
 Text Processing
 
 Speech recognition is not done on the device.
@@ -92,27 +92,27 @@ The system uses a **multi-stage AI pipeline**.
 Memory pipeline:
 
 Audio
-↓
+->
 Whisper transcription
-↓
+->
 LLM memory extraction
-↓
+->
 Clarification questions if needed
-↓
+->
 User confirmation
-↓
+->
 Memory stored in database
 
 Question pipeline:
 
 Audio
-↓
+->
 Whisper transcription
-↓
+->
 Intent detection
-↓
+->
 Database query
-↓
+->
 LLM generates natural response
 
 AI does not perform calculations.
@@ -240,6 +240,10 @@ Database technology:
 
 PostgreSQL
 
+Provider:
+
+Supabase Postgres
+
 Extension:
 
 pgvector
@@ -315,13 +319,13 @@ Vector search enables semantic retrieval.
 Process:
 
 User question
-↓
+->
 Embedding generation
-↓
+->
 Vector search
-↓
+->
 Relevant memories retrieved
-↓
+->
 LLM generates answer
 
 Embeddings stored using pgvector.
@@ -447,9 +451,7 @@ Files are stored in cloud object storage.
 
 Examples:
 
-S3 compatible storage
-Cloudflare R2
-Supabase storage
+Supabase Storage
 
 The database stores file URLs.
 
@@ -457,13 +459,7 @@ The database stores file URLs.
 
 # AUTHENTICATION
 
-Authentication is handled by external providers.
-
-Recommended providers:
-
-Clerk
-Auth0
-Supabase Auth
+Authentication is handled by Supabase Auth.
 
 The backend validates tokens from the provider.
 
@@ -614,7 +610,7 @@ Example limits:
 
 Price range:
 
-10–15 € per month
+10-15 EUR per month
 
 Features:
 

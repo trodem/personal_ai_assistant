@@ -40,10 +40,10 @@ Speech to text
 Whisper API
 
 Authentication
-Clerk
+Supabase Auth
 
 File storage
-Cloud object storage
+Supabase Storage
 
 Payments
 Stripe

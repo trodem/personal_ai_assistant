@@ -1,6 +1,7 @@
 # Database Schema
 
 Database: PostgreSQL
+Provider: Supabase Postgres
 Extensions: pgvector
 
 The database stores all user memories, events, attachments, and AI embeddings.
@@ -185,6 +186,6 @@ Users cannot access data belonging to other users.
 
 Files are not stored directly in PostgreSQL.
 
-They are uploaded to cloud storage (S3-compatible).
+They are uploaded to Supabase Storage.
 
 The database stores only metadata and URLs.

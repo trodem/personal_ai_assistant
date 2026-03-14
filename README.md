@@ -123,3 +123,64 @@ Relevant project changes should be recorded in `CHANGELOG.md` in the same iterat
 ---
 
 # Repository Structure
+
+- `mobile/` Flutter mobile app
+- `backend/` FastAPI backend
+- `docs/` architecture and governance documents
+- `specs/` API and extraction specifications
+- `infra/` container and deployment infrastructure
+
+---
+
+# Official MVP Stack
+
+- Mobile: Flutter / Dart
+- Backend: Python / FastAPI
+- Auth: Supabase Auth
+- Database: Supabase Postgres + pgvector
+- Storage: Supabase Storage (receipt photos only)
+- AI: OpenAI (including Whisper)
+- Billing: Stripe
+
+---
+
+# Onboarding Checklist (Owner)
+
+Follow these sections in [TODO.md](/d:/Personal_AI_Assistant/TODO.md):
+
+- `Founder/Developer Prerequisites`
+- `Day 0 (owner checklist, 2-4 hours)`
+- `Day 1 (project readiness, 2-4 hours)`
+
+Do not start implementation before external dependencies are ready.
+
+---
+
+# Local Development Start
+
+1. Prepare environment variables from `.env.example`.
+2. Start local services (`backend` + Supabase local stack).
+3. Verify health and readiness endpoints.
+4. Run lint/tests/smoke checks before implementation milestones.
+
+Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).
+
+---
+
+# Document Routing
+
+Agents and contributors must follow routing and precedence rules in:
+
+- [docs/AGENTS.md](/d:/Personal_AI_Assistant/docs/AGENTS.md)
+- [docs/agent-start.md](/d:/Personal_AI_Assistant/docs/agent-start.md)
+
+If documents conflict, precedence in `docs/AGENTS.md` is mandatory.
+
+---
+
+# Security and Governance
+
+- Security policy: [SECURITY.md](/d:/Personal_AI_Assistant/SECURITY.md)
+- Threat model: [docs/security-threat-model.md](/d:/Personal_AI_Assistant/docs/security-threat-model.md)
+- RBAC source of truth: [docs/rbac-matrix.md](/d:/Personal_AI_Assistant/docs/rbac-matrix.md)
+- Contribution rules: [CONTRIBUTING.md](/d:/Personal_AI_Assistant/CONTRIBUTING.md)

@@ -25,14 +25,14 @@ The platform consists of five main components:
 System overview:
 
 Mobile App
-↓
+->
 API Backend
-↓
+->
 AI Pipeline
-↓
+->
 Database + Vector Search
-↓
-Object Storage
+->
+Supabase Storage
 
 ---
 
@@ -123,43 +123,43 @@ The AI system follows a multi-stage pipeline.
 Voice pipeline:
 
 Audio
-↓
+->
 Whisper transcription
-↓
+->
 Memory extraction
-↓
+->
 Clarification
-↓
+->
 Confirmation
-↓
+->
 Database storage
 
 Receipt-photo pipeline:
 
 Receipt photo (camera/gallery)
-â†“
+->
 Upload validation
-â†“
+->
 Object storage
-â†“
+->
 OCR extraction
-â†“
+->
 Memory extraction proposal
-â†“
+->
 Clarification + confirmation
-â†“
+->
 Database storage
 
 Question pipeline:
 
 Audio question
-↓
+->
 Whisper transcription
-↓
+->
 Intent detection
-↓
+->
 Database query
-↓
+->
 LLM response generation
 
 AI is used only for language understanding and natural responses.
@@ -173,6 +173,10 @@ Calculations are always handled by the backend.
 Technology:
 
 PostgreSQL
+
+Provider:
+
+Supabase Postgres
 
 Extension:
 
@@ -217,9 +221,7 @@ Files are stored in cloud object storage.
 
 Examples:
 
-S3-compatible storage
-Cloudflare R2
-Supabase storage
+Supabase Storage
 
 Stored files include:
 
@@ -235,10 +237,8 @@ The database stores only file URLs.
 
 Authentication is handled by an external identity provider.
 
-Recommended options:
+Provider:
 
-Clerk
-Auth0
 Supabase Auth
 
 Responsibilities:

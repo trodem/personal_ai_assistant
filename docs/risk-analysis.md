@@ -140,7 +140,7 @@ Mitigation:
 
 ## Unauthorized Access
 
-Users accessing other users’ data.
+Users accessing other users' data.
 
 Mitigation:
 

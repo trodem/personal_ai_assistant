@@ -19,7 +19,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - Complete only the first incomplete item of the active milestone.
 - Respect strict dependency order: backend + DB first, then AI pipeline and API contracts, then auth enforcement, then user-facing features.
 - Use a Docker-first development strategy: run backend + database + storage locally in containers whenever feasible.
-- Use external SaaS only where local parity is not practical (`OpenAI`, `Clerk`, later `Stripe`).
+- Use external SaaS only where local parity is not practical (`OpenAI`, `Supabase`, later `Stripe`).
 - Keep security controls enabled by default.
 - Never introduce arbitrary command execution.
 - Keep architecture modular; avoid monolithic files.
@@ -37,7 +37,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Structured logging + metrics + consistent error handling are active.
 - [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
-- [ ] For auth changes: Clerk login/token -> protected API call succeeds (`401` without token, `200` with valid token).
+- [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
 - [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
@@ -64,13 +64,13 @@ Complete this checklist before implementation to avoid setup blockers.
 ### Required accounts (MVP)
 - [ ] Git hosting account and repository access configured.
 - [ ] OpenAI account with active API billing and API key.
-- [ ] Authentication provider account (Clerk recommended) with app created.
+- [ ] Supabase project created (Auth + Postgres + Storage enabled).
 - [ ] PostgreSQL environment ready:
-- [ ] local Docker Postgres for development
-- [ ] managed Postgres for staging (recommended)
+- [ ] Supabase local Postgres (via Supabase CLI/Docker) for development
+- [ ] Supabase managed Postgres for staging/prod
 - [ ] Object storage ready:
-- [ ] local Docker MinIO for development (recommended)
-- [ ] managed storage for staging/prod (S3-compatible, Cloudflare R2, or Supabase Storage)
+- [ ] Supabase local Storage (via Supabase CLI/Docker) for development
+- [ ] Supabase Storage buckets configured for staging/prod
 - [ ] Stripe account with test mode enabled (for billing phase).
 
 ### Recommended accounts (to reduce risk)
@@ -89,7 +89,7 @@ Complete this checklist before implementation to avoid setup blockers.
 
 ### Environment readiness checks
 - [ ] `.env.example` completed with all required variables for local startup.
-- [ ] Clerk test users and token validation path verified.
+- [ ] Supabase Auth test users and token validation path verified.
 - [ ] OpenAI key validated with a minimal API test call.
 - [ ] Postgres connection, migration run, and rollback test completed.
 - [ ] Object storage upload/download test completed.
@@ -107,7 +107,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [ ] Define support contact and incident response owner.
 
 ### Day 0 (owner checklist, 2-4 hours)
-- [ ] Create/verify accounts: OpenAI, Clerk, Postgres target, object storage.
+- [ ] Create/verify accounts: OpenAI, Supabase, Stripe (test mode).
 - [ ] Enable MFA everywhere and store recovery codes securely.
 - [ ] Generate dev-only keys/secrets and place them in local secret storage.
 - [ ] Set OpenAI budget cap and spend alerts.
@@ -117,7 +117,7 @@ Complete this checklist before implementation to avoid setup blockers.
 ### Day 1 (project readiness, 2-4 hours)
 - [ ] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
 - [ ] Validate `docker compose config` and ensure services become healthy.
-- [ ] Ensure local Docker stack includes at minimum: `backend`, `postgres+pgvector`, `minio`.
+- [ ] Ensure local Docker stack includes at minimum: `backend` + Supabase local stack (`auth`, `postgres+pgvector`, `storage`).
 - [ ] Verify `.env.example` completeness against actual runtime needs.
 - [ ] Execute one full smoke path: backend boot -> health endpoints -> DB readiness.
 - [ ] Record all setup commands in `README.md` so setup is reproducible.
@@ -129,11 +129,8 @@ Use this as your single source of truth for external dependencies and ownership.
 | Service | Purpose | Environment(s) | Console URL | Secret/Key Name | Owner | Backup Owner | Status | Last Verified | Notes |
 |---|---|---|---|---|---|---|---|---|---|
 | OpenAI | LLM + Whisper APIs | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Billing enabled + spend cap set |
-| Clerk | Authentication | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | JWT template and webhook configured |
-| PostgreSQL (managed) | Primary DB | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Backups + restore policy defined |
-| PostgreSQL (local Docker) | Local development DB | dev | local | n/a | TODO | TODO | planned | TODO | pgvector enabled |
-| MinIO (local Docker) | Local object storage for receipt photo attachments | dev | local | TODO | TODO | TODO | planned | TODO | S3-compatible endpoint configured |
-| Object Storage (managed) | Receipt photo attachments | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Signed URL strategy decided |
+| Supabase (managed) | Auth + Postgres + Storage | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | JWT settings, backups, storage buckets configured |
+| Supabase (local CLI/Docker) | Local Auth + Postgres + Storage | dev | local | n/a | TODO | TODO | planned | TODO | Local parity with managed project verified |
 | Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |
 | Email Provider (TBD) | Transactional notifications | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Domain authentication + delivery monitoring |
 | CI Platform | Build/test automation | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Required checks enabled |
@@ -150,7 +147,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P0 - Product Lock and Setup (blocking)
 
-- [ ] Confirm final stack: Flutter, FastAPI, PostgreSQL, pgvector, Whisper, Clerk, Stripe.
+- [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper, Stripe.
 - [ ] Freeze MVP scope and non-goals in one source of truth document.
 - [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
 - [ ] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
@@ -252,7 +249,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P5 - Auth and Access Control
 
-- [ ] Integrate Clerk JWT validation in backend.
+- [ ] Integrate Supabase Auth JWT validation in backend.
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.
@@ -302,7 +299,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P7 - Flutter Mobile App
 
 - [ ] Bootstrap Flutter app with clean architecture (state management decided and fixed).
-- [ ] Login/logout with Clerk.
+- [ ] Login/logout with Supabase Auth.
 - [ ] First-run onboarding focused on fast first value (first memory + first question).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
 - [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
@@ -345,7 +342,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P9 - Attachments
 
-- [ ] Integrate S3-compatible object storage.
+- [ ] Integrate Supabase Storage.
 - [ ] Endpoint `POST /attachments` with strict file type/size validation (receipt photos only).
 - [ ] Link attachment <-> memory with user ownership checks.
 - [ ] Introduce attachment lifecycle state machine (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `failed`) with deterministic transitions.
@@ -501,7 +498,7 @@ Goal: deliver a production-grade backend foundation plus DB baseline (P0-P2 firs
 - [ ] Deliverable: startup smoke test green in local environment.
 
 ### Day 3 - Database and migrations baseline
-- [ ] Add Postgres service + pgvector-enabled DB image in `docker-compose`.
+- [ ] Add Supabase local stack (Auth + Postgres + Storage) in `docker-compose`/Supabase CLI setup.
 - [ ] Set up migration framework and first migration baseline.
 - [ ] Create core tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
 - [ ] Add key indexes and constraints for `user_id`, `created_at`, `memory_type`.

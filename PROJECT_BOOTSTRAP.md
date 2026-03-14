@@ -76,6 +76,10 @@ Database:
 
 PostgreSQL
 
+Provider:
+
+Supabase Postgres
+
 Required extension:
 
 pgvector
@@ -160,11 +164,9 @@ MVP attachment policy:
 - upload/scan alone must never persist memory
 - OCR output must go through normal clarification + confirmation flow
 
-Recommended providers:
+Provider:
 
-S3-compatible storage
-Cloudflare R2
-Supabase storage
+Supabase Storage
 
 The database stores only file metadata.
 
@@ -176,11 +178,6 @@ Authentication must use an external provider.
 
 Recommended provider:
 
-Clerk
-
-Alternative providers:
-
-Auth0
 Supabase Auth
 
 The backend validates authentication tokens.

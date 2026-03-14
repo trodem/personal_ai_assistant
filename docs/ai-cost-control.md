@@ -60,11 +60,11 @@ When the user records a voice memory.
 Pipeline:
 
 voice
-↓
+->
 transcription
-↓
+->
 LLM extraction
-↓
+->
 structured memory
 
 This step uses minimal tokens.

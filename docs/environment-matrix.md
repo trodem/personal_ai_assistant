@@ -22,9 +22,8 @@ Goal:
 Default stack:
 
 - backend in Docker
-- PostgreSQL + pgvector in Docker
-- MinIO in Docker
-- external SaaS: OpenAI, Clerk
+- Supabase local stack in Docker (Auth + PostgreSQL + pgvector + Storage)
+- external SaaS: OpenAI
 
 Data policy:
 
@@ -41,9 +40,8 @@ Goal:
 Default stack:
 
 - backend deployed with staging config
-- managed PostgreSQL
-- managed object storage
-- OpenAI/Clerk/Stripe test mode
+- managed Supabase (Auth + Postgres + Storage)
+- OpenAI + Stripe test mode with Supabase staging project
 
 Data policy:
 
@@ -70,9 +68,9 @@ Requirements:
 
 | Area | dev | staging | prod |
 |---|---|---|---|
-| Auth provider | Clerk (dev app) | Clerk (staging app) | Clerk (prod app) |
-| DB | local Docker Postgres | managed Postgres | managed Postgres |
-| Storage | local MinIO | managed object storage | managed object storage |
+| Auth provider | Supabase Auth (local) | Supabase Auth (staging project) | Supabase Auth (prod project) |
+| DB | Supabase local Postgres | Supabase managed Postgres | Supabase managed Postgres |
+| Storage | Supabase local Storage | Supabase managed Storage | Supabase managed Storage |
 | Billing | disabled or mocked | Stripe test mode | Stripe live mode |
 | AI provider | OpenAI dev key | OpenAI staging key | OpenAI prod key |
 | Observability | local logs | full metrics + alerts | full metrics + alerts |

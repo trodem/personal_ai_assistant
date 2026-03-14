@@ -42,9 +42,9 @@ Voice processing occurs in the backend.
 Pipeline:
 
 User audio
-↓
+->
 Backend upload
-↓
+->
 Whisper speech-to-text
 
 Speech recognition is not performed locally on the device.
@@ -58,13 +58,13 @@ The system uses a **multi-stage AI pipeline**.
 Pipeline:
 
 Speech-to-text (Whisper)
-↓
+->
 Memory extraction (LLM)
-↓
+->
 Clarification if needed
-↓
+->
 User confirmation
-↓
+->
 Database storage
 
 AI is also used for generating natural language responses to questions.
@@ -76,6 +76,8 @@ AI is also used for generating natural language responses to questions.
 Database: PostgreSQL
 
 Vector search: pgvector extension.
+
+Provider: Supabase Postgres.
 
 The database stores:
 
@@ -136,6 +138,18 @@ All data is isolated per user.
 Each table includes a user_id field.
 
 Users cannot access other users' data.
+
+---
+
+# Platform Provider Decision
+
+Supabase is the default platform for core backend services:
+
+- Supabase Auth for authentication
+- Supabase Postgres for primary relational storage
+- Supabase Storage for receipt-photo attachments
+
+Alternative auth/storage providers are out of scope for MVP unless explicitly re-approved.
 
 ---
 
@@ -210,7 +224,7 @@ limited questions
 
 Premium plan:
 
-10–15 € per month
+10-15 EUR per month
 
 Premium features:
 

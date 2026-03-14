@@ -67,11 +67,11 @@ The backend exposes REST APIs used by the mobile application.
 Authentication is handled by an external provider.
 
 Provider:
-Clerk
+Supabase Auth
 
 Flow:
 
-User login -> Clerk -> JWT token -> Backend verification
+User login -> Supabase Auth -> JWT token -> Backend verification
 
 The backend validates tokens before processing requests.
 
@@ -112,6 +112,9 @@ User voice -> mobile recording -> backend -> Whisper API -> text
 Primary database:
 
 PostgreSQL
+
+Provider:
+Supabase Postgres
 
 The database stores:
 
@@ -167,7 +170,7 @@ receipt photo (camera or gallery)
 
 -> strict file validation (`jpg`, `jpeg`, `png`, `webp`, `heic`)
 
--> object storage upload
+-> Supabase Storage upload
 
 -> OCR extraction
 
@@ -198,8 +201,8 @@ Components:
 
 - mobile application
 - backend API
-- PostgreSQL database
-- object storage
+- Supabase Postgres
+- Supabase Storage
 - AI services
 
 The backend will run inside containers and can scale horizontally.

@@ -66,6 +66,6 @@ Training custom models is not part of the MVP.
 
 # Full document knowledge base
 
-While files can be attached to memories, the first version will not include full document indexing systems for large document collections.
+While receipt photos can be attached to memories, the first version will not include full document indexing systems for large document collections.
 
 Attachments are primarily contextual references for individual memories.

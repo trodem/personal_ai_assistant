@@ -34,15 +34,15 @@ When a user records voice input, the following pipeline runs.
 
 ```
 User Voice
-↓
+->
 Audio Upload
-↓
+->
 Speech-to-Text (Whisper)
-↓
+->
 Text Processing
-↓
+->
 AI Extraction
-↓
+->
 Structured Memory
 ```
 
@@ -56,19 +56,19 @@ When a user adds a receipt photo, the following pipeline runs.
 
 ```
 Receipt Photo (camera/gallery)
-↓
+->
 Upload validation (type/size/auth)
-↓
+->
 Object storage persistence
-↓
+->
 OCR text extraction
-↓
+->
 Memory extraction proposal
-↓
+->
 Clarification (if required)
-↓
+->
 User confirmation (`Confirm / Modify / Cancel`)
-↓
+->
 Memory stored
 ```
 
@@ -89,17 +89,17 @@ When the user records a new memory:
 
 ```
 voice
-↓
+->
 Whisper transcription
-↓
+->
 LLM memory extraction
-↓
+->
 structured memory proposal
-↓
+->
 clarification if required
-↓
+->
 user confirmation
-↓
+->
 memory stored
 ```
 
@@ -179,15 +179,15 @@ When a user asks a question:
 
 ```
 voice question
-↓
+->
 Whisper transcription
-↓
+->
 intent detection
-↓
+->
 database query
-↓
+->
 result aggregation
-↓
+->
 LLM generates natural response
 ```
 
@@ -205,7 +205,7 @@ Example question:
 
 Process:
 
-1. intent detected → expense summary
+1. intent detected -> expense summary
 2. database query
 3. sum calculated
 4. AI generates final answer
@@ -261,13 +261,13 @@ Process:
 
 ```
 user question
-↓
+->
 embedding generation
-↓
+->
 vector search in database
-↓
+->
 retrieve relevant memories
-↓
+->
 AI answer generation
 ```
 

@@ -32,7 +32,7 @@ Goal: Create the database schema.
 
 Tasks:
 
-* Setup PostgreSQL
+* Setup Supabase Postgres
 * Enable pgvector extension
 * Create database tables
 
@@ -100,7 +100,7 @@ Goal: Secure user access.
 
 Tasks:
 
-* Integrate external authentication provider
+* Integrate Supabase Auth
 * Validate tokens in backend
 * Connect users to database records
 
@@ -169,7 +169,7 @@ Goal: Allow receipt photo uploads only.
 
 Tasks:
 
-* Implement object storage integration
+* Implement Supabase Storage integration
 * Upload receipt photos (`jpg`, `jpeg`, `png`, `webp`, `heic`)
 * Reject PDF and any non-image upload
 * Run OCR on uploaded receipt photos

@@ -98,6 +98,10 @@ memory.py
 query.py
 attachments.py
 dashboard.py
+settings.py
+admin.py
+author.py
+billing.py
 
 services/
 
@@ -121,6 +125,24 @@ migrations/
 auth/
 
 auth_middleware.py
+
+settings/
+
+profile_service.py
+security_service.py
+
+admin/
+
+user_admin_service.py
+
+author/
+
+author_supervision_service.py
+role_management_service.py
+
+billing/
+
+billing_service.py
 
 utils/
 
@@ -183,6 +205,26 @@ POST /attachments
 dashboard.py
 
 GET /dashboard
+
+settings.py
+
+GET /me/settings
+PATCH /me/settings/profile
+PATCH /me/settings/security
+
+admin.py
+
+GET /admin/users
+PATCH /admin/users/{id}/status
+
+author.py
+
+GET /author/dashboard
+PATCH /author/users/{id}/role
+
+billing.py
+
+POST /billing/subscription/change-plan
 
 ---
 

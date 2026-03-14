@@ -26,8 +26,8 @@ This document complements:
 ## Trust Boundaries
 
 - mobile client <-> backend API
-- backend API <-> external providers (OpenAI, Clerk, Stripe, storage)
-- backend API <-> database
+- backend API <-> Supabase platform services (Auth, Postgres, Storage)
+- backend API <-> external providers (OpenAI, Stripe)
 
 All boundaries require explicit authentication and validation.
 
