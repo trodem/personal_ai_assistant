@@ -142,7 +142,6 @@ POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
 GET /api/v1/me/retention/status
-POST /api/v1/billing/trial/activate
 POST /api/v1/billing/coupons/apply
 POST /api/v1/me/data-export
 GET /api/v1/me/data-export/{job_id}
@@ -234,7 +233,7 @@ subscription validation
 payment method management
 subscription cancellation retention flow (reason + alternatives preview)
 answer feedback loop (`Like` / `Dislike`)
-trial and coupon management
+coupon and discount management
 data portability export flow (`json`/`csv`/`pdf`)
 
 Premium features must require active subscription.

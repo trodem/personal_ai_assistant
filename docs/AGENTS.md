@@ -42,7 +42,7 @@ Precedence order when conflicts appear:
 - `docs/multi-tenancy.md`
 - `docs/data-lifecycle.md`
 - `docs/churn-management.md`
-- `docs/trial-and-freemium.md`
+- `docs/freemium-and-discounts.md`
 - `docs/data-portability.md`
 - `docs/completeness-matrix.md`
 - `docs/coding-standards.md`
@@ -62,7 +62,7 @@ When to consult each document:
 - B2B/tenant isolation change: read `docs/multi-tenancy.md`, `docs/rbac-matrix.md`, and `docs/security-threat-model.md`
 - retention/deletion/GDPR lifecycle change: read `docs/data-lifecycle.md`, `docs/security-threat-model.md`, and `docs/operations-runbook.md`
 - churn/retention change: read `docs/churn-management.md`, `docs/monetization.md`, and `docs/product-analytics.md`
-- trial/coupon/pricing promotion change: read `docs/trial-and-freemium.md`, `docs/monetization.md`, and `docs/rbac-matrix.md`
+- coupon/pricing promotion change: read `docs/freemium-and-discounts.md`, `docs/monetization.md`, and `docs/rbac-matrix.md`
 - user export/portability change: read `docs/data-portability.md`, `docs/security-threat-model.md`, and `docs/data-lifecycle.md`
 - planning completeness/review request: read `docs/completeness-matrix.md` with `TODO.md` and `PROJECT_CONTEXT.md`
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`

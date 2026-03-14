@@ -659,27 +659,6 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
-  /api/v1/billing/trial/activate:
-    post:
-      tags: [Billing]
-      summary: Activate trial (if eligible)
-      description: Activates trial plan for eligible user account.
-      security:
-        - bearerAuth: []
-      responses:
-        "200":
-          description: Trial activated.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserSettingsResponse"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          description: Forbidden. Not eligible or role-locked policy.
-        "422":
-          $ref: "#/components/responses/ValidationError"
-
   /api/v1/billing/coupons/apply:
     post:
       tags: [Billing]
@@ -1038,6 +1017,7 @@ components:
         subscription_plan:
           type: string
           enum: [free, premium]
+          description: Current effective plan state.
         billing_exempt:
           type: boolean
           description: True for `admin` and `author` roles by policy.
@@ -1145,6 +1125,7 @@ components:
         plan:
           type: string
           enum: [free, premium]
+          description: Self-service plan change target.
 
     AnswerFeedbackRequest:
       type: object
@@ -1260,6 +1241,7 @@ components:
         subscription_plan:
           type: string
           enum: [free, premium]
+          description: Current effective plan state.
         billing_exempt:
           type: boolean
 

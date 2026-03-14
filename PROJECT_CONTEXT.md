@@ -255,12 +255,13 @@ memories
 memory_versions
 attachments
 embeddings
+qa_interactions
 
 ---
 
 # USER ISOLATION
 
-All records include:
+All user-scoped records include:
 
 user_id
 
@@ -381,7 +382,6 @@ POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
 GET /api/v1/me/retention/status
-POST /api/v1/billing/trial/activate
 POST /api/v1/billing/coupons/apply
 POST /api/v1/me/data-export
 GET /api/v1/me/data-export/{job_id}
@@ -547,7 +547,6 @@ payments
 billing events
 plan upgrades
 plan downgrades
-trial activation/expiry
 coupon and temporary discount handling
 
 Users must be able to manage subscription in app settings (`free` <-> `premium`) according to billing policy.

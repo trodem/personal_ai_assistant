@@ -72,6 +72,7 @@ Fields:
 
 id (uuid, primary key)
 memory_id (uuid, foreign key)
+user_id (uuid, foreign key)
 version_number (integer)
 raw_text (text)
 
@@ -144,6 +145,7 @@ Fields:
 
 id (uuid, primary key)
 memory_id (uuid)
+user_id (uuid)
 embedding (vector)
 created_at (timestamp)
 
@@ -176,9 +178,29 @@ The system computes the current state dynamically when answering queries.
 
 # Multi-user Isolation
 
-All tables include user_id to isolate user data.
+All user-scoped tables include `user_id` to isolate user data.
 
 Users cannot access data belonging to other users.
+
+System-owned tables that do not represent user content may omit `user_id`.
+
+---
+
+# AI Query History
+
+Stores persisted question/answer interactions used for export, analytics, and auditability.
+
+Table: qa_interactions
+
+Fields:
+
+id (uuid, primary key)
+user_id (uuid, foreign key)
+question_text (text)
+answer_text (text)
+confidence (text)
+source_memory_ids (jsonb)
+created_at (timestamp)
 
 ---
 

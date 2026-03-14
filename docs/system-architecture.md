@@ -135,7 +135,6 @@ POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
 GET /api/v1/me/retention/status
-POST /api/v1/billing/trial/activate
 POST /api/v1/billing/coupons/apply
 POST /api/v1/me/data-export
 GET /api/v1/me/data-export/{job_id}
@@ -235,6 +234,7 @@ memories
 memory_versions
 attachments
 embeddings
+qa_interactions
 
 PostgreSQL handles:
 
@@ -335,7 +335,6 @@ payment processing
 billing events
 plan upgrades
 plan cancellation retention flow
-trial activation/expiry
 coupon and temporary discount application
 
 The backend checks subscription status before allowing premium features.

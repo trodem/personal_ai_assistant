@@ -57,7 +57,6 @@ Role hierarchy:
 | `POST /api/v1/billing/subscription/cancel-preview` | allow | deny | deny | churn flow preview for `user` only |
 | `POST /api/v1/billing/subscription/cancel` | allow | deny | deny | churn reason mandatory; `user` only |
 | `GET /api/v1/me/retention/status` | allow | deny | deny | retention status is user self-service only |
-| `POST /api/v1/billing/trial/activate` | allow | deny | deny | trial eligibility rules apply; role-locked policy enforced |
 | `POST /api/v1/billing/coupons/apply` | allow | deny | deny | coupon eligibility rules apply; role-locked policy enforced |
 | `POST /api/v1/me/data-export` | allow | allow | allow | own export only |
 | `GET /api/v1/me/data-export/{job_id}` | allow | allow | allow | own export job only |

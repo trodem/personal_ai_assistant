@@ -1,8 +1,8 @@
-# Trial and Freemium Management Policy
+# Freemium and Discount Management Policy
 
 ## Purpose
 
-Define trial lifecycle, freemium limits, and discount/coupon controls.
+Define freemium limits and discount/coupon controls.
 
 ---
 
@@ -10,8 +10,7 @@ Define trial lifecycle, freemium limits, and discount/coupon controls.
 
 Applies to:
 
-- free/trial/premium plan transitions
-- trial eligibility and expiration
+- free/premium plan transitions
 - coupon and temporary discount logic
 
 ---
@@ -19,21 +18,11 @@ Applies to:
 ## Plan States
 
 - `free`
-- `trial`
 - `premium`
 
 Role lock policy still applies:
 
 - `admin` and `author` remain `premium` and billing-exempt
-
----
-
-## Trial Rules (MVP)
-
-- one trial per eligible user account
-- explicit trial duration configuration (for example 7 or 14 days)
-- automatic transition on trial expiry according to policy
-- trial start/end timestamps must be auditable
 
 ---
 
@@ -51,13 +40,12 @@ Role lock policy still applies:
 - no coupon flow for role-locked billing-exempt accounts (`admin`, `author`)
 - failed coupon application must return deterministic error code
 - all plan-price changes must preserve compatibility with active subscriptions
+- self-service plan change endpoint supports only `free <-> premium`
 
 ---
 
 ## Metrics
 
-- trial activation rate
-- trial-to-premium conversion rate
 - coupon redemption rate
 - discounted-user retention after 30 days
 
@@ -65,4 +53,4 @@ Role lock policy still applies:
 
 ## Governance
 
-- trial/coupon policy changes must update this document, API spec, and `CHANGELOG.md`
+- coupon/pricing policy changes must update this document, API spec, and `CHANGELOG.md`

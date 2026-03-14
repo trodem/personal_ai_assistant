@@ -113,15 +113,15 @@ Controls:
 
 ---
 
-### Coupon/trial abuse
+### Coupon abuse
 
 Risk:
 
-- repeated/automated discount exploitation and unauthorized trial reuse
+- repeated/automated discount exploitation
 
 Controls:
 
-- eligibility checks and one-trial policy
+- deterministic coupon eligibility checks and usage limits
 - coupon validity window + usage limits
 - redemption rate limits and anti-duplication controls
 
@@ -163,6 +163,7 @@ Risk:
 
 Controls:
 
+- support email/password auth with strong password policy and secure reset flow
 - support OAuth SSO for trusted providers (`Google`, `Apple`)
 - 2FA/TOTP support for all users
 - mandatory 2FA for `admin` and `author`

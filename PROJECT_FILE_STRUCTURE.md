@@ -119,6 +119,7 @@ user.py
 memory.py
 memory_version.py
 attachment.py
+qa_interaction.py
 
 database/
 
@@ -148,7 +149,6 @@ role_management_service.py
 billing/
 
 billing_service.py
-trial_service.py
 coupon_service.py
 churn_service.py
 
@@ -262,7 +262,6 @@ POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
 GET /api/v1/me/retention/status
-POST /api/v1/billing/trial/activate
 POST /api/v1/billing/coupons/apply
 POST /api/v1/me/data-export
 GET /api/v1/me/data-export/{job_id}
@@ -293,7 +292,7 @@ semantic-caching.md
 multi-tenancy.md
 data-lifecycle.md
 churn-management.md
-trial-and-freemium.md
+freemium-and-discounts.md
 data-portability.md
 completeness-matrix.md
 

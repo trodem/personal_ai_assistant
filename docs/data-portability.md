@@ -12,7 +12,7 @@ Export includes user-owned data:
 
 - memories and memory versions
 - attachments metadata
-- question/answer history
+- question/answer history (from `qa_interactions`)
 - settings/profile metadata
 - subscription and notification preference metadata
 

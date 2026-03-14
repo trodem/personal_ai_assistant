@@ -41,6 +41,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [ ] For B2B tenant changes: strict `tenant_id` + `user_id` isolation rules are enforced per `docs/multi-tenancy.md`.
 - [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
+- [ ] For auth changes: email/password login flow succeeds.
 - [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple).
 - [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
@@ -167,7 +168,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper, Stripe.
 - [ ] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
-- [ ] Lock authentication policy for MVP: Supabase OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
+- [ ] Lock authentication policy for MVP: Supabase Auth with email/password + OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
 - [ ] Freeze MVP scope and non-goals in one source of truth document.
 - [ ] Define initial feature-flag governance model (naming, ownership, expiry, kill-switch requirements).
 - [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
@@ -207,7 +208,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [ ] Set up migrations (Alembic or equivalent).
 - [ ] Enable `pgvector` extension.
-- [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
+- [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, `qa_interactions`.
 - [ ] Add user billing-policy fields (`role`, `subscription_plan`, `billing_exempt`) with constraints.
 - [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
 - [ ] Implement memory versioning strategy (`memory_versions` append-only).
@@ -275,7 +276,6 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `POST /api/v1/billing/subscription/cancel-preview` (churn prevention preview)
 - [ ] `POST /api/v1/billing/subscription/cancel` (cancel with mandatory reason)
 - [ ] `GET /api/v1/me/retention/status` (churn risk + recommended retention actions)
-- [ ] `POST /api/v1/billing/trial/activate` (trial activation for eligible users)
 - [ ] `POST /api/v1/billing/coupons/apply` (coupon apply for eligible users)
 - [ ] `POST /api/v1/me/data-export` (start export job: `json/csv/pdf`)
 - [ ] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
@@ -293,6 +293,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P5 - Auth and Access Control
 
 - [ ] Integrate Supabase Auth JWT validation in backend.
+- [ ] Enable email/password auth in Supabase Auth for MVP.
 - [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`).
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
@@ -455,7 +456,6 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Add cancellation retention flow (`cancel-preview`): reason capture, pause/downgrade alternatives, final cancel confirmation.
 - [ ] Persist and analyze churn reasons to guide product/pricing improvements.
 - [ ] Add proactive churn-risk scoring and trigger retention interventions before cancel intent.
-- [ ] Implement trial lifecycle management (`trial` plan state, eligibility, expiry transition).
 - [ ] Implement coupon/discount logic (validity window, usage limits, anti-abuse controls).
 
 ---
@@ -604,7 +604,7 @@ Goal: deliver a production-grade backend foundation plus DB baseline (P0-P2 firs
 ### Day 3 - Database and migrations baseline
 - [ ] Add Supabase local stack (Auth + Postgres + Storage) in `docker-compose`/Supabase CLI setup.
 - [ ] Set up migration framework and first migration baseline.
-- [ ] Create core tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
+- [ ] Create core tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, `qa_interactions`.
 - [ ] Add key indexes and constraints for `user_id`, `created_at`, `memory_type`.
 - [ ] Add repository layer skeleton with mandatory per-user filtering contract.
 - [ ] Deliverable: migrations run up/down cleanly and schema matches docs.

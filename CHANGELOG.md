@@ -12,6 +12,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Alignment invariant and documentation consistency requirements.
 - Admin and Author role architecture with RBAC-protected management endpoints.
 - Author safety policy (self-change restrictions and last-active-author protection).
+- Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
 - Architecture and governance docs aligned to receipt-photo-only attachment policy.
@@ -45,8 +46,12 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added formal rollout/lifecycle governance docs: `docs/feature-flags-experiments.md` and `docs/api-compatibility.md`, with alignment across AGENTS, TODO, roadmap, architecture, decisions, context, and analytics event taxonomy.
 - Added `docs/semantic-caching.md` with user-scoped cache strategy, thresholds/TTL, invalidation rules, and quality guardrails; aligned across AGENTS, TODO, query contract, roadmap, architecture, cost-control, LLMOps, and context docs.
 - Added `docs/multi-tenancy.md` and `docs/data-lifecycle.md` to formalize B2B tenant isolation and automated retention/deletion workflows (including right-to-be-forgotten), with alignment updates across AGENTS, TODO, roadmap, architecture, security threat model, context, and file structure docs.
-- Expanded churn/trial/portability planning with proactive churn-risk policy, trial/coupon governance, and data portability export policy (`json`/`csv`/`pdf`) including API contracts, RBAC, analytics KPIs, error codes, roadmap, and architecture/context alignment.
+- Expanded churn/portability planning with proactive churn-risk policy, coupon governance, and data portability export policy (`json`/`csv`/`pdf`) including API contracts, RBAC, analytics KPIs, error codes, roadmap, and architecture/context alignment.
 - Added `docs/completeness-matrix.md` as consolidated planning status matrix (capability -> docs/contracts/TODO coverage) and linked it in AGENTS routing and project file structure.
+- OpenAPI subscription schema aligned to freemium policy (`subscription_plan`: `free/premium` in user/admin responses).
+- Auth planning language normalized to include both email/password and OAuth SSO (Google/Apple) for MVP.
+- Database schema clarified for user isolation scope (`user_id` required on user-scoped tables) and extended with `qa_interactions` as canonical source for Q/A export history.
+- Trial lifecycle removed from planning/contracts by product decision; billing model is now strictly `free/premium` plus coupon/discount management.
 
 ---
 

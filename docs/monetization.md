@@ -42,13 +42,6 @@ Example limits:
 
 Attachments may be limited or disabled.
 
-Trial policy:
-
-- eligible users may activate a time-limited `trial` state
-- trial expiry transitions must follow deterministic billing policy
-
----
-
 # Premium Plan
 
 The premium plan unlocks the full potential of the assistant.

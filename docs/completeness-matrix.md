@@ -37,7 +37,7 @@ Status meanings:
 | Data lifecycle and right-to-be-forgotten | covered | `docs/data-lifecycle.md` | lifecycle policy contract | `P12`, `P13` |
 | Data portability export (`json`/`csv`/`pdf`) | covered | `docs/data-portability.md` | export job endpoints in `specs/api.yaml` | `P4`, `P12` |
 | Churn management (predictive + cancel retention) | covered | `docs/churn-management.md`, `docs/monetization.md` | retention/cancel endpoints in `specs/api.yaml` | `P10` |
-| Trial/coupon/discount management | covered | `docs/trial-and-freemium.md`, `docs/monetization.md` | trial/coupon endpoints in `specs/api.yaml` | `P10` |
+| Coupon/discount management | covered | `docs/freemium-and-discounts.md`, `docs/monetization.md` | coupon endpoint in `specs/api.yaml` | `P10` |
 | Feature flags and A/B testing | covered | `docs/feature-flags-experiments.md` | policy-level governance | `P11`, `P13` |
 | API backward compatibility lifecycle | covered | `docs/api-compatibility.md`, `docs/decisions.md` | versioning + deprecation policy | quality gates, `P4`, `P13` |
 

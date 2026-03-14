@@ -100,7 +100,6 @@ POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
 GET /api/v1/me/retention/status
-POST /api/v1/billing/trial/activate
 POST /api/v1/billing/coupons/apply
 POST /api/v1/me/data-export
 GET /api/v1/me/data-export/{job_id}
@@ -232,7 +231,6 @@ Tasks:
 * Add in-app settings plan management (upgrade/downgrade)
 * Add cancellation retention flow (reason capture + preview alternatives + final cancel)
 * Add proactive churn-risk scoring and pre-cancel retention triggers
-* Add trial lifecycle management and eligibility checks
 * Add coupon/discount management with anti-abuse controls
 * Add payment-method management (setup intent, list, default, remove)
 * Trigger transactional notifications for billing/account security events
