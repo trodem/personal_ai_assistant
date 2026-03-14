@@ -161,16 +161,16 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ### Day 0 Credentials and Policy Checklist
 - [x] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).
-- [ ] Secret rotation cadence defined (recommended: every 90 days).
-- [ ] Access revocation process defined for team offboarding.
-- [ ] Incident contact list documented (primary + backup).
-- [ ] Billing alert thresholds defined (warning/critical).
+- [x] Secret rotation cadence defined (recommended: every 90 days).
+- [x] Access revocation process defined for team offboarding.
+- [x] Incident contact list documented (primary + backup).
+- [x] Billing alert thresholds defined (warning/critical).
 
 ---
 
 ## P0 - Product Lock and Setup (blocking)
 
-- [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper, Stripe.
+- [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper.
 - [ ] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
 - [ ] Lock authentication policy for MVP: Supabase Auth with email/password + OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
 - [ ] Freeze MVP scope and non-goals in one source of truth document.

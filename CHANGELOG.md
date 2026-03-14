@@ -13,6 +13,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `TERMS_BASELINE.md` with MVP terms baseline for account usage, acceptable use, AI-output limitations, billing baseline, and liability/contact placeholders.
 - Added `SUPPORT_CONTACT_AND_INCIDENT_OWNER.md` defining MVP support contact, incident owner/backup owner, and baseline escalation flow.
 - Added `KEY_NAMING_CONVENTION.md` with canonical secret/key naming pattern `APP_<SERVICE>_<ENV>_<PURPOSE>`, enforcement rules, and environment-specific examples.
+- Added `SECRET_ROTATION_CADENCE.md` defining 90-day secret rotation baseline, minimum rotation procedure, emergency rotation trigger, and ownership model.
+- Added `ACCESS_REVOCATION_OFFBOARDING.md` with team offboarding access-revocation checklist, SLA, validation steps, and audit-trail requirements.
+- Added `INCIDENT_CONTACT_LIST.md` documenting primary and backup incident contacts plus escalation usage rules.
+- Added `BILLING_ALERT_THRESHOLDS.md` documenting warning/critical billing alert thresholds and verification steps aligned with LLMOps runtime/test coverage.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -63,6 +67,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Completed Day 1 smoke-path verification in `TODO.md` (`backend boot -> /health/live 200 -> /health/ready 200 -> DB readiness query`).
 - Updated `README.md` with a reproducible local setup command sequence covering Docker/Supabase startup, health checks, OpenAI/Supabase auth checks, migration smoke, storage smoke, and full quality checks; marked the related Day 1 checklist item as completed in `TODO.md`.
 - Marked Day 0 credentials/policy checklist item `Key naming convention defined` as completed in `TODO.md`.
+- Marked Day 0 credentials/policy checklist item `Secret rotation cadence defined (recommended: every 90 days)` as completed in `TODO.md`.
+- Marked Day 0 credentials/policy checklist item `Access revocation process defined for team offboarding` as completed in `TODO.md`.
+- Marked Day 0 credentials/policy checklist item `Incident contact list documented (primary + backup)` as completed in `TODO.md`.
+- Marked Day 0 credentials/policy checklist item `Billing alert thresholds defined (warning/critical)` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.
