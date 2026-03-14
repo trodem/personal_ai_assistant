@@ -81,6 +81,7 @@ Question flow:
 - `question_answered`
 - `question_no_result`
 - `question_ambiguous`
+- `answer_feedback_submitted`
 
 Attachment flow:
 
@@ -97,6 +98,10 @@ Billing and settings:
 - `plan_upgrade_requested`
 - `plan_downgrade_requested`
 - `plan_changed`
+- `subscription_cancel_previewed`
+- `subscription_cancel_reason_submitted`
+- `subscription_retained`
+- `subscription_canceled`
 - `settings_profile_updated`
 - `settings_security_updated`
 - `settings_notification_preferences_updated`
@@ -173,6 +178,8 @@ Receipt funnel:
 - `time_to_first_successful_memory` = first `memory_persisted` - first `auth_login_completed`
 - `question_success_rate` = `question_answered / question_asked`
 - `onboarding_completion_rate` = `onboarding_completed / onboarding_started`
+- `answer_feedback_positive_rate` = `like / (like + dislike)`
+- `subscription_retention_rate_after_cancel_preview` = `subscription_retained / subscription_cancel_previewed`
 
 ---
 

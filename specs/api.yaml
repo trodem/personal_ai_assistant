@@ -16,6 +16,7 @@ tags:
   - name: Admin
   - name: Author
   - name: Billing
+  - name: Feedback
 
 paths:
   /api/v1/voice/memory:
@@ -136,6 +137,34 @@ paths:
           $ref: "#/components/responses/ValidationError"
         "503":
           description: Streaming unavailable. Client should fallback to non-stream endpoint.
+
+  /api/v1/feedback/answers:
+    post:
+      tags: [Feedback]
+      summary: Submit feedback for AI answer
+      description: Capture user satisfaction for a specific AI answer (`like` or `dislike`) with optional comment.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnswerFeedbackRequest"
+      responses:
+        "200":
+          description: Feedback accepted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
 
   /api/v1/memory:
     post:
@@ -559,6 +588,60 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
+  /api/v1/billing/subscription/cancel-preview:
+    post:
+      tags: [Billing]
+      summary: Preview cancellation outcomes and retention options
+      description: Returns consequences and available retention actions (for example pause/downgrade) before cancel.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelPreviewRequest"
+      responses:
+        "200":
+          description: Cancellation preview generated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancelPreviewResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan is locked by role policy.
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/billing/subscription/cancel:
+    post:
+      tags: [Billing]
+      summary: Cancel subscription
+      description: Cancels subscription with mandatory reason capture for churn analytics.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CancelSubscriptionRequest"
+      responses:
+        "200":
+          description: Subscription canceled.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan is locked by role policy.
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
   /api/v1/admin/users:
     get:
       tags: [Admin]
@@ -948,6 +1031,50 @@ components:
         plan:
           type: string
           enum: [free, premium]
+
+    AnswerFeedbackRequest:
+      type: object
+      required: [answer_id, sentiment]
+      properties:
+        answer_id:
+          type: string
+        sentiment:
+          type: string
+          enum: [like, dislike]
+        reason:
+          type: string
+        comment:
+          type: string
+
+    CancelPreviewRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          enum: [too_expensive, low_value, too_many_errors, not_using_enough, switched_alternative, other]
+
+    CancelPreviewResponse:
+      type: object
+      properties:
+        can_pause:
+          type: boolean
+        can_downgrade:
+          type: boolean
+        suggested_offer:
+          type: string
+        impact_summary:
+          type: string
+
+    CancelSubscriptionRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          enum: [too_expensive, low_value, too_many_errors, not_using_enough, switched_alternative, other]
+        comment:
+          type: string
 
     AdminUserRecord:
       type: object

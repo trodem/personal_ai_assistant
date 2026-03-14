@@ -118,6 +118,7 @@ POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
 POST /api/v1/question/stream
+POST /api/v1/feedback/answers
 POST /api/v1/memory
 GET /api/v1/memories
 DELETE /api/v1/memory/{id}
@@ -138,6 +139,8 @@ DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
+POST /api/v1/billing/subscription/cancel-preview
+POST /api/v1/billing/subscription/cancel
 
 The API must enforce user authentication.
 Role and permission enforcement must follow `docs/rbac-matrix.md`.
@@ -172,6 +175,7 @@ Add Memory
 Ask Assistant
 Dashboard
 Memory History
+Settings (including subscription retention flow)
 
 Voice recording must use push-to-talk.
 
@@ -222,6 +226,8 @@ subscription plans
 payment processing
 subscription validation
 payment method management
+subscription cancellation retention flow (reason + alternatives preview)
+answer feedback loop (`Like` / `Dislike`)
 
 Premium features must require active subscription.
 Role policy exception:

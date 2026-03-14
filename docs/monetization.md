@@ -71,6 +71,12 @@ Payment method management policy:
 - payment method data exposed to client must be masked
 - `admin` and `author` cannot use self-service billing/payment-method flows
 
+Churn management policy:
+
+- cancellation flow must capture reason before final cancellation
+- cancellation preview should offer retention alternatives (for example downgrade/pause)
+- churn reasons must be tracked for pricing/product iteration
+
 ---
 
 # AI Cost Control

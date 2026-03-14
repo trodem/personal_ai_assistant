@@ -246,6 +246,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `POST /api/v1/voice/question`
 - [ ] `POST /api/v1/question`
 - [ ] `POST /api/v1/question/stream` (SSE streaming answer with chunk/done events)
+- [ ] `POST /api/v1/feedback/answers` (like/dislike answer feedback with optional reason/comment)
 - [ ] `POST /api/v1/memory`
 - [ ] `GET /api/v1/memories`
 - [ ] `DELETE /api/v1/memory/{id}`
@@ -266,6 +267,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `GET /api/v1/notifications` (in-app notifications feed)
 - [ ] `POST /api/v1/notifications/{id}/read` (mark notification as read)
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
+- [ ] `POST /api/v1/billing/subscription/cancel-preview` (churn prevention preview)
+- [ ] `POST /api/v1/billing/subscription/cancel` (cancel with mandatory reason)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
@@ -374,6 +377,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
 - [ ] Add streaming answer UI mode (typing effect with SSE chunks + graceful fallback to non-stream endpoint).
+- [ ] Add answer feedback UI (`Like` / `Dislike`) with optional reason/comment capture.
 - [ ] No-result UI: clear message + CTA to "Add Memory".
 - [ ] Ensure AI microcopy/actions/error states follow `docs/ai-ux-contract.md`.
 - [ ] Widget tests on critical flows.
@@ -434,6 +438,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] In-app payment methods management UX for `user` role.
 - [ ] Restrict subscription self-service to `user` role; `admin`/`author` plan changes follow role policy.
 - [ ] Grace period and downgrade policy defined and enforced.
+- [ ] Add cancellation retention flow (`cancel-preview`): reason capture, pause/downgrade alternatives, final cancel confirmation.
+- [ ] Persist and analyze churn reasons to guide product/pricing improvements.
 
 ---
 

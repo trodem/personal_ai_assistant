@@ -114,6 +114,12 @@ Streaming behavior:
 - keep source-of-truth metadata (`confidence`, `source_memory_ids`) hidden until stream `done` event
 - if stream fails/interrupted, show actionable fallback to non-streaming retry
 
+Feedback behavior:
+
+- every final answer should expose `Like` / `Dislike` actions
+- dislike flow may collect optional reason/comment
+- feedback submit must be non-blocking for primary QA flow
+
 ---
 
 ## Receipt/OCR UX Contract

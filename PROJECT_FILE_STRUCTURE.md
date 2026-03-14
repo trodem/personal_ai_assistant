@@ -99,6 +99,7 @@ query.py
 attachments.py
 dashboard.py
 settings.py
+feedback.py
 admin.py
 author.py
 billing.py
@@ -110,6 +111,7 @@ ai_pipeline.py
 memory_extractor.py
 intent_detector.py
 vector_search.py
+feedback_service.py
 
 models/
 
@@ -209,6 +211,10 @@ GET /api/v1/memories
 POST /api/v1/question
 POST /api/v1/question/stream
 
+feedback.py
+
+POST /api/v1/feedback/answers
+
 attachments.py
 
 POST /api/v1/attachments
@@ -246,6 +252,8 @@ PATCH /api/v1/author/users/{id}/role
 billing.py
 
 POST /api/v1/billing/subscription/change-plan
+POST /api/v1/billing/subscription/cancel-preview
+POST /api/v1/billing/subscription/cancel
 
 ---
 

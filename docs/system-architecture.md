@@ -117,6 +117,7 @@ POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
 POST /api/v1/question/stream
+POST /api/v1/feedback/answers
 POST /api/v1/memory
 GET /api/v1/memories
 DELETE /api/v1/memory/{id}
@@ -130,6 +131,9 @@ POST /api/v1/me/settings/payment-methods/{id}/default
 DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
+POST /api/v1/billing/subscription/change-plan
+POST /api/v1/billing/subscription/cancel-preview
+POST /api/v1/billing/subscription/cancel
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -184,6 +188,10 @@ Intent detection
 Database query
 ->
 LLM response generation
+
+Post-answer feedback:
+
+`Like/Dislike` feedback is captured to improve quality and routing over time.
 
 AI is used only for language understanding and natural responses.
 
@@ -311,11 +319,13 @@ subscription management
 payment processing
 billing events
 plan upgrades
+plan cancellation retention flow
 
 The backend checks subscription status before allowing premium features.
 
 Users can manage plan changes in settings (`free` <-> `premium`) through backend billing orchestration.
 Users can manage payment methods in settings (add/update via setup intent, set default, remove) when role policy allows.
+Before cancellation, the app must capture reason and show retention alternatives (pause/downgrade) via preview flow.
 
 Role-based billing policy:
 

@@ -37,6 +37,7 @@ Role hierarchy:
 | `POST /api/v1/voice/question` | allow | allow | allow | blocked if status is `suspended`/`canceled` |
 | `POST /api/v1/question` | allow | allow | allow | blocked if status is `suspended`/`canceled` |
 | `POST /api/v1/question/stream` | allow | allow | allow | blocked if status is `suspended`/`canceled`; fallback to non-stream endpoint required on stream failure |
+| `POST /api/v1/feedback/answers` | allow | allow | allow | own answer feedback only |
 | `POST /api/v1/memory` | allow | allow | allow | explicit confirm required |
 | `GET /api/v1/memories` | allow | allow | allow | user-scoped data only |
 | `DELETE /api/v1/memory/{id}` | allow | allow | allow | user-scoped ownership checks |
@@ -53,6 +54,8 @@ Role hierarchy:
 | `GET /api/v1/notifications` | allow | allow | allow | own in-app notifications only |
 | `POST /api/v1/notifications/{id}/read` | allow | allow | allow | own notification only |
 | `POST /api/v1/billing/subscription/change-plan` | allow | deny | deny | `admin`/`author` plan locked by role policy |
+| `POST /api/v1/billing/subscription/cancel-preview` | allow | deny | deny | churn flow preview for `user` only |
+| `POST /api/v1/billing/subscription/cancel` | allow | deny | deny | churn reason mandatory; `user` only |
 | `GET /api/v1/admin/users` | deny | allow | allow | admin surface |
 | `PATCH /api/v1/admin/users/{id}/status` | deny | allow | allow | status: `active`/`suspended`/`canceled` |
 | `GET /api/v1/author/dashboard` | deny | deny | allow | global supervision dashboard |

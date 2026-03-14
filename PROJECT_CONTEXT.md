@@ -358,6 +358,7 @@ POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
 POST /api/v1/question/stream
+POST /api/v1/feedback/answers
 
 Other endpoints:
 
@@ -377,6 +378,8 @@ DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
+POST /api/v1/billing/subscription/cancel-preview
+POST /api/v1/billing/subscription/cancel
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -541,6 +544,7 @@ plan upgrades
 plan downgrades
 
 Users must be able to manage subscription in app settings (`free` <-> `premium`) according to billing policy.
+Before cancellation, the system must capture reason and show retention alternatives (for example pause/downgrade) before final cancel.
 
 Role-based billing policy:
 
@@ -560,8 +564,11 @@ email change flow
 password change flow
 subscription plan and billing status
 payment methods (add/default/remove, masked display only)
+subscription cancellation flow with reason capture and retention preview
 notification channel preferences (in-app/push/email)
 language preference (`preferred_language`: `en`/`it`/`de`, fallback `en`)
+
+Question/answer experience should include feedback actions (`Like` / `Dislike`) for continuous quality improvement.
 
 All sensitive changes must trigger transactional notifications.
 

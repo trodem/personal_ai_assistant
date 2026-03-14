@@ -79,6 +79,7 @@ POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
 POST /api/v1/question/stream
+POST /api/v1/feedback/answers
 POST /api/v1/memory
 GET /api/v1/memories
 DELETE /api/v1/memory/{id}
@@ -94,6 +95,9 @@ POST /api/v1/me/settings/payment-methods/{id}/default
 DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
+POST /api/v1/billing/subscription/change-plan
+POST /api/v1/billing/subscription/cancel-preview
+POST /api/v1/billing/subscription/cancel
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -160,6 +164,7 @@ Tasks:
 * Implement guided onboarding wizard (welcome -> language -> permissions -> first memory -> first question)
 * Persist onboarding completion and support skip/resume behavior
 * Implement AI interaction UX rules from `docs/ai-ux-contract.md` (clarification, confirmation, answer explainability, error states)
+* Add answer feedback UX (`Like`/`Dislike`) with optional reason capture
 
 Deliverable:
 
@@ -214,6 +219,7 @@ Tasks:
 * Create subscription plans
 * Validate subscription status
 * Add in-app settings plan management (upgrade/downgrade)
+* Add cancellation retention flow (reason capture + preview alternatives + final cancel)
 * Add payment-method management (setup intent, list, default, remove)
 * Trigger transactional notifications for billing/account security events
 
