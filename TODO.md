@@ -74,7 +74,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 Complete this checklist before implementation to avoid setup blockers.
 
 ### Hard blockers before Sprint 1 start
-- [ ] Supabase project is created and reachable (Auth + Postgres + Storage).
+- [x] Supabase project is created and reachable (Auth + Postgres + Storage).
 - [ ] OpenAI API key is valid and billing is enabled.
 - [ ] `.env.example` values are complete for local boot.
 - [ ] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
