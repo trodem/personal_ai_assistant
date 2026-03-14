@@ -12,6 +12,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `PRIVACY_POLICY_BASELINE.md` with MVP privacy baseline scope, data categories, retention/deletion process, security posture, and user rights/export-deletion commitments.
 - Added `TERMS_BASELINE.md` with MVP terms baseline for account usage, acceptable use, AI-output limitations, billing baseline, and liability/contact placeholders.
 - Added `SUPPORT_CONTACT_AND_INCIDENT_OWNER.md` defining MVP support contact, incident owner/backup owner, and baseline escalation flow.
+- Added `KEY_NAMING_CONVENTION.md` with canonical secret/key naming pattern `APP_<SERVICE>_<ENV>_<PURPOSE>`, enforcement rules, and environment-specific examples.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -61,6 +62,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Completed Day 1 environment-config verification in `TODO.md` by passing `.env.example` completeness and environment-matrix checks against current runtime requirements.
 - Completed Day 1 smoke-path verification in `TODO.md` (`backend boot -> /health/live 200 -> /health/ready 200 -> DB readiness query`).
 - Updated `README.md` with a reproducible local setup command sequence covering Docker/Supabase startup, health checks, OpenAI/Supabase auth checks, migration smoke, storage smoke, and full quality checks; marked the related Day 1 checklist item as completed in `TODO.md`.
+- Marked Day 0 credentials/policy checklist item `Key naming convention defined` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

@@ -160,7 +160,7 @@ Use this as your single source of truth for external dependencies and ownership.
 | Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set | -->
 
 ### Day 0 Credentials and Policy Checklist
-- [ ] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).
+- [x] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).
 - [ ] Secret rotation cadence defined (recommended: every 90 days).
 - [ ] Access revocation process defined for team offboarding.
 - [ ] Incident contact list documented (primary + backup).
