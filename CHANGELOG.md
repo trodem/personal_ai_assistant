@@ -7,6 +7,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
 - Added `scripts/quality-check.ps1` plus backend baseline test (`backend/tests/test_compose_baseline.py`) to run lint/test/build checks for touched components.
@@ -45,6 +46,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Expanded local bootstrap configuration with `APP_VERSION`, `APP_CORS_ALLOW_ORIGINS`, `AI_TOKEN_BUDGET_FREE`, and `AI_TOKEN_BUDGET_PREMIUM` in `.env.example` and backend compose env mapping; marked the corresponding hard blocker task as completed in `TODO.md`.
 - Architecture and governance docs aligned to receipt-photo-only attachment policy.
 - README and bootstrap guidance aligned to confirmation-first memory persistence.
 - Billing model updated with role-based policy: `admin`/`author` always `premium` and billing-exempt.

@@ -76,7 +76,7 @@ Complete this checklist before implementation to avoid setup blockers.
 ### Hard blockers before Sprint 1 start
 - [x] Supabase project is created and reachable (Auth + Postgres + Storage).
 - [x] OpenAI API key is valid and billing is enabled.
-- [ ] `.env.example` values are complete for local boot.
+- [x] `.env.example` values are complete for local boot.
 - [ ] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
 - [ ] MFA is enabled on Git hosting, OpenAI, Supabase, and Stripe accounts.
 
