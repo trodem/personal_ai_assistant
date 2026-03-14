@@ -5,7 +5,9 @@ import json
 import os
 import time
 from dataclasses import dataclass
+from functools import lru_cache
 
+import jwt
 from fastapi import Header
 from starlette import status
 
@@ -33,16 +35,31 @@ def _sign(payload_b64: str, secret: str) -> str:
     return _urlsafe_b64encode(digest)
 
 
-def build_dev_token(user_id: str, *, tenant_id: str = "tenant-default", ttl_seconds: int = 3600) -> str:
-    secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
-    payload = {"sub": user_id, "tenant_id": tenant_id, "exp": int(time.time()) + ttl_seconds}
+def _encode_jwt(payload: dict[str, object], secret: str) -> str:
+    header = {"alg": "HS256", "typ": "JWT"}
+    header_b64 = _urlsafe_b64encode(json.dumps(header, separators=(",", ":")).encode("utf-8"))
     payload_b64 = _urlsafe_b64encode(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
-    return f"{payload_b64}.{_sign(payload_b64, secret)}"
+    signing_input = f"{header_b64}.{payload_b64}"
+    signature = _sign(signing_input, secret)
+    return f"{signing_input}.{signature}"
+
+
+def build_dev_token(
+    user_id: str,
+    *,
+    tenant_id: str | None = "tenant-default",
+    ttl_seconds: int = 3600,
+) -> str:
+    secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
+    payload: dict[str, object] = {"sub": user_id, "exp": int(time.time()) + ttl_seconds}
+    if tenant_id:
+        payload["tenant_id"] = tenant_id
+    return _encode_jwt(payload, secret)
 
 
 def _decode_token(token: str) -> dict[str, object]:
     try:
-        payload_b64, signature = token.split(".", maxsplit=1)
+        header_b64, payload_b64, signature = token.split(".")
     except ValueError as exc:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,13 +67,32 @@ def _decode_token(token: str) -> dict[str, object]:
             message="Invalid token format.",
         ) from exc
 
-    secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
-    expected_signature = _sign(payload_b64, secret)
-    if not hmac.compare_digest(signature, expected_signature):
+    try:
+        header = json.loads(_urlsafe_b64decode(header_b64).decode("utf-8"))
+    except (ValueError, json.JSONDecodeError) as exc:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
             code="auth.invalid_token",
-            message="Invalid token signature.",
+            message="Token header is invalid.",
+        ) from exc
+    alg = str(header.get("alg", ""))
+    if alg == "HS256":
+        secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
+        expected_signature = _sign(f"{header_b64}.{payload_b64}", secret)
+        if not hmac.compare_digest(signature, expected_signature):
+            raise AppError(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                code="auth.invalid_token",
+                message="Invalid token signature.",
+            )
+    elif alg in {"ES256", "RS256"}:
+        payload = _decode_with_jwks(token, alg)
+        return payload
+    else:
+        raise AppError(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            code="auth.invalid_token",
+            message="Unsupported token algorithm.",
         )
 
     try:
@@ -85,6 +121,39 @@ def _decode_token(token: str) -> dict[str, object]:
     return payload
 
 
+@lru_cache(maxsize=1)
+def _jwks_client() -> jwt.PyJWKClient:
+    supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+    if not supabase_url:
+        raise AppError(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            code="auth.invalid_token",
+            message="SUPABASE_URL is required for JWT verification.",
+        )
+    jwks_url = f"{supabase_url}/auth/v1/.well-known/jwks.json"
+    return jwt.PyJWKClient(jwks_url)
+
+
+def _decode_with_jwks(token: str, algorithm: str) -> dict[str, object]:
+    try:
+        signing_key = _jwks_client().get_signing_key_from_jwt(token)
+        payload = jwt.decode(
+            token,
+            signing_key.key,
+            algorithms=[algorithm],
+            options={"verify_aud": False},
+        )
+        return dict(payload)
+    except AppError:
+        raise
+    except Exception as exc:
+        raise AppError(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            code="auth.invalid_token",
+            message="Token signature verification failed.",
+        ) from exc
+
+
 def get_current_user(
     authorization: str | None = Header(default=None),
     x_tenant_id: str | None = Header(default=None),
@@ -106,19 +175,31 @@ def get_current_user(
     payload = _decode_token(token)
     user_id = str(payload["sub"])
     token_tenant_id = str(payload.get("tenant_id", "")).strip()
-    if not x_tenant_id or not token_tenant_id:
+    if token_tenant_id:
+        if not x_tenant_id:
+            raise AppError(
+                status_code=status.HTTP_403_FORBIDDEN,
+                code="auth.forbidden",
+                message="Tenant context is required.",
+            )
+        if x_tenant_id != token_tenant_id:
+            raise AppError(
+                status_code=status.HTTP_403_FORBIDDEN,
+                code="auth.forbidden",
+                message="Cross-tenant access is forbidden.",
+            )
+        effective_tenant = token_tenant_id
+    else:
+        # Single-tenant fallback for personal mode tokens.
+        effective_tenant = "tenant-default"
+
+    if not effective_tenant:
         raise AppError(
             status_code=status.HTTP_403_FORBIDDEN,
             code="auth.forbidden",
             message="Tenant context is required.",
         )
-    if x_tenant_id != token_tenant_id:
-        raise AppError(
-            status_code=status.HTTP_403_FORBIDDEN,
-            code="auth.forbidden",
-            message="Cross-tenant access is forbidden.",
-        )
 
     user_id_ctx_var.set(user_id)
-    tenant_id_ctx_var.set(token_tenant_id)
-    return AuthenticatedUser(user_id=user_id, tenant_id=token_tenant_id)
+    tenant_id_ctx_var.set(effective_tenant)
+    return AuthenticatedUser(user_id=user_id, tenant_id=effective_tenant)

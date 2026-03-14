@@ -35,6 +35,15 @@ _MEMORY_FIXTURES = [
         "structured_data": {"topic": "alpha-tenant-b"},
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
+    {
+        "id": str(uuid4()),
+        "tenant_id": "tenant-default",
+        "user_id": "user-alpha",
+        "memory_type": "note",
+        "raw_text": "Private note for alpha in default tenant",
+        "structured_data": {"topic": "alpha-default"},
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    },
 ]
 
 

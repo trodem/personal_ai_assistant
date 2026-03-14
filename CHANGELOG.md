@@ -20,6 +20,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added production-grade log redaction in `backend/app/core/logging_config.py` (secret/token/password/email masking) with contract tests in `backend/tests/test_logging_redaction.py`.
 - Added security-by-default backend baseline with bearer-token validation and strict user_id-scoped memory access (GET /api/v1/memories) plus negative auth tests (401 missing/invalid token).
 - Added strict tenant+user isolation for tenant-aware access (`tenant_id` claim + `x-tenant-id` header enforcement, cross-tenant rejection) on `GET /api/v1/memories`, with dedicated negative tests.
+- Added Supabase-auth smoke tooling (`scripts/supabase-auth-smoke.ps1`) and JWT validation compatibility updates to verify `401` without token and `200` with a valid Supabase access token on protected endpoints.
+- Added Supabase JWT ES256/JWKS verification path in auth plus backend compose env wiring (SUPABASE_URL, SUPABASE_JWT_SECRET) to support real token validation.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
@@ -73,6 +75,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Update this file whenever a change is user-visible or developer-relevant.
 - Prefer updating `Unreleased` in the same PR/iteration as the change.
 - If a changelog update is skipped, document the reason in the PR notes.
+
 
 
 
