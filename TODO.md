@@ -63,7 +63,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] Flutter UI uses reusable components and centralized theme tokens (no scattered hardcoded styles/colors).
 - [x] Test scope is aligned with `docs/testing-strategy.md` for touched components.
 - [x] Environment/config choices are aligned with `docs/environment-matrix.md`.
-- [ ] Security-sensitive changes are checked against `docs/security-threat-model.md`.
+- [x] Security-sensitive changes are checked against `docs/security-threat-model.md`.
 - [ ] AI-input/output safety changes are aligned with `docs/content-moderation.md` and `docs/data-sanitization.md`.
 - [ ] Auth/role/permission changes are aligned with `docs/rbac-matrix.md`.
 

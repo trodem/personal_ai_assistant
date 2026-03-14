@@ -85,6 +85,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added Flutter UI design-system baseline with centralized theme tokens (`colors`, `spacing`, `radii`, `shadows`), reusable widgets (`AppPrimaryButton`, `AppSurfaceCard`), and app bootstrap wired to shared theme to prevent scattered hardcoded style usage; added Flutter analyze/test coverage for the new UI baseline.
 - Added `scripts/test-scope-check.ps1` to enforce testing-strategy-aligned scope for touched backend/mobile components (targeted unit/integration/e2e backend suites + Flutter analyze/test in `mobile/`).
 - Added `scripts/environment-matrix-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce dev environment/config alignment (`APP_ENV`, Supabase URL wiring, compose env bindings) against `docs/environment-matrix.md`.
+- Added `scripts/security-threat-model-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce security threat-model checks (auth/tenant isolation, RBAC+MFA, attachment upload/signed URL authorization, and log redaction).
 - Auth planning language normalized to include both email/password and OAuth SSO (Google/Apple) for MVP.
 - Database schema clarified for user isolation scope (`user_id` required on user-scoped tables) and extended with `qa_interactions` as canonical source for Q/A export history.
 - Trial lifecycle removed from planning/contracts by product decision; billing model is now strictly `free/premium` plus coupon/discount management.

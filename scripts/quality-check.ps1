@@ -33,6 +33,9 @@ docker compose config -q
 Write-Host "[lint] environment matrix alignment"
 ./scripts/environment-matrix-check.ps1
 
+Write-Host "[test] security threat-model alignment"
+./scripts/security-threat-model-check.ps1
+
 Write-Host "[runtime] docker compose up -d"
 docker compose up -d
 
