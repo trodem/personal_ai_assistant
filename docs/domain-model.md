@@ -25,8 +25,20 @@ Fields:
 
 - id
 - email
+- role
+- status
 - subscription status
 - created_at
+
+Role values:
+
+- user
+- admin
+
+Status values:
+
+- active
+- suspended
 
 ---
 

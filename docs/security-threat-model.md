@@ -48,6 +48,34 @@ Controls:
 
 ---
 
+### Admin privilege abuse
+
+Risk:
+
+- unauthorized or excessive admin actions on user accounts
+
+Controls:
+
+- strict RBAC (`user` vs `admin`) on admin endpoints
+- audit log for every admin action (who/when/target/change)
+- dual review for high-impact admin operations where feasible
+
+---
+
+### Notification abuse / spoofing
+
+Risk:
+
+- fake or repeated security/billing emails causing trust or phishing issues
+
+Controls:
+
+- send notifications only from backend trusted triggers
+- deduplicate/retry controls with delivery logs
+- clear signed sender domain and template governance
+
+---
+
 ### Token misuse / auth bypass
 
 Risk:

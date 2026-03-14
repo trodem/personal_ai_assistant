@@ -20,6 +20,7 @@ The platform consists of five main components:
 3. AI Processing Layer
 4. Database Layer
 5. Storage Layer
+6. Notification Layer (transactional email)
 
 System overview:
 
@@ -57,6 +58,8 @@ Memory recording
 Question recording
 Dashboard
 Memory list
+Settings
+Admin user management (admin role only)
 
 Voice interaction uses **push-to-talk recording**.
 
@@ -76,6 +79,10 @@ Responsibilities:
 * database queries
 * memory processing
 * attachment uploads
+* role-based user administration
+* account settings management
+* billing plan changes
+* transactional notification triggers
 
 Example endpoints:
 
@@ -241,6 +248,23 @@ billing events
 plan upgrades
 
 The backend checks subscription status before allowing premium features.
+
+Users can manage plan changes in settings (`free` <-> `premium`) through backend billing orchestration.
+
+---
+
+# Transactional Notifications
+
+Critical account and billing events must trigger automatic notifications.
+
+Examples:
+
+email change
+password change
+account suspension/reactivation
+plan change and billing failures
+
+Provider is abstracted behind backend service (provider choice decided separately).
 
 ---
 

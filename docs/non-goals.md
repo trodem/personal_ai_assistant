@@ -10,7 +10,6 @@ The following features are intentionally not included in the initial version.
 
 The assistant will not perform complex automated actions such as:
 
-- sending emails
 - booking services
 - controlling smart home devices
 

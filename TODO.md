@@ -77,6 +77,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [ ] Uptime/observability platform account (metrics, dashboards, alerts).
 - [ ] CI platform connected to repository (GitHub Actions or equivalent).
 - [ ] Secret manager available for staging/production credentials.
+- [ ] Transactional email provider account (provider TBD; decision tracked separately).
 
 ### Access and security setup
 - [ ] Enable MFA on all critical services (Git, OpenAI, auth provider, cloud, Stripe).
@@ -133,6 +134,7 @@ Use this as your single source of truth for external dependencies and ownership.
 | MinIO (local Docker) | Local object storage for receipt photo attachments | dev | local | TODO | TODO | TODO | planned | TODO | S3-compatible endpoint configured |
 | Object Storage (managed) | Receipt photo attachments | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Signed URL strategy decided |
 | Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |
+| Email Provider (TBD) | Transactional notifications | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Domain authentication + delivery monitoring |
 | CI Platform | Build/test automation | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Required checks enabled |
 | Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set |
 
@@ -229,6 +231,12 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `DELETE /memory/{id}`
 - [ ] `POST /attachments`
 - [ ] `GET /dashboard`
+- [ ] `GET /admin/users` (admin only)
+- [ ] `PATCH /admin/users/{id}/status` (admin only: suspend/reactivate)
+- [ ] `GET /me/settings`
+- [ ] `PATCH /me/settings/profile`
+- [ ] `PATCH /me/settings/security` (password/email change flow trigger)
+- [ ] `POST /billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
@@ -243,10 +251,14 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.
+- [ ] Add role-based access control (`user`, `admin`) and enforce on admin endpoints.
+- [ ] Add user account status control (`active`, `suspended`) and block access when suspended.
 - [ ] Negative auth tests:
 - [ ] missing token
 - [ ] expired token
 - [ ] valid token but cross-user resource access
+- [ ] suspended user access blocked
+- [ ] non-admin access blocked on admin routes
 
 ---
 
@@ -292,6 +304,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Implement one-question-per-turn clarification UX.
 - [ ] Memory timeline with basic filters.
 - [ ] MVP dashboard screen.
+- [ ] Build user `Settings` screen (profile, security, subscription).
+- [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate).
 - [ ] User-friendly error handling (retry, offline state, timeout).
 - [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
@@ -347,6 +361,22 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Apply per-user and per-endpoint rate limiting by subscription plan.
 - [ ] Graceful degradation when limits are exceeded.
 - [ ] Billing webhook and plan-switch tests.
+- [ ] In-app subscription management UX for user (`upgrade`, `downgrade`, current plan visibility).
+- [ ] Grace period and downgrade policy defined and enforced.
+
+---
+
+## P10.5 - Transactional Notifications
+
+- [ ] Define transactional email policy (events, templates, localization, legal footer).
+- [ ] Add automatic notifications for security/account-critical events:
+- [ ] email change requested/completed
+- [ ] password change requested/completed
+- [ ] account suspension/reactivation
+- [ ] plan upgrade/downgrade and billing failures
+- [ ] Integrate email delivery provider abstraction (provider `TBD`, to be selected separately).
+- [ ] Add notification delivery logs, retry, and dead-letter handling.
+- [ ] Add tests for notification triggers and failure behavior.
 
 ---
 

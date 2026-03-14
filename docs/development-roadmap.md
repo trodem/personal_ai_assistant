@@ -185,10 +185,29 @@ Tasks:
 * Integrate Stripe
 * Create subscription plans
 * Validate subscription status
+* Add in-app settings plan management (upgrade/downgrade)
+* Trigger transactional notifications for billing/account security events
 
 Deliverable:
 
 Freemium model working.
+
+---
+
+# Phase 10.5 - Admin and Settings
+
+Goal: Add account administration and self-service settings.
+
+Tasks:
+
+* Add role model (`user`, `admin`) and account status (`active`, `suspended`)
+* Build admin user management APIs and UI (list/search/suspend/reactivate)
+* Build user settings APIs and UI (profile, security, subscription)
+* Enforce RBAC and audit logs for admin actions
+
+Deliverable:
+
+Operational admin management + user self-service settings.
 
 ---
 

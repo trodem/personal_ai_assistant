@@ -383,6 +383,8 @@ Memory recording
 Question recording
 Dashboard
 Memory list
+Settings
+Admin user management (admin role only)
 
 ---
 
@@ -456,6 +458,18 @@ Supabase Auth
 
 The backend validates tokens from the provider.
 
+Authorization model:
+
+roles:
+user
+admin
+
+account status:
+active
+suspended
+
+Suspended users must not access protected product flows until reactivated.
+
 ---
 
 # BILLING
@@ -468,6 +482,48 @@ subscription management
 payments
 billing events
 plan upgrades
+plan downgrades
+
+Users must be able to manage subscription in app settings (`free` <-> `premium`) according to billing policy.
+
+---
+
+# ACCOUNT SETTINGS
+
+Users must have a settings screen to manage:
+
+profile data
+email change flow
+password change flow
+subscription plan and billing status
+
+All sensitive changes must trigger transactional notifications.
+
+---
+
+# ADMIN CAPABILITIES
+
+Admin users must have a dedicated management surface with:
+
+user list
+search/filter
+account status actions (suspend/reactivate)
+
+Admin actions must be audited and protected by role-based access control.
+
+---
+
+# TRANSACTIONAL NOTIFICATIONS
+
+The system must send automatic notifications for critical account/billing/security events:
+
+email change
+password change
+account suspension/reactivation
+plan change
+billing issues
+
+Email provider choice is intentionally left open (to be selected separately).
 
 ---
 

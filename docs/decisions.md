@@ -139,6 +139,17 @@ Users cannot access other users' data.
 
 ---
 
+# Roles and Administration
+
+The system supports role-based access:
+
+user
+admin
+
+Admin capabilities include user management actions (for example suspend/reactivate), protected by RBAC and audit logging.
+
+---
+
 # Attachments
 
 Memories can include attachments.

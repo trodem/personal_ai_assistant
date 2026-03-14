@@ -17,8 +17,20 @@ Fields:
 
 id (uuid, primary key)
 email (text)
+role (text)
+status (text)
 created_at (timestamp)
 subscription_plan (text)
+
+Role values:
+
+user
+admin
+
+Status values:
+
+active
+suspended
 
 ---
 

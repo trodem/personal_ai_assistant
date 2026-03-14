@@ -127,6 +127,30 @@ Future versions may include visual charts and statistics.
 
 ---
 
+# User Settings
+
+Users must have a settings area for:
+
+Profile update
+Email/password security actions
+Subscription management (`free`/`premium`)
+
+Sensitive changes must trigger transactional notifications.
+
+---
+
+# Admin Panel
+
+Admin users must have a management interface for:
+
+User list with search/filter
+Account status control (`suspend`/`reactivate`)
+Operational user oversight
+
+Admin actions require strict role checks and audit logging.
+
+---
+
 # Voice Interaction
 
 Voice is the primary input method.

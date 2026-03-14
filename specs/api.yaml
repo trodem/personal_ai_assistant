@@ -11,6 +11,9 @@ tags:
   - name: Memory
   - name: Attachments
   - name: Dashboard
+  - name: Settings
+  - name: Admin
+  - name: Billing
 
 paths:
   /voice/memory:
@@ -208,6 +211,154 @@ paths:
         "401":
           $ref: "#/components/responses/Unauthorized"
 
+  /me/settings:
+    get:
+      tags: [Settings]
+      summary: Get current user settings
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User settings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /me/settings/profile:
+    patch:
+      tags: [Settings]
+      summary: Update profile settings
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /me/settings/security:
+    patch:
+      tags: [Settings]
+      summary: Trigger security-sensitive settings change
+      description: Starts email/password change flow and must trigger transactional notification.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSecurityRequest"
+      responses:
+        "200":
+          description: Security change flow started.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /billing/subscription/change-plan:
+    post:
+      tags: [Billing]
+      summary: Change user subscription plan
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePlanRequest"
+      responses:
+        "200":
+          description: Plan change accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /admin/users:
+    get:
+      tags: [Admin]
+      summary: List users (admin only)
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User list.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AdminUserRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Admin role required.
+
+  /admin/users/{id}/status:
+    patch:
+      tags: [Admin]
+      summary: Update user status (admin only)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserStatusRequest"
+      responses:
+        "200":
+          description: User status updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminUserRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Admin role required.
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
 components:
   parameters:
     IdempotencyKey:
@@ -340,6 +491,71 @@ components:
     DashboardResponse:
       type: object
       additionalProperties: true
+
+    UserSettingsResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        status:
+          type: string
+          enum: [active, suspended]
+        subscription_plan:
+          type: string
+          enum: [free, premium]
+
+    UpdateProfileRequest:
+      type: object
+      additionalProperties: true
+
+    UpdateSecurityRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      additionalProperties: false
+
+    ChangePlanRequest:
+      type: object
+      required: [plan]
+      properties:
+        plan:
+          type: string
+          enum: [free, premium]
+
+    AdminUserRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        role:
+          type: string
+          enum: [user, admin]
+        status:
+          type: string
+          enum: [active, suspended]
+        subscription_plan:
+          type: string
+          enum: [free, premium]
+
+    UpdateUserStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [active, suspended]
 
     DeleteMemoryResponse:
       type: object
