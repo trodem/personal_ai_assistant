@@ -244,6 +244,20 @@ Rules:
 - new endpoints must be published under `/api/v1/...`
 - docs, OpenAPI spec, and implementation must stay aligned on the same versioned paths
 - unversioned aliases are out of scope for MVP
+- backward compatibility for released mobile clients must follow `docs/api-compatibility.md`
+
+---
+
+# Feature Flags and Experimentation Policy
+
+Feature flags and experiments are mandatory for high-risk rollouts and optimization work.
+
+Rules:
+
+- feature activation/deactivation must be possible at runtime (no restart)
+- targeted rollouts by cohort must be supported
+- A/B experiments must have explicit success and rollback criteria
+- AI prompt/model experiments must follow `docs/model-registry.md`
 
 ---
 

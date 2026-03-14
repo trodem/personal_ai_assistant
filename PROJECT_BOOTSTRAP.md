@@ -145,6 +145,7 @@ POST /api/v1/billing/subscription/cancel
 The API must enforce user authentication.
 Role and permission enforcement must follow `docs/rbac-matrix.md`.
 Localization behavior must follow MVP language matrix (`en`, `it`, `de`) with fallback `en`.
+API lifecycle and backward compatibility must follow `docs/api-compatibility.md`.
 
 ---
 
@@ -246,6 +247,7 @@ event-based memory model
 database-first calculations
 AI only for language reasoning
 strict user data isolation
+runtime feature flags for controlled rollout and safe rollback
 
 ---
 

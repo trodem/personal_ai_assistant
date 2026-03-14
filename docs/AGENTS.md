@@ -36,6 +36,8 @@ Precedence order when conflicts appear:
 - `docs/llmops-dashboard-spec.md`
 - `docs/content-moderation.md`
 - `docs/data-sanitization.md`
+- `docs/feature-flags-experiments.md`
+- `docs/api-compatibility.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -50,6 +52,8 @@ When to consult each document:
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
+- feature rollout/experiment change: read `docs/feature-flags-experiments.md`, `docs/product-analytics.md`, and `docs/model-registry.md`
+- API lifecycle/versioning change: read `docs/api-compatibility.md`, `docs/decisions.md`, and `specs/api.yaml`
 - test strategy/quality gate change: read `docs/testing-strategy.md` and `TODO.md`
 - analytics/observability behavior change: read `docs/product-analytics.md`, `docs/error-model.md`, and `TODO.md`
 - LLMOps/dashboard/alerting change: read `docs/llmops-dashboard-spec.md`, `docs/ai-cost-control.md`, and `docs/operations-runbook.md`

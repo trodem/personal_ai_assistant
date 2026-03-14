@@ -431,6 +431,14 @@ This includes clarification cadence, confirm/modify/cancel flow, explainability 
 
 ---
 
+# Feature Rollout and Experiments
+
+Feature flags and A/B testing must follow `docs/feature-flags-experiments.md`.
+
+Rollouts must support cohort targeting and kill-switch rollback without app restart.
+
+---
+
 # Model and Prompt Governance
 
 Model and prompt versions must be managed through `docs/model-registry.md`.
@@ -438,3 +446,5 @@ Model and prompt versions must be managed through `docs/model-registry.md`.
 All AI use-cases (transcription, extraction, clarification, question phrasing, embeddings) must map to explicit active model entries with rollback targets.
 
 LLMOps dashboards and alerts must follow `docs/llmops-dashboard-spec.md`.
+
+API backward compatibility and deprecation rules must follow `docs/api-compatibility.md`.

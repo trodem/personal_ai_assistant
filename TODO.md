@@ -44,6 +44,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
 - [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
+- [ ] For API lifecycle changes: backward compatibility rules in `docs/api-compatibility.md` are respected.
 - [ ] For i18n changes: `preferred_language` behavior is consistent across backend responses and Flutter UI labels.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
@@ -166,6 +167,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
 - [ ] Lock authentication policy for MVP: Supabase OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
 - [ ] Freeze MVP scope and non-goals in one source of truth document.
+- [ ] Define initial feature-flag governance model (naming, ownership, expiry, kill-switch requirements).
 - [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
 - [ ] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
 - [ ] Define review cadence for governance docs (recommended: at each milestone mini-audit).
@@ -274,6 +276,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
 - [ ] Add API contract tests for core success/error responses.
 - [ ] Add streaming API tests (`chunk` ordering, terminal `done` event, fallback on stream failure).
+- [ ] Add compatibility tests for active and previous supported client contract.
 - [ ] Add privileged-policy tests (`last active author protection`, `self-role-change forbidden`, `billing.plan_locked_by_role`).
 - [ ] Add consistent error model and status code mapping.
 
@@ -476,6 +479,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Track core funnels and KPI derivations from canonical events (first memory, first question, receipt flow).
 - [ ] Implement required LLMOps dashboards and threshold alerts from `docs/llmops-dashboard-spec.md`.
 - [ ] Validate critical alert-to-runbook mapping for LLM incidents in staging before prod.
+- [ ] Add A/B framework support for AI prompt/model variants with guardrails and rollback criteria.
 
 ---
 
@@ -518,6 +522,9 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Define SLOs and error budget policy for API and voice pipelines.
 - [ ] Define and test backup/restore targets (`RPO`/`RTO`) with evidence.
 - [ ] Feature flags for controlled rollout.
+- [ ] Implement runtime feature-flag targeting (role/plan/app-version/percentage cohorts) without restart.
+- [ ] Add kill-switch operational procedure for high-risk feature rollback.
+- [ ] Define and publish client support matrix + API deprecation/sunset process.
 - [ ] Private beta with weekly feedback loop.
 - [ ] Signed go-live checklist.
 

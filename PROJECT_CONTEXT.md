@@ -684,6 +684,18 @@ Unsafe content must be moderated (`allow/warn/block/review`), and sensitive data
 
 ---
 
+# FEATURE FLAGS, EXPERIMENTS, AND API COMPATIBILITY
+
+Feature rollouts and experiments must follow:
+
+`docs/feature-flags-experiments.md`
+
+API backward compatibility and deprecation process must follow:
+
+`docs/api-compatibility.md`
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

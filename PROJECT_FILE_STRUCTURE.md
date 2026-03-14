@@ -275,6 +275,8 @@ ai-ux-contract.md
 llmops-dashboard-spec.md
 content-moderation.md
 data-sanitization.md
+feature-flags-experiments.md
+api-compatibility.md
 
 ---
 

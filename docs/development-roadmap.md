@@ -107,6 +107,10 @@ Deliverable:
 
 Complete backend API.
 
+API lifecycle note:
+
+Backward compatibility must follow `docs/api-compatibility.md`.
+
 ---
 
 # Phase 5 - Authentication
@@ -266,6 +270,9 @@ Tasks:
 * Implement product analytics event tracking based on `docs/product-analytics.md`
 * Validate KPI dashboards from canonical event stream
 * Implement LLMOps operational dashboards and alert thresholds from `docs/llmops-dashboard-spec.md`
+* Implement runtime feature flags with cohort targeting and kill-switch operations
+* Add A/B experimentation framework for UI and AI variants
+* Validate API backward compatibility and deprecation workflow for previous client versions
 * Setup deployment pipeline
 
 Deliverable:

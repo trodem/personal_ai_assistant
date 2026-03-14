@@ -122,6 +122,12 @@ Safety and privacy:
 - `prompt_sanitized`
 - `privacy_redaction_applied`
 
+Experiments and rollout:
+
+- `feature_flag_exposed`
+- `experiment_exposed`
+- `experiment_converted`
+
 ---
 
 ## Operational/Error Events (MVP)
@@ -180,6 +186,7 @@ Receipt funnel:
 - `onboarding_completion_rate` = `onboarding_completed / onboarding_started`
 - `answer_feedback_positive_rate` = `like / (like + dislike)`
 - `subscription_retention_rate_after_cancel_preview` = `subscription_retained / subscription_cancel_previewed`
+- `experiment_variant_conversion_rate` = `experiment_converted / experiment_exposed` (per experiment variant)
 
 ---
 
