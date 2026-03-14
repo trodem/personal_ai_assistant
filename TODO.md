@@ -325,6 +325,14 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Bootstrap Flutter app with clean architecture (state management decided and fixed).
 - [ ] Login/logout with Supabase Auth.
 - [ ] First-run onboarding focused on fast first value (first memory + first question).
+- [ ] Onboarding step 1: welcome + value proposition + privacy short notice.
+- [ ] Onboarding step 2: language selection (`en`/`it`/`de`) and persistence to `preferred_language`.
+- [ ] Onboarding step 3: permission guidance and request flow (microphone required; camera optional for receipt flow).
+- [ ] Onboarding step 4: guided first memory capture with explicit confirmation (`Confirm/Modify/Cancel`).
+- [ ] Onboarding step 5: guided first question flow with "Why this answer" disclosure.
+- [ ] Onboarding completion state persisted (`onboarding_completed_at`) to avoid repeating full wizard.
+- [ ] Add skip/resume onboarding behavior with deterministic resume point.
+- [ ] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
 - [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
 - [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.

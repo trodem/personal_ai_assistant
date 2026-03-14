@@ -408,6 +408,20 @@ Author supervision dashboard (author role only)
 
 ---
 
+# ONBOARDING
+
+New users must follow a guided first-run onboarding:
+
+welcome
+language selection
+permission guidance (microphone required, camera optional)
+first memory capture with explicit confirmation
+first question flow
+
+Onboarding must support skip/resume and persist completion state.
+
+---
+
 # LANGUAGE AND NAMING POLICY
 
 Official product language is English.

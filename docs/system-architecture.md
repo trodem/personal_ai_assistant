@@ -59,6 +59,7 @@ Question recording
 Dashboard
 Memory list
 Settings
+Onboarding wizard (first-run only)
 Admin user management (admin/author role)
 Author supervision dashboard (author role only)
 
@@ -69,6 +70,12 @@ Localization policy (MVP):
 - supported languages: English (`en`), Italian (`it`), German (`de`)
 - UI fallback language: English (`en`)
 - user-selected locale is managed in settings and propagated to backend preference (`preferred_language`)
+
+Onboarding policy (MVP):
+
+- guided first-run flow is required for new users
+- sequence: welcome -> language -> permissions -> first memory -> first question
+- onboarding must be resumable and stored as completion state
 
 ---
 

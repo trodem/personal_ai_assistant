@@ -148,6 +148,8 @@ Tasks:
 * Implement assistant response UI
 * Implement i18n localization framework (`en`, `it`, `de`) with English fallback
 * Add settings language selector and backend sync (`preferred_language`)
+* Implement guided onboarding wizard (welcome -> language -> permissions -> first memory -> first question)
+* Persist onboarding completion and support skip/resume behavior
 
 Deliverable:
 

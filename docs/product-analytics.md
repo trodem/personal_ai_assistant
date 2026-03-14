@@ -58,6 +58,11 @@ Onboarding and auth:
 - `auth_sso_login_completed`
 - `auth_mfa_enabled`
 - `auth_mfa_challenge_passed`
+- `onboarding_started`
+- `onboarding_step_viewed`
+- `onboarding_permissions_granted`
+- `onboarding_skipped`
+- `onboarding_completed`
 
 Memory flow:
 
@@ -135,6 +140,14 @@ First question funnel:
 1. `question_asked`
 2. `question_answered`
 
+Onboarding activation funnel:
+
+1. `onboarding_started`
+2. `onboarding_step_viewed` (language + permissions)
+3. `memory_persisted` (first memory)
+4. `question_answered` (first question)
+5. `onboarding_completed`
+
 Receipt funnel:
 
 1. `attachment_upload_completed`
@@ -151,6 +164,7 @@ Receipt funnel:
 - `extraction_confirmation_rate` = `memory_confirmed / memory_extraction_proposed`
 - `time_to_first_successful_memory` = first `memory_persisted` - first `auth_login_completed`
 - `question_success_rate` = `question_answered / question_asked`
+- `onboarding_completion_rate` = `onboarding_completed / onboarding_started`
 
 ---
 
