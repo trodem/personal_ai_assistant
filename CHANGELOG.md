@@ -79,6 +79,9 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Expanded churn/portability planning with proactive churn-risk policy, coupon governance, and data portability export policy (`json`/`csv`/`pdf`) including API contracts, RBAC, analytics KPIs, error codes, roadmap, and architecture/context alignment.
 - Added `docs/completeness-matrix.md` as consolidated planning status matrix (capability -> docs/contracts/TODO coverage) and linked it in AGENTS routing and project file structure.
 - OpenAPI subscription schema aligned to freemium policy (`subscription_plan`: `free/premium` in user/admin responses).
+- Updated `docs/model-registry.md` with concrete active runtime mappings (`memory_extraction`, `receipt_ocr_extraction`, `answer_generation`) and explicit rollback entries aligned with current backend telemetry identifiers and versions.
+- Added active AI cost controls in LLMOps runtime metrics: token budget tracking by plan (usage/utilization/breaches), per-user cost visibility via hashed user metrics, and daily spend spike alert gauges (`warning`/`critical`) based on 7-day baseline comparison.
+- Enabled browser CORS preflight support for protected APIs by adding FastAPI `CORSMiddleware` configuration and automated coverage for `OPTIONS` on `/api/v1/memories` with expected CORS headers.
 - Auth planning language normalized to include both email/password and OAuth SSO (Google/Apple) for MVP.
 - Database schema clarified for user isolation scope (`user_id` required on user-scoped tables) and extended with `qa_interactions` as canonical source for Q/A export history.
 - Trial lifecycle removed from planning/contracts by product decision; billing model is now strictly `free/premium` plus coupon/discount management.

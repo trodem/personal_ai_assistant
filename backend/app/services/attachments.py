@@ -149,6 +149,7 @@ def create_attachment(
         model_version="mvp-v1",
         prompt_version="receipt_extraction_v1",
         user_plan=plan_for_role(user.role),
+        user_id=user.user_id,
         token_in=token_in,
         token_out=token_out,
         estimated_cost=estimated_cost,

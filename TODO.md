@@ -57,9 +57,9 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [x] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
 - [x] For AI-related changes: token usage/cost logging remains active and visible in metrics.
-- [ ] For AI model/prompt changes: `docs/model-registry.md` is updated with active version mapping and rollback entry.
-- [ ] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
-- [ ] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
+- [x] For AI model/prompt changes: `docs/model-registry.md` is updated with active version mapping and rollback entry.
+- [x] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
+- [x] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
 - [ ] Flutter UI uses reusable components and centralized theme tokens (no scattered hardcoded styles/colors).
 - [ ] Test scope is aligned with `docs/testing-strategy.md` for touched components.
 - [ ] Environment/config choices are aligned with `docs/environment-matrix.md`.

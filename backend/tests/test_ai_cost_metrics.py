@@ -1,6 +1,7 @@
 import re
 import sys
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from uuid import uuid4
 
@@ -9,7 +10,7 @@ from fastapi.testclient import TestClient
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from app.core.auth import build_dev_token
-from app.core.llmops import reset_llmops_usage_metrics
+from app.core.llmops import record_ai_usage, reset_llmops_usage_metrics
 from app.main import app
 
 
@@ -28,6 +29,12 @@ class AICostMetricsTests(unittest.TestCase):
         )
         match = re.search(pattern, metrics_text)
         self.assertIsNotNone(match, f"Missing metric {metric_name} for use_case={use_case}")
+        return float(match.group(1))
+
+    def _extract_metric_by_label(self, metrics_text: str, metric_name: str, label_match: str) -> float:
+        pattern = rf"{re.escape(metric_name)}\{{[^}}]*{label_match}[^}}]*\}} ([0-9]+(?:\.[0-9]+)?)"
+        match = re.search(pattern, metrics_text)
+        self.assertIsNotNone(match, f"Missing metric {metric_name} with {label_match}")
         return float(match.group(1))
 
     def test_token_and_cost_metrics_increase_after_ai_flows(self) -> None:
@@ -74,6 +81,58 @@ class AICostMetricsTests(unittest.TestCase):
         self.assertGreater(answer_tokens, 0)
         self.assertGreater(extraction_cost, 0.0)
         self.assertGreater(answer_cost, 0.0)
+        self.assertIn("llmops_user_estimated_cost_total", metrics_text)
+        self.assertIn('user_plan="free"', metrics_text)
+        self.assertIn("llmops_token_budget_utilization_percent", metrics_text)
+
+    def test_budget_breach_and_spike_alert_metrics_are_emitted(self) -> None:
+        base_day = datetime(2026, 3, 14, 10, 0, tzinfo=timezone.utc)
+        for offset in range(1, 8):
+            record_ai_usage(
+                use_case="answer_generation",
+                provider="openai",
+                model_id="gpt-4o-mini",
+                model_version="mvp-v1",
+                prompt_version="answer_generation_v1",
+                user_plan="free",
+                user_id=self.user_id,
+                token_in=10,
+                token_out=10,
+                estimated_cost=1.0,
+                occurred_at=base_day - timedelta(days=offset),
+            )
+        record_ai_usage(
+            use_case="answer_generation",
+            provider="openai",
+            model_id="gpt-4o-mini",
+            model_version="mvp-v1",
+            prompt_version="answer_generation_v1",
+            user_plan="free",
+            user_id=self.user_id,
+            token_in=250000,
+            token_out=0,
+            estimated_cost=200.0,
+            occurred_at=base_day,
+        )
+        metrics_text = self.client.get("/metrics").text
+        self.assertGreater(
+            self._extract_metric_by_label(
+                metrics_text, "llmops_token_budget_breaches_total", 'user_plan="free"'
+            ),
+            0,
+        )
+        self.assertEqual(
+            self._extract_metric_by_label(
+                metrics_text, "llmops_spend_spike_alert_active", 'severity="warning"'
+            ),
+            1.0,
+        )
+        self.assertEqual(
+            self._extract_metric_by_label(
+                metrics_text, "llmops_spend_spike_alert_active", 'severity="critical"'
+            ),
+            1.0,
+        )
 
 
 if __name__ == "__main__":

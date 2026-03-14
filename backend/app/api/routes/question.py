@@ -76,6 +76,7 @@ async def ask_text_question(
         model_version="mvp-v1",
         prompt_version="answer_generation_v1",
         user_plan=plan_for_role(current_user.role),
+        user_id=current_user.user_id,
         token_in=token_in,
         token_out=token_out,
         estimated_cost=estimated_cost,

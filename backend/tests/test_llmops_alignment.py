@@ -40,6 +40,8 @@ class LLMOpsAlignmentTests(unittest.TestCase):
     def test_metrics_output_contains_llmops_series(self) -> None:
         output = render_llmops_prometheus()
         self.assertIn("llmops_ai_requests_total", output)
+        self.assertIn("llmops_token_budget_limit", output)
+        self.assertIn("llmops_spend_spike_alert_active", output)
         self.assertIn("llmops_alert_threshold", output)
         self.assertIn('metric="ai_endpoint_latency_p95"', output)
 

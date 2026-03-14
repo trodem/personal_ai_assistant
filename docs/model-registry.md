@@ -49,35 +49,80 @@ Each entry must define:
 
 ---
 
-## Initial Entries (MVP Baseline)
+## Active Registry Entries (MVP Runtime Mapping)
 
-1. `voice_transcription`
+Date of this active mapping: `2026-03-14`
+
+1. `memory_extraction`
+- provider: `openai`
+- model_id: `gpt-4o-mini`
+- model_version: `mvp-v1`
+- prompt_spec: `specs/memory-extraction.md`
+- prompt_version: `memory_extraction_v1`
+- temperature: `0.0`
+- max_tokens: `800`
+- fallback_entry: `memory_extraction@openai:gpt-4o-mini:mvp-v0:memory_extraction_v0`
+- rollout_stage: `dev`
+- owner: `backend-team`
+- last_validated_at: `2026-03-14`
+
+2. `receipt_ocr_extraction`
+- provider: `openai`
+- model_id: `gpt-4o-mini`
+- model_version: `mvp-v1`
+- prompt_spec: `specs/memory-extraction.md`
+- prompt_version: `receipt_extraction_v1`
+- temperature: `0.0`
+- max_tokens: `800`
+- fallback_entry: `receipt_ocr_extraction@openai:gpt-4o-mini:mvp-v0:receipt_extraction_v0`
+- rollout_stage: `dev`
+- owner: `backend-team`
+- last_validated_at: `2026-03-14`
+
+3. `answer_generation`
+- provider: `openai`
+- model_id: `gpt-4o-mini`
+- model_version: `mvp-v1`
+- prompt_spec: `docs/query-contract.md`
+- prompt_version: `answer_generation_v1`
+- temperature: `0.2`
+- max_tokens: `600`
+- fallback_entry: `answer_generation@openai:gpt-4o-mini:mvp-v0:answer_generation_v0`
+- rollout_stage: `dev`
+- owner: `backend-team`
+- last_validated_at: `2026-03-14`
+
+4. `voice_transcription` (planned baseline, not yet active in runtime telemetry)
 - provider: `openai`
 - model_id: `whisper-1` (or approved successor)
+- model_version: `mvp-v1`
 - prompt_spec: `n/a`
+- prompt_version: `n/a`
+- temperature: `n/a`
+- max_tokens: `n/a`
+- fallback_entry: `voice_transcription@openai:whisper-1:mvp-v0:n/a`
+- rollout_stage: `planned`
+- owner: `backend-team`
+- last_validated_at: `pending`
 
-2. `memory_extraction`
-- provider: `openai`
-- model_id: `gpt-*` (exact ID locked per environment)
-- prompt_spec: `specs/memory-extraction.md`
-- prompt_version: `v1`
-
-3. `clarification_generation`
-- provider: `openai`
-- model_id: `gpt-*` (cost-efficient tier)
-- prompt_spec: `specs/memory-extraction.md` (clarification section)
-- prompt_version: `v1`
-
-4. `question_response_nlg`
-- provider: `openai`
-- model_id: `gpt-*` (cost-efficient default, escalated for complex cases)
-- prompt_spec: internal query response template
-- prompt_version: `v1`
-
-5. `embedding_generation`
+5. `embedding_generation` (planned baseline, not yet active in runtime telemetry)
 - provider: `openai`
 - model_id: `text-embedding-*`
+- model_version: `mvp-v1`
 - prompt_spec: `n/a`
+- prompt_version: `n/a`
+- temperature: `n/a`
+- max_tokens: `n/a`
+- fallback_entry: `embedding_generation@openai:text-embedding-*:mvp-v0:n/a`
+- rollout_stage: `planned`
+- owner: `backend-team`
+- last_validated_at: `pending`
+
+## Rollback Entries (Immediate Use)
+
+- `memory_extraction@openai:gpt-4o-mini:mvp-v0:memory_extraction_v0`
+- `receipt_ocr_extraction@openai:gpt-4o-mini:mvp-v0:receipt_extraction_v0`
+- `answer_generation@openai:gpt-4o-mini:mvp-v0:answer_generation_v0`
 
 ---
 

@@ -1,7 +1,9 @@
 import logging
+import os
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -27,10 +29,27 @@ from app.core.middleware import RequestContextMiddleware
 configure_logging()
 logger = logging.getLogger(__name__)
 
+
+def _cors_origins() -> list[str]:
+    raw = os.getenv(
+        "APP_CORS_ALLOW_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173",
+    )
+    return [value.strip() for value in raw.split(",") if value.strip()]
+
+
 app = FastAPI(
     title="Personal AI Assistant Backend",
     version="0.1.0",
     description="MVP backend APIs for health, metrics, authenticated memory access, and admin controls.",
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_cors_origins(),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["x-request-id", "x-trace-id"],
 )
 app.add_middleware(RequestContextMiddleware)
 app.include_router(health_router)
