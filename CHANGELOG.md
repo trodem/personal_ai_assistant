@@ -35,6 +35,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `backend/tests/test_settings_validation.py` covering valid typed config parsing and invalid env failure modes.
 - Added `backend/tests/test_logging_context_fields.py` to verify structured JSON logs always include context fields (`request_id`, `trace_id`, `user_id`, `tenant_id`) and default user placeholder behavior when unauthenticated.
 - Extended `backend/tests/test_runtime_integration.py` with request-tracing checks to verify `x-trace-id` propagation and deterministic fallback to `x-request-id` when trace header is missing.
+- Added `ErrorHandlingMiddleware` in `backend/app/core/middleware.py` and wired it in `backend/app/main.py` to standardize API error handling in middleware (`AppError`, validation, HTTP exceptions, unexpected failures) with stable error-code mapping.
+- Added `backend/tests/test_error_handling_middleware.py` to verify middleware registration and standardized validation error code behavior.
+- Added asynchronous job-boundary baseline in `ASYNC_JOB_BOUNDARY_BASELINE.md` and code source-of-truth mapping in `backend/app/domain/async_job_boundary.py` (`request_path` vs `background_worker` execution model).
+- Added `backend/tests/test_async_job_boundary.py` to validate boundary-map uniqueness and expected execution-mode classification.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -105,6 +109,14 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked P1 task `Implement typed config management (env validation)` as completed in `TODO.md`.
 - Marked P1 task `Set up JSON logging with request_id and user_id (when available)` as completed in `TODO.md`.
 - Marked P1 task `Add request tracing (trace_id) to support cross-service debugging` as completed in `TODO.md`.
+- Marked P1 task `Add error-handling middleware with standard error codes` as completed in `TODO.md`.
+- Marked P1 task `Define asynchronous job boundary (API request path vs background worker path)` as completed in `TODO.md`.
+- Marked P1 parent task `Health endpoints` as completed in `TODO.md` after validating existing health-route implementation coverage.
+- Marked P1 task `GET /health/live` as completed in `TODO.md` after runtime `200` verification.
+- Marked P1 task `GET /health/ready` as completed in `TODO.md` after runtime readiness verification (`200`, `status=ready`).
+- Marked P1 task `Backend Dockerfile + local docker-compose with Postgres` as completed in `TODO.md` after compose baseline verification.
+- Added `scripts/startup-smoke-check.ps1` for backend startup smoke validation (`docker compose config`, service health wait, `/health/live` and `/health/ready` checks) and documented it in `README.md`.
+- Marked P1 task `Backend startup smoke test + health checks` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

@@ -198,13 +198,13 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Implement typed config management (env validation).
 - [x] Set up JSON logging with `request_id` and `user_id` (when available).
 - [x] Add request tracing (`trace_id`) to support cross-service debugging.
-- [ ] Add error-handling middleware with standard error codes.
-- [ ] Define asynchronous job boundary (API request path vs background worker path).
-- [ ] Health endpoints:
-- [ ] `GET /health/live`
-- [ ] `GET /health/ready`
-- [ ] Backend Dockerfile + local `docker-compose` with Postgres.
-- [ ] Backend startup smoke test + health checks.
+- [x] Add error-handling middleware with standard error codes.
+- [x] Define asynchronous job boundary (API request path vs background worker path).
+- [x] Health endpoints:
+- [x] `GET /health/live`
+- [x] `GET /health/ready`
+- [x] Backend Dockerfile + local `docker-compose` with Postgres.
+- [x] Backend startup smoke test + health checks.
 
 ---
 

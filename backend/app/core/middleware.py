@@ -3,14 +3,44 @@ import time
 import uuid
 
 from fastapi import Request, Response
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.analytics import emit_operational_event
+from app.core.errors import (
+    AppError,
+    app_error_to_response,
+    http_error_to_response,
+    unexpected_error_to_response,
+    validation_error_to_response,
+)
 from app.core.metrics import metrics_registry
 from app.core.request_context import request_id_ctx_var, tenant_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
 
 
 logger = logging.getLogger(__name__)
+
+
+class ErrorHandlingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next) -> Response:
+        try:
+            return await call_next(request)
+        except AppError as exc:
+            logger.warning("app_error", extra={"error_code": exc.code, "status_code": exc.status_code})
+            return app_error_to_response(exc)
+        except RequestValidationError as exc:
+            logger.warning("request_validation_error", extra={"error_code": "memory.missing_required_fields"})
+            return validation_error_to_response(exc)
+        except StarletteHTTPException as exc:
+            logger.warning(
+                "http_exception",
+                extra={"error_code": "http.exception", "status_code": exc.status_code},
+            )
+            return http_error_to_response(exc.status_code, request)
+        except Exception:
+            logger.exception("unhandled_exception", extra={"error_code": "internal.unexpected_error"})
+            return unexpected_error_to_response()
 
 
 class RequestContextMiddleware(BaseHTTPMiddleware):

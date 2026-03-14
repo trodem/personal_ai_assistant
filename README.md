@@ -177,6 +177,7 @@ supabase status
 Invoke-WebRequest http://localhost:8000/health/live -UseBasicParsing
 Invoke-WebRequest http://localhost:8000/health/ready -UseBasicParsing
 docker compose exec -T postgres psql -U personal_ai -d personal_ai -c "select 1 as db_ready;"
+powershell -ExecutionPolicy Bypass -File scripts/startup-smoke-check.ps1
 
 powershell -ExecutionPolicy Bypass -File scripts/openai-account-check.ps1
 powershell -ExecutionPolicy Bypass -File scripts/supabase-auth-smoke.ps1
