@@ -36,6 +36,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Multi-language planning made explicit with MVP language matrix (`en`, `it`, `de`), deterministic fallback (`en`), settings-level `preferred_language` contract, and aligned roadmap/query/testing/TODO coverage.
 - Guided onboarding planning expanded with explicit first-run step sequence, permission UX, skip/resume behavior, persisted completion state, and analytics funnel instrumentation.
 - Added `docs/model-registry.md` as canonical model/prompt governance source, with rollout/rollback policy and required mapping of AI use-cases to model/prompt versions; linked across AGENTS, TODO, roadmap, architecture, cost-control, and project context docs.
+- Added `docs/ai-ux-contract.md` to formalize AI-specific UX rules (clarification cadence, confirmation flow, answer explainability, state/error UX, accessibility/localization), with alignment updates across AGENTS, TODO, roadmap, architecture, and project context.
 
 ---
 

@@ -151,6 +151,7 @@ Tasks:
 * Add settings language selector and backend sync (`preferred_language`)
 * Implement guided onboarding wizard (welcome -> language -> permissions -> first memory -> first question)
 * Persist onboarding completion and support skip/resume behavior
+* Implement AI interaction UX rules from `docs/ai-ux-contract.md` (clarification, confirmation, answer explainability, error states)
 
 Deliverable:
 

@@ -257,6 +257,7 @@ monetization.md
 decisions.md
 product-analytics.md
 model-registry.md
+ai-ux-contract.md
 
 ---
 

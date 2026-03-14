@@ -21,7 +21,7 @@ Precedence order when conflicts appear:
 1. `PROJECT_CONTEXT.md`
 2. `docs/architecture.md` + `docs/system-architecture.md`
 3. `docs/contract.md` + `docs/database-schema.md` + `docs/ai-pipeline.md`
-4. `docs/query-contract.md`
+4. `docs/query-contract.md` + `docs/ai-ux-contract.md`
 5. `specs/api.yaml` + `specs/memory-extraction.md`
 6. `docs/development-roadmap.md` + `TODO.md`
 7. operational docs:
@@ -41,6 +41,7 @@ When to consult each document:
 - API change: read `specs/api.yaml` and `docs/error-model.md`
 - memory extraction/storage change: read `docs/contract.md`, `docs/domain-model.md`, `specs/memory-extraction.md`, `docs/database-schema.md`
 - question-answering change: read `docs/query-contract.md`, `docs/ai-pipeline.md`, `docs/error-model.md`, `specs/api.yaml`
+- AI UX behavior change: read `docs/ai-ux-contract.md`, `docs/contract.md`, and `docs/error-model.md`
 - AI model/prompt change: read `docs/model-registry.md`, `docs/ai-cost-control.md`, and `specs/memory-extraction.md`
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation

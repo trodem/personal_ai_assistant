@@ -641,6 +641,19 @@ No silent model or prompt switch is allowed.
 
 ---
 
+# AI UX CONTRACT
+
+AI interaction UX must follow `docs/ai-ux-contract.md`.
+
+Key UX invariants:
+
+one clarification question per turn
+explicit `Confirm / Modify / Cancel` before save
+visible AI state transitions
+answer explainability panel for question responses
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

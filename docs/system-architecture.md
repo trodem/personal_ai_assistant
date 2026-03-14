@@ -402,6 +402,14 @@ Event tracking must cover:
 
 ---
 
+# AI UX Governance
+
+AI interaction behavior must follow `docs/ai-ux-contract.md`.
+
+This includes clarification cadence, confirm/modify/cancel flow, explainability UX, and user-visible state transitions.
+
+---
+
 # Model and Prompt Governance
 
 Model and prompt versions must be managed through `docs/model-registry.md`.

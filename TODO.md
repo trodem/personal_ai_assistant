@@ -48,6 +48,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
 - [ ] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
+- [ ] For AI UX changes: behavior is aligned with `docs/ai-ux-contract.md`.
 - [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
 - [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
@@ -336,6 +337,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Add skip/resume onboarding behavior with deterministic resume point.
 - [ ] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
+- [ ] Implement AI chat surface states per UX contract (`idle`, `processing`, `needs_clarification`, `ready_to_confirm`, `saved`, `failed`).
 - [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
 - [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
 - [ ] Implement Flutter i18n architecture (arb-based keys, locale resolution, fallback to English).
@@ -361,6 +363,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
 - [ ] No-result UI: clear message + CTA to "Add Memory".
+- [ ] Ensure AI microcopy/actions/error states follow `docs/ai-ux-contract.md`.
 - [ ] Widget tests on critical flows.
 
 ---
