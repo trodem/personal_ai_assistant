@@ -54,6 +54,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked legal minimum checklist item `Draft privacy policy baseline (data stored, retention, deletion process)` as completed in `TODO.md`.
 - Marked legal minimum checklist item `Draft terms baseline for MVP users` as completed in `TODO.md`.
 - Marked legal minimum checklist item `Define support contact and incident response owner` as completed in `TODO.md`.
+- Completed Day 0 connectivity checks in `TODO.md` by validating OpenAI minimal API call, PostgreSQL connectivity (`select 1`), and Supabase Storage upload/download smoke.
+- Completed Day 1 toolchain readiness check in `TODO.md` by confirming local Docker, Python, package manager (`pip`), and Flutter SDK availability.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

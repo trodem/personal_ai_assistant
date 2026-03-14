@@ -130,15 +130,15 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Define support contact and incident response owner.
 
 ### Day 0 (owner checklist, 2-4 hours)
-<!-- - [ ] Create/verify accounts: OpenAI, Supabase, Stripe (test mode).
-- [ ] Enable MFA everywhere and store recovery codes securely.
-- [ ] Generate dev-only keys/secrets and place them in local secret storage.
-- [ ] Set OpenAI budget cap and spend alerts. -->
-- [ ] Run minimal connectivity checks (OpenAI test call, DB connect, storage upload).
-- [ ] Mark this section done only when no external dependency remains blocked.
+<!-- - [ ] Create/verify accounts: OpenAI, Supabase, Stripe (test mode). -->
+<!-- - [ ] Enable MFA everywhere and store recovery codes securely. -->
+<!-- - [ ] Generate dev-only keys/secrets and place them in local secret storage. -->
+<!-- - [ ] Set OpenAI budget cap and spend alerts. -->
+- [x] Run minimal connectivity checks (OpenAI test call, DB connect, storage upload).
+<!-- - [ ] Mark this section done only when no external dependency remains blocked. -->
 
 ### Day 1 (project readiness, 2-4 hours)
-- [ ] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
+- [x] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
 - [ ] Validate `docker compose config` and ensure services become healthy.
 - [ ] Ensure local Docker stack includes at minimum: `backend` + Supabase local stack (`auth`, `postgres+pgvector`, `storage`).
 - [ ] Verify `.env.example` completeness against actual runtime needs.
