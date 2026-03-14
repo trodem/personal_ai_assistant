@@ -415,3 +415,5 @@ This includes clarification cadence, confirm/modify/cancel flow, explainability 
 Model and prompt versions must be managed through `docs/model-registry.md`.
 
 All AI use-cases (transcription, extraction, clarification, question phrasing, embeddings) must map to explicit active model entries with rollback targets.
+
+LLMOps dashboards and alerts must follow `docs/llmops-dashboard-spec.md`.

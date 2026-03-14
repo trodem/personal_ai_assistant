@@ -35,6 +35,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Every feature includes automated tests (unit + integration where needed).
 - [ ] No merge without green CI.
 - [ ] Structured logging + metrics + consistent error handling are active.
+- [ ] LLMOps dashboards and alert thresholds are aligned with `docs/llmops-dashboard-spec.md`.
 - [ ] Product analytics events follow `docs/product-analytics.md` schema and naming contract.
 - [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
@@ -454,6 +455,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Load-test simulation to estimate monthly cost.
 - [ ] Implement product analytics event pipeline (capture, validation, storage/export) aligned with `docs/product-analytics.md`.
 - [ ] Track core funnels and KPI derivations from canonical events (first memory, first question, receipt flow).
+- [ ] Implement required LLMOps dashboards and threshold alerts from `docs/llmops-dashboard-spec.md`.
+- [ ] Validate critical alert-to-runbook mapping for LLM incidents in staging before prod.
 
 ---
 

@@ -8,6 +8,7 @@ This document complements:
 
 - `docs/risk-analysis.md` (risk identification)
 - `docs/environment-matrix.md` (where systems run)
+- `docs/llmops-dashboard-spec.md` (AI monitoring panels and alert thresholds)
 
 ---
 

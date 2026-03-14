@@ -33,6 +33,7 @@ Precedence order when conflicts appear:
 - `docs/rbac-matrix.md`
 - `docs/product-analytics.md`
 - `docs/model-registry.md`
+- `docs/llmops-dashboard-spec.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -48,6 +49,7 @@ When to consult each document:
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
 - test strategy/quality gate change: read `docs/testing-strategy.md` and `TODO.md`
 - analytics/observability behavior change: read `docs/product-analytics.md`, `docs/error-model.md`, and `TODO.md`
+- LLMOps/dashboard/alerting change: read `docs/llmops-dashboard-spec.md`, `docs/ai-cost-control.md`, and `docs/operations-runbook.md`
 - code-structure/style/logging change: read `docs/coding-standards.md`, `CONTRIBUTING.md`, and `TODO.md`
 - architecture-level tradeoff: add/update ADR in `ADR/`
 

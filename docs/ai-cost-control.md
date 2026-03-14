@@ -185,6 +185,8 @@ cost per user
 
 Alerts should trigger if usage spikes unexpectedly.
 
+LLMOps dashboard panels and thresholds must follow `docs/llmops-dashboard-spec.md`.
+
 ---
 
 # Long-Term Strategy

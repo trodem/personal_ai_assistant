@@ -654,6 +654,12 @@ answer explainability panel for question responses
 
 ---
 
+# LLMOPS DASHBOARD SPEC
+
+Operational AI monitoring and alert thresholds must follow `docs/llmops-dashboard-spec.md`.
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

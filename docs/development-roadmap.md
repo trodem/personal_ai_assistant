@@ -250,6 +250,7 @@ Tasks:
 * Setup monitoring
 * Implement product analytics event tracking based on `docs/product-analytics.md`
 * Validate KPI dashboards from canonical event stream
+* Implement LLMOps operational dashboards and alert thresholds from `docs/llmops-dashboard-spec.md`
 * Setup deployment pipeline
 
 Deliverable:
