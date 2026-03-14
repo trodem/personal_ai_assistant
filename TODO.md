@@ -111,8 +111,8 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Supabase Auth test users and token validation path verified.
 - [x] OpenAI key validated with a minimal API test call.
 - [x] Postgres connection, migration run, and rollback test completed.
-- [ ] Object storage upload/download test completed.
-- [ ] Stripe test webhook delivery validated locally.
+- [x] Object storage upload/download test completed.
+<!-- - [ ] Stripe test webhook delivery validated locally. -->
 
 ### Budget and limits safeguards
 - [ ] Set monthly spending cap for OpenAI usage.

@@ -8,6 +8,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 
 ### Added
 - Added Alembic migration baseline (`backend/alembic`) and `scripts/migration-smoke-check.ps1` to verify PostgreSQL migration upgrade/downgrade/restore flow in local Docker.
+- Added `scripts/storage-upload-download-smoke.ps1` to validate Supabase Storage object lifecycle (`upload -> download -> content check -> delete`) against the configured receipts bucket.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -48,6 +49,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 
 ### Changed
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
+- Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.
 - Re-validated OpenAI API key with a minimal live API call via `scripts/openai-account-check.ps1`; marked `OpenAI key validated with a minimal API test call` as completed in `TODO.md`.
 - Re-validated Supabase Auth test-user login and protected-token path using `scripts/supabase-auth-smoke.ps1`; marked `Supabase Auth test users and token validation path verified` as completed in `TODO.md`.
 - Marked environment readiness checklist item `.env.example completed with all required variables for local startup` as completed after re-validating with `scripts/env-example-completeness-check.ps1`.
