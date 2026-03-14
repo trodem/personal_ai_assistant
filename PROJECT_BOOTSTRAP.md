@@ -129,6 +129,9 @@ PATCH /api/v1/author/users/{id}/role
 GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
+PATCH /api/v1/me/settings/notifications
+GET /api/v1/notifications
+POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
 
 The API must enforce user authentication.

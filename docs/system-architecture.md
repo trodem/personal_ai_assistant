@@ -20,7 +20,7 @@ The platform consists of five main components:
 3. AI Processing Layer
 4. Database Layer
 5. Storage Layer
-6. Notification Layer (transactional email)
+6. Notification Layer (in-app + push + email)
 
 System overview:
 
@@ -84,6 +84,7 @@ Responsibilities:
 * account settings management
 * billing plan changes
 * transactional notification triggers
+* in-app notification feed and read-state updates
 
 User account status model:
 
@@ -108,6 +109,9 @@ DELETE /api/v1/memory/{id}
 GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
+PATCH /api/v1/me/settings/notifications
+GET /api/v1/notifications
+POST /api/v1/notifications/{id}/read
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -303,6 +307,14 @@ account suspension/reactivation
 plan change and billing failures
 
 Provider is abstracted behind backend service (provider choice decided separately).
+
+Notification channels:
+
+in-app
+push
+email
+
+Users must be able to configure channel preferences in settings.
 
 Author safety invariants:
 

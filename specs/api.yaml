@@ -12,6 +12,7 @@ tags:
   - name: Attachments
   - name: Dashboard
   - name: Settings
+  - name: Notifications
   - name: Admin
   - name: Author
   - name: Billing
@@ -304,6 +305,94 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "422":
           $ref: "#/components/responses/ValidationError"
+
+  /api/v1/me/settings/notifications:
+    patch:
+      tags: [Settings]
+      summary: Update notification preferences
+      description: Update per-user channel preferences for in-app, push, and email notifications.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNotificationPreferencesRequest"
+      responses:
+        "200":
+          description: Notification preferences updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/notifications:
+    get:
+      tags: [Notifications]
+      summary: List in-app notifications
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: unread_only
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: Notification list.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/InAppNotificationRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/v1/notifications/{id}/read:
+    post:
+      tags: [Notifications]
+      summary: Mark in-app notification as read
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Notification marked as read.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Notification not found.
 
   /api/v1/billing/subscription/change-plan:
     post:
@@ -613,6 +702,8 @@ components:
         billing_exempt:
           type: boolean
           description: True for `admin` and `author` roles by policy.
+        notification_preferences:
+          $ref: "#/components/schemas/NotificationPreferences"
 
     UpdateProfileRequest:
       type: object
@@ -633,6 +724,47 @@ components:
           type: string
           description: Required for `verify_2fa` and for sensitive changes when challenge is active.
       additionalProperties: false
+
+    NotificationPreferences:
+      type: object
+      required: [in_app, push, email]
+      properties:
+        in_app:
+          type: boolean
+        push:
+          type: boolean
+        email:
+          type: boolean
+
+    UpdateNotificationPreferencesRequest:
+      type: object
+      required: [preferences]
+      properties:
+        preferences:
+          $ref: "#/components/schemas/NotificationPreferences"
+
+    InAppNotificationRecord:
+      type: object
+      required: [id, event_type, title, body, read, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+          enum:
+            - security_event
+            - billing_event
+            - system_event
+        title:
+          type: string
+        body:
+          type: string
+        read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
 
     ChangePlanRequest:
       type: object

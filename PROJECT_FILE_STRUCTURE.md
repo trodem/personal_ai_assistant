@@ -102,6 +102,7 @@ settings.py
 admin.py
 author.py
 billing.py
+notifications.py
 
 services/
 
@@ -130,6 +131,7 @@ settings/
 
 profile_service.py
 security_service.py
+notification_preferences_service.py
 
 admin/
 
@@ -143,6 +145,12 @@ role_management_service.py
 billing/
 
 billing_service.py
+
+notifications/
+
+notification_service.py
+push_provider_adapter.py
+email_provider_adapter.py
 
 utils/
 
@@ -212,6 +220,12 @@ settings.py
 GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
+PATCH /api/v1/me/settings/notifications
+
+notifications.py
+
+GET /api/v1/notifications
+POST /api/v1/notifications/{id}/read
 
 admin.py
 

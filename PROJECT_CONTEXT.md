@@ -368,6 +368,9 @@ GET /api/v1/dashboard
 GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
+PATCH /api/v1/me/settings/notifications
+GET /api/v1/notifications
+POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
@@ -399,6 +402,7 @@ Question recording
 Dashboard
 Memory list
 Settings
+Notifications
 Admin user management (admin/author role)
 Author supervision dashboard (author role only)
 
@@ -536,6 +540,7 @@ profile data
 email change flow
 password change flow
 subscription plan and billing status
+notification channel preferences (in-app/push/email)
 
 All sensitive changes must trigger transactional notifications.
 
@@ -585,7 +590,13 @@ account suspension/reactivation
 plan change
 billing issues
 
-Email provider choice is intentionally left open (to be selected separately).
+Notification channels:
+
+in-app
+push
+email
+
+Provider choice is intentionally abstracted (to be selected separately where needed).
 
 ---
 

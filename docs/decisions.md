@@ -272,6 +272,22 @@ Role-based billing rule:
 
 ---
 
+# Notification Policy
+
+Notification system supports three channels:
+
+in-app
+push
+email
+
+MVP requirements:
+
+- transactional security/billing events must trigger notifications
+- users can manage channel preferences in settings
+- in-app notifications must support read/unread state
+
+---
+
 # Long-Term Model Flexibility
 
 The AI architecture is designed to support multiple models.

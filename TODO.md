@@ -248,6 +248,9 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `GET /api/v1/me/settings`
 - [ ] `PATCH /api/v1/me/settings/profile`
 - [ ] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
+- [ ] `PATCH /api/v1/me/settings/notifications` (notification channels preferences)
+- [ ] `GET /api/v1/notifications` (in-app notifications feed)
+- [ ] `POST /api/v1/notifications/{id}/read` (mark notification as read)
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
@@ -334,6 +337,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] MVP dashboard screen.
 - [ ] Build user `Settings` screen (profile, security, subscription).
 - [ ] Add auth settings UX for SSO visibility (linked provider) and 2FA management (enable/disable/verify).
+- [ ] Add notification preferences UI in settings (in-app/push/email toggles).
+- [ ] Build in-app notification center with unread/read state and deep links to related screens.
 - [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate/cancel).
 - [ ] Build author `Supervision Dashboard` screen (global metrics + oversight panels).
 - [ ] Build author role-management UI (promote/demote `user` <-> `admin`).
@@ -402,15 +407,19 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P10.5 - Transactional Notifications
 
-- [ ] Define transactional email policy (events, templates, localization, legal footer).
+- [ ] Define unified notification policy (event taxonomy, templates, localization, legal footer, channel routing rules).
 - [ ] Add automatic notifications for security/account-critical events:
 - [ ] email change requested/completed
 - [ ] password change requested/completed
 - [ ] account suspension/reactivation
 - [ ] plan upgrade/downgrade and billing failures
 - [ ] Integrate email delivery provider abstraction (provider `TBD`, to be selected separately).
+- [ ] Integrate push delivery provider/service abstraction (FCM/APNs via provider adapter).
+- [ ] Implement in-app notification persistence (`notifications` table/model) with read/unread lifecycle.
+- [ ] Add push token registration/rotation/revocation flow per device session.
 - [ ] Add notification delivery logs, retry, and dead-letter handling.
-- [ ] Add tests for notification triggers and failure behavior.
+- [ ] Add user-level notification preferences and channel opt-in/opt-out enforcement.
+- [ ] Add tests for notification triggers, per-channel routing, and failure behavior.
 
 ---
 

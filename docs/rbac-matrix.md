@@ -44,6 +44,9 @@ Role hierarchy:
 | `GET /api/v1/me/settings` | allow | allow | allow | own settings only |
 | `PATCH /api/v1/me/settings/profile` | allow | allow | allow | own settings only |
 | `PATCH /api/v1/me/settings/security` | allow | allow | allow | own settings only + notification + 2FA challenge for sensitive changes |
+| `PATCH /api/v1/me/settings/notifications` | allow | allow | allow | own preferences only |
+| `GET /api/v1/notifications` | allow | allow | allow | own in-app notifications only |
+| `POST /api/v1/notifications/{id}/read` | allow | allow | allow | own notification only |
 | `POST /api/v1/billing/subscription/change-plan` | allow | deny | deny | `admin`/`author` plan locked by role policy |
 | `GET /api/v1/admin/users` | deny | allow | allow | admin surface |
 | `PATCH /api/v1/admin/users/{id}/status` | deny | allow | allow | status: `active`/`suspended`/`canceled` |

@@ -84,6 +84,9 @@ GET /api/v1/dashboard
 GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
+PATCH /api/v1/me/settings/notifications
+GET /api/v1/notifications
+POST /api/v1/notifications/{id}/read
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -215,6 +218,7 @@ Tasks:
 * Build admin user management APIs and UI (list/search/suspend/reactivate/cancel)
 * Build author role-management APIs/UI (`user` <-> `admin`) and global supervision dashboard
 * Build user settings APIs and UI (profile, security, subscription)
+* Build notifications UX (in-app notification center + channel preferences for in-app/push/email)
 * Enforce RBAC and audit logs for admin/author actions
 * Enforce author safety invariants (no self-role-change, no self-suspend/cancel, keep at least one active author)
 * Enforce role-based billing lock (`admin`/`author` always premium + billing-exempt)
