@@ -13,6 +13,7 @@ class MemoryRecordResponse(BaseModel):
     raw_text: str
     structured_data: dict[str, Any]
     created_at: str
+    ai_state: Literal["saved"] = "saved"
 
     model_config = ConfigDict(extra="forbid")
 
@@ -28,6 +29,10 @@ class MemoryProposalResponse(BaseModel):
     clarification_questions: list[str] = []
     missing_required_fields: list[str] = []
     needs_confirmation: bool
+    ai_state: Literal["needs_clarification", "ready_to_confirm"]
+    source_context: Literal["voice", "text", "receipt_ocr"] = "voice"
+    confirmation_actions: list[Literal["Confirm", "Modify", "Cancel"]] = ["Confirm", "Modify", "Cancel"]
+    editable_datetime: str
 
     model_config = ConfigDict(extra="forbid")
 

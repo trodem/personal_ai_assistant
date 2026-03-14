@@ -99,7 +99,11 @@ def clarification_questions_for_fields(fields: list[str]) -> list[str]:
         "action": "Is this an add or remove action?",
         "counterparty": "Who is the counterparty?",
     }
-    return [questions[field] for field in fields if field in questions]
+    # AI UX contract: ask one concise clarification question per turn.
+    for field in fields:
+        if field in questions:
+            return [questions[field]]
+    return []
 
 
 def extract_memory_proposal(transcript: str) -> ExtractionResult:

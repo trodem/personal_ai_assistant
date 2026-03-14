@@ -35,6 +35,7 @@ async def upload_voice_memory(
         transcript = audio.filename or "voice memory"
 
     proposal = extract_memory_proposal(transcript)
+    ai_state = "ready_to_confirm" if proposal.needs_confirmation else "needs_clarification"
     return MemoryProposalResponse(
         transcript=proposal.transcript,
         memory_type=proposal.memory_type,  # type: ignore[arg-type]
@@ -42,6 +43,10 @@ async def upload_voice_memory(
         clarification_questions=proposal.clarification_questions,
         missing_required_fields=proposal.missing_required_fields,
         needs_confirmation=proposal.needs_confirmation,
+        ai_state=ai_state,  # type: ignore[arg-type]
+        source_context="voice",
+        confirmation_actions=["Confirm", "Modify", "Cancel"],
+        editable_datetime=datetime.now().strftime("%Y-%m-%d %H:%M"),
     )
 
 
