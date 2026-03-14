@@ -301,3 +301,5 @@ Future support may include:
 Anthropic
 local models
 other providers
+
+Model/prompt version governance is managed in `docs/model-registry.md` and must be updated on every model routing or prompt change.

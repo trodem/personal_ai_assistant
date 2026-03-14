@@ -171,6 +171,8 @@ other AI APIs
 
 Model routing may allow cost optimization in the future.
 
+Model and prompt version governance must follow `docs/model-registry.md`.
+
 ---
 
 # Monitoring

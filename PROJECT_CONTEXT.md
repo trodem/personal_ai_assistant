@@ -629,6 +629,18 @@ error/dependency events
 
 ---
 
+# MODEL AND PROMPT REGISTRY
+
+Model and prompt governance must follow `docs/model-registry.md`.
+
+Any AI change must keep explicit mapping:
+
+use-case -> provider -> model version -> prompt version -> fallback
+
+No silent model or prompt switch is allowed.
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

@@ -35,6 +35,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `docs/product-analytics.md` with canonical event taxonomy, funnels, KPI mapping, payload schema rules, and privacy constraints; linked into AGENTS routing, TODO quality gates, roadmap, architecture context, and testing strategy.
 - Multi-language planning made explicit with MVP language matrix (`en`, `it`, `de`), deterministic fallback (`en`), settings-level `preferred_language` contract, and aligned roadmap/query/testing/TODO coverage.
 - Guided onboarding planning expanded with explicit first-run step sequence, permission UX, skip/resume behavior, persisted completion state, and analytics funnel instrumentation.
+- Added `docs/model-registry.md` as canonical model/prompt governance source, with rollout/rollback policy and required mapping of AI use-cases to model/prompt versions; linked across AGENTS, TODO, roadmap, architecture, cost-control, and project context docs.
 
 ---
 

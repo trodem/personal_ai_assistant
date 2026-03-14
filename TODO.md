@@ -51,6 +51,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
 - [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
+- [ ] For AI model/prompt changes: `docs/model-registry.md` is updated with active version mapping and rollback entry.
 - [ ] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
 - [ ] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
 - [ ] Flutter UI uses reusable components and centralized theme tokens (no scattered hardcoded styles/colors).
@@ -217,6 +218,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Endpoint `POST /api/v1/voice/memory` with robust audio upload handling.
 - [ ] Whisper integration with timeout and controlled retry.
 - [ ] Versioned extraction prompt (`specs/memory-extraction.md`).
+- [ ] Register extraction/clarification model + prompt versions in `docs/model-registry.md`.
 - [ ] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
 - [ ] Enforce required fields per `memory_type` before persistence (`required_by_type` contract).
 - [ ] Typed + semantic field extraction (`who/what/where/when/why/how`).
@@ -444,6 +446,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Prompt budget with hard token cap.
 - [ ] Cache low-risk repeated responses.
 - [ ] Model routing policy (cost-efficient default, escalation for complex cases).
+- [ ] Formalize per-use-case active model mapping and fallback chain in `docs/model-registry.md`.
 - [ ] Add circuit breaker/fallback behavior for AI provider outages and elevated error rates.
 - [ ] Load-test simulation to estimate monthly cost.
 - [ ] Implement product analytics event pipeline (capture, validation, storage/export) aligned with `docs/product-analytics.md`.

@@ -32,6 +32,7 @@ Precedence order when conflicts appear:
 - `docs/security-threat-model.md`
 - `docs/rbac-matrix.md`
 - `docs/product-analytics.md`
+- `docs/model-registry.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -40,6 +41,7 @@ When to consult each document:
 - API change: read `specs/api.yaml` and `docs/error-model.md`
 - memory extraction/storage change: read `docs/contract.md`, `docs/domain-model.md`, `specs/memory-extraction.md`, `docs/database-schema.md`
 - question-answering change: read `docs/query-contract.md`, `docs/ai-pipeline.md`, `docs/error-model.md`, `specs/api.yaml`
+- AI model/prompt change: read `docs/model-registry.md`, `docs/ai-cost-control.md`, and `specs/memory-extraction.md`
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`

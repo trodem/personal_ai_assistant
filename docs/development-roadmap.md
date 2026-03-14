@@ -60,6 +60,7 @@ Tasks:
 * Implement memory extraction
 * Implement clarification logic
 * Implement confirmation system
+* Define model/prompt mappings in `docs/model-registry.md` for extraction, clarification, question NLG, and embeddings
 
 Deliverable:
 

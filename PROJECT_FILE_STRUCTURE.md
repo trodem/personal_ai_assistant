@@ -256,6 +256,7 @@ product-features.md
 monetization.md
 decisions.md
 product-analytics.md
+model-registry.md
 
 ---
 
