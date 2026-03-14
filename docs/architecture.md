@@ -1,4 +1,4 @@
-# Personal AI Assistant Architecture
+﻿# Personal AI Assistant Architecture
 
 ## Overview
 
@@ -10,6 +10,7 @@ The system is composed of:
 - a backend API
 - AI processing services
 - a cloud database
+- object storage for receipt-photo attachments
 
 The architecture is designed to be scalable, secure, and AI-native.
 
@@ -29,11 +30,13 @@ Responsibilities:
 - sending requests to backend
 - displaying AI answers
 - showing dashboard insights
+- receipt photo capture/selection
 
 Supported inputs:
 
 - voice
 - text
+- receipt photos (camera/gallery attachment flow)
 
 ---
 
@@ -47,6 +50,9 @@ Responsibilities:
 - user authentication validation
 - request processing
 - memory extraction
+- receipt-photo validation and upload
+- OCR pipeline orchestration
+- attachment lifecycle state handling
 - AI orchestration
 - embeddings generation
 - semantic search
@@ -65,7 +71,7 @@ Clerk
 
 Flow:
 
-User login → Clerk → JWT token → Backend verification
+User login -> Clerk -> JWT token -> Backend verification
 
 The backend validates tokens before processing requests.
 
@@ -76,6 +82,7 @@ The backend validates tokens before processing requests.
 AI is used for:
 
 - extracting structured information from user input
+- OCR text interpretation for receipt photos
 - generating embeddings
 - answering user queries
 - generating insights
@@ -96,7 +103,7 @@ OpenAI Whisper API
 
 Flow:
 
-User voice → mobile recording → backend → Whisper API → text
+User voice -> mobile recording -> backend -> Whisper API -> text
 
 ---
 
@@ -111,6 +118,7 @@ The database stores:
 - users
 - memories
 - extracted structured data
+- attachments and OCR/lifecycle metadata
 - analytics data
 
 ---
@@ -131,19 +139,54 @@ The memory pipeline works as follows:
 
 User input (voice or text)
 
-→ speech-to-text conversion
+-> speech-to-text conversion (for voice)
 
-→ memory extraction
+-> memory extraction
 
-→ embeddings generation
+-> clarification (if required)
 
-→ storage in PostgreSQL
+-> user confirmation (`Confirm / Modify / Cancel`)
 
-→ vector indexing
+-> storage in PostgreSQL
+
+-> embeddings generation / vector indexing
+
+Memories must never be saved automatically without explicit user confirmation.
 
 When a user asks a question:
 
-query → embedding → vector search → relevant memories → AI response generation
+query -> embedding -> vector search -> relevant memories -> AI response generation
+
+---
+
+## Receipt Attachment Pipeline
+
+Receipt-photo ingestion works as follows:
+
+receipt photo (camera or gallery)
+
+-> strict file validation (`jpg`, `jpeg`, `png`, `webp`, `heic`)
+
+-> object storage upload
+
+-> OCR extraction
+
+-> memory proposal generation
+
+-> clarification (if required)
+
+-> user confirmation (`Confirm / Modify / Cancel`)
+
+-> memory persistence
+
+Upload/scan alone must not persist memory.
+
+Attachment lifecycle states:
+
+- uploaded
+- ocr_processing
+- proposal_ready
+- confirmed or failed
 
 ---
 
@@ -156,6 +199,7 @@ Components:
 - mobile application
 - backend API
 - PostgreSQL database
+- object storage
 - AI services
 
 The backend will run inside containers and can scale horizontally.
@@ -174,6 +218,11 @@ Secure authentication
 
 Scalable backend design
 
+Database-first calculations
+
+Explicit user confirmation before persistence
+
+---
 
 ## Event-Based State Computation
 

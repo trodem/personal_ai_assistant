@@ -107,6 +107,22 @@ Confirmation
 ↓
 Database storage
 
+Receipt-photo pipeline:
+
+Receipt photo (camera/gallery)
+â†“
+Upload validation
+â†“
+Object storage
+â†“
+OCR extraction
+â†“
+Memory extraction proposal
+â†“
+Clarification + confirmation
+â†“
+Database storage
+
 Question pipeline:
 
 Audio question

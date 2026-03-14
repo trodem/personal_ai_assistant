@@ -160,7 +160,7 @@ paths:
     post:
       tags: [Attachments]
       summary: Upload receipt photo attachment
-      description: Accepts only receipt photos. PDF and non-image files are rejected.
+      description: Accepts only receipt photos. PDF and non-image files are rejected. Upload does not persist a memory by itself; memory persistence still requires explicit user confirmation in the memory flow.
       security:
         - bearerAuth: []
       parameters:
@@ -315,7 +315,7 @@ components:
 
     AttachmentResponse:
       type: object
-      required: [id, file_url, file_type]
+      required: [id, file_url, file_type, status]
       properties:
         id:
           type: string
@@ -324,6 +324,18 @@ components:
           type: string
         file_type:
           type: string
+        status:
+          type: string
+          enum: [uploaded, ocr_processing, proposal_ready, confirmed, failed]
+        ocr_status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        ocr_text_preview:
+          type: string
+          description: Optional OCR preview text extracted from the receipt photo.
+        error_code:
+          type: string
+          description: Present when status is `failed` (for example `ocr.processing_failed`).
 
     DashboardResponse:
       type: object

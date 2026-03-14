@@ -284,6 +284,24 @@ photos
 receipts
 receipt photos only (no PDF/documents/contracts in MVP)
 
+User attachment UX must support both:
+
+Take Photo
+Choose from Gallery
+
+After upload, the backend must run OCR and feed the extracted text into the normal memory extraction flow.
+
+Attachment scan/upload alone must not save memory automatically; `Confirm` is still required.
+
+Attachment lifecycle must be deterministic:
+
+uploaded
+ocr_processing
+proposal_ready
+confirmed or failed
+
+Orphan uploads (never confirmed) must be cleaned by retention policy.
+
 Files are stored in cloud object storage.
 
 The database stores only metadata and file URLs.

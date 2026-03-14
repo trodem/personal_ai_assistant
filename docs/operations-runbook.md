@@ -100,6 +100,30 @@ Exit criteria:
 
 ---
 
+## Playbook: OCR/Attachment Pipeline Degradation
+
+Symptoms:
+
+- attachments stuck in `ocr_processing`
+- spike in `ocr.processing_failed` or low-confidence OCR outcomes
+- orphan attachment growth
+
+Actions:
+
+1. pause new OCR jobs only if queue overload threatens core API stability
+2. keep uploads accepted when possible and mark deterministic status
+3. retry OCR jobs with bounded backoff and dead-letter failed jobs
+4. run orphan cleanup policy and verify DB/storage consistency
+5. communicate clear user action (`Retry`, `Modify manually`, `Cancel`)
+
+Exit criteria:
+
+- attachment lifecycle backlog returns to baseline
+- `ocr_processing` stuck count below alert threshold
+- no orphan growth trend beyond retention target
+
+---
+
 ## Playbook: Auth Provider Issues
 
 Symptoms:

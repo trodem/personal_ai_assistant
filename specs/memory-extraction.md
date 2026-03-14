@@ -23,7 +23,7 @@ User input can include:
 - inventory events
 - loan events
 - notes
-- receipt documents (captured as photos)
+- receipt photos
 - maintenance activities
 
 User wording like "purchase", "store object", or "event" is treated as intent text and mapped to canonical memory types.
@@ -195,6 +195,12 @@ Attachments are stored in cloud object storage and linked to the memory record.
 Upload validation must allow only: `jpg`, `jpeg`, `png`, `webp`, `heic`.
 
 PDF and other non-image files must be rejected.
+
+When a receipt photo is attached, OCR text extraction must run before memory extraction.
+
+OCR output is candidate input (`raw_text`) and must still go through the standard clarification + confirmation flow.
+
+A receipt scan must never create a persisted memory automatically.
 
 ---
 

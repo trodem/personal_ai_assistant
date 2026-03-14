@@ -13,7 +13,7 @@ Personal AI Assistant is a mobile application that allows users to store persona
 Users can:
 
 - store information using voice or text
-- attach files
+- attach receipt photos only
 - ask questions about stored memories
 - receive AI-generated answers and insights
 
@@ -129,6 +129,8 @@ Each memory contains:
 - embeddings
 
 Memories must only be stored after user confirmation.
+
+Receipt photo scan/upload must never persist memory by itself; it must pass through OCR, proposal, and `Confirm / Modify / Cancel`.
 
 If information is incomplete, the assistant must ask follow-up questions.
 

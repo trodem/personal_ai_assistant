@@ -9,6 +9,8 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - Do not modify architecture, memory model, or security rules unless explicitly requested.
 - Run end-of-milestone mini-audit before starting the next milestone.
 - Treat missing prerequisites as blockers, not assumptions.
+- Enforce full-document alignment on every change: update all impacted files (`PROJECT_CONTEXT.md`, `docs/`, `specs/`, `TODO.md`) in the same iteration.
+- Never leave contradictions across documents; if alignment cannot be completed, stop and report blocker explicitly.
 
 ## Execution protocol (always-on)
 - Follow milestone order unless explicitly overridden.
@@ -37,7 +39,8 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
 - [ ] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
-- [ ] For attachment changes: `receipt photo upload -> object storage persistence -> authorized access via signed URL` is verified.
+- [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
+- [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
 - [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
 - [ ] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
 - [ ] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
@@ -219,6 +222,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `POST /attachments`
 - [ ] `GET /dashboard`
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
+- [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
 - [ ] Add API contract tests for core success/error responses.
 - [ ] Add consistent error model and status code mapping.
@@ -268,6 +272,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Login/logout with Clerk.
 - [ ] First-run onboarding focused on fast first value (first memory + first question).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
+- [ ] Attachment button UX: support both `Take Photo` and `Choose from Gallery` for receipt photos.
 - [ ] Push-to-talk memory capture.
 - [ ] Memory confirmation flow with `Confirm / Modify / Cancel` only.
 - [ ] Implement `Modify` as guided field editor by memory type.
@@ -301,9 +306,18 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Integrate S3-compatible object storage.
 - [ ] Endpoint `POST /attachments` with strict file type/size validation (receipt photos only).
 - [ ] Link attachment <-> memory with user ownership checks.
+- [ ] Introduce attachment lifecycle state machine (`uploaded`, `ocr_processing`, `proposal_ready`, `confirmed`, `failed`) with deterministic transitions.
+- [ ] Run OCR on uploaded receipt photo and expose preview text for memory proposal flow.
+- [ ] Normalize receipt photo before OCR (orientation/rotation, optional compression, quality guardrails).
+- [ ] Parse and normalize OCR fields (amount/currency/date/vendor candidates) with explicit uncertainty flags.
+- [ ] Ensure scan/upload alone never persists memory (confirm required).
 - [ ] Temporary signed URLs for file access.
 - [ ] Minimum support: receipt photo images only (`jpg`, `jpeg`, `png`, `webp`, `heic`).
 - [ ] Explicitly reject `pdf` and every non-image content type on upload.
+- [ ] Strip sensitive EXIF metadata before long-term storage.
+- [ ] Add file hash-based dedup strategy to avoid duplicate OCR and duplicate attachment storage.
+- [ ] Define orphan attachment policy (uploaded but never confirmed) with automatic cleanup job and retention window.
+- [ ] Define delete semantics: memory deletion must enforce attachment deletion/retention policy consistently in DB and object storage.
 - [ ] Basic malware scanning (if available in selected provider).
 - [ ] Upload/download authorization tests.
 

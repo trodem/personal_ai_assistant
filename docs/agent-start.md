@@ -31,6 +31,11 @@ The agent must use the document routing rules in `docs/AGENTS.md` to decide whic
 
 The agent must not ignore any architectural decision defined in these documents.
 
+Mandatory alignment rule:
+
+- before finalizing any task, the agent must align all impacted files across `PROJECT_CONTEXT.md`, `docs/`, `specs/`, and `TODO.md`
+- the agent must not leave conflicting statements between documents
+
 ---
 
 # Step 3 - Confirm Understanding

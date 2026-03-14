@@ -165,6 +165,9 @@ Tasks:
 * Implement object storage integration
 * Upload receipt photos (`jpg`, `jpeg`, `png`, `webp`, `heic`)
 * Reject PDF and any non-image upload
+* Run OCR on uploaded receipt photos
+* Feed OCR text into memory extraction proposal flow
+* Enforce no auto-save after scan (save only after `Confirm`)
 * Link attachments to memories
 
 Deliverable:

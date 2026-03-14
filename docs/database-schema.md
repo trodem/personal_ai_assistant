@@ -99,6 +99,12 @@ memory_id (uuid)
 user_id (uuid)
 file_url (text)
 file_type (text)
+storage_key (text)
+status (text)
+ocr_status (text)
+ocr_text (text)
+content_hash (text)
+error_code (text)
 created_at (timestamp)
 
 Files are stored in cloud object storage.
@@ -108,6 +114,7 @@ Attachment policy in MVP:
 - only receipt photo files are allowed
 - allowed formats: `jpg`, `jpeg`, `png`, `webp`, `heic`
 - PDF and non-image files are rejected at upload validation
+- attachment lifecycle must be tracked in DB for reliability and cleanup
 
 ---
 

@@ -50,6 +50,29 @@ Attachment policy in MVP:
 - only receipt photos are allowed as attachments
 - allowed formats: `jpg`, `jpeg`, `png`, `webp`, `heic`
 - PDF and any non-image file must be rejected with validation error
+- attachment picker must offer both: `Take Photo` and `Choose from Gallery`
+
+Receipt photo ingestion contract:
+
+1. user adds receipt photo from camera or gallery
+2. backend validates and stores attachment
+3. backend runs OCR on the receipt photo
+4. OCR text is used as candidate input for memory extraction
+5. assistant asks clarifications if needed
+6. assistant shows final summary with `Confirm / Modify / Cancel`
+7. memory is saved only after `Confirm` (never auto-saved after scan)
+
+Attachment lifecycle contract:
+
+- each attachment must expose a deterministic status:
+- `uploaded` -> `ocr_processing` -> `proposal_ready` -> (`confirmed` or `failed`)
+- `failed` status must include machine-readable error reason and user-visible retry action
+- an attachment in `proposal_ready` can be canceled without persisting memory
+
+Attachment cleanup and delete semantics:
+
+- if upload succeeded but memory is never confirmed, attachment is treated as orphan and cleaned by retention policy
+- if a memory is deleted, linked attachments must follow a documented delete/retention policy (DB + object storage consistency)
 
 ---
 

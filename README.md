@@ -28,12 +28,17 @@ Ask questions:
 
 The assistant searches the user's stored data and returns intelligent answers.
 
+Memory persistence always requires explicit user confirmation (`Confirm / Modify / Cancel`).
+
 ---
 
 # Main Features
 
 ### Voice Memory Capture
 Users can quickly record information using voice input.
+
+### Receipt Photo Capture
+Users can attach only receipt photos (camera or gallery). The app runs OCR and proposes structured memory data before confirmation.
 
 ### AI Question Interface
 Users can ask questions about their stored information in natural language.
@@ -58,7 +63,7 @@ Private individuals who want to organize their personal information and memory.
 
 Professionals who need to keep track of work-related notes, expenses, or activities.
 
-Companies that want to use the system as a troubleshooting or knowledge assistant.
+Small teams/professionals are a future expansion path, while MVP remains personal-memory focused.
 
 ---
 
@@ -84,9 +89,10 @@ Cloud-based LLM with backend logic for:
 
 # Business Model
 
-The application is distributed as a subscription-based service.
+The application follows a freemium model:
 
-Users create an account and access the assistant through a paid subscription.
+- Free: limited usage
+- Premium: expanded limits and advanced features
 
 ---
 

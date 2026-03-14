@@ -1,4 +1,4 @@
-# PROJECT BOOTSTRAP
+﻿# PROJECT BOOTSTRAP
 
 This file instructs the AI agent how to start working on the Personal AI Assistant project.
 
@@ -6,7 +6,7 @@ The agent must follow these rules strictly.
 
 ---
 
-# STEP 1 — READ PROJECT CONTEXT
+# STEP 1 â€” READ PROJECT CONTEXT
 
 Before performing any action the agent must read:
 
@@ -18,7 +18,7 @@ No architectural decision may be ignored.
 
 ---
 
-# STEP 2 — CONFIRM UNDERSTANDING
+# STEP 2 â€” CONFIRM UNDERSTANDING
 
 After reading the context, the agent must summarize:
 
@@ -32,7 +32,7 @@ Only after confirming understanding may implementation begin.
 
 ---
 
-# STEP 3 — IMPLEMENTATION PRIORITY
+# STEP 3 â€” IMPLEMENTATION PRIORITY
 
 The implementation must follow this order:
 
@@ -50,7 +50,7 @@ The agent must never start with UI before backend APIs exist.
 
 ---
 
-# STEP 4 — BACKEND FOUNDATION
+# STEP 4 â€” BACKEND FOUNDATION
 
 The backend must be built first.
 
@@ -70,7 +70,7 @@ ai_pipeline
 
 ---
 
-# STEP 5 — DATABASE SETUP
+# STEP 5 â€” DATABASE SETUP
 
 Database:
 
@@ -90,7 +90,7 @@ embeddings
 
 ---
 
-# STEP 6 — AI PIPELINE IMPLEMENTATION
+# STEP 6 â€” AI PIPELINE IMPLEMENTATION
 
 The AI pipeline must implement:
 
@@ -106,7 +106,7 @@ All calculations must be performed in the backend.
 
 ---
 
-# STEP 7 — API IMPLEMENTATION
+# STEP 7 â€” API IMPLEMENTATION
 
 Required endpoints:
 
@@ -122,7 +122,7 @@ The API must enforce user authentication.
 
 ---
 
-# STEP 8 — MOBILE APPLICATION
+# STEP 8 â€” MOBILE APPLICATION
 
 Technology:
 
@@ -140,9 +140,16 @@ Voice recording must use push-to-talk.
 
 ---
 
-# STEP 9 — STORAGE
+# STEP 9 â€” STORAGE
 
 Attachments must be stored in cloud object storage.
+
+MVP attachment policy:
+
+- only receipt photos are allowed (jpg, jpeg, png, webp, heic)
+- PDF and non-image files must be rejected
+- upload/scan alone must never persist memory
+- OCR output must go through normal clarification + confirmation flow
 
 Recommended providers:
 
@@ -154,7 +161,7 @@ The database stores only file metadata.
 
 ---
 
-# STEP 10 — AUTHENTICATION
+# STEP 10 â€” AUTHENTICATION
 
 Authentication must use an external provider.
 
@@ -171,7 +178,7 @@ The backend validates authentication tokens.
 
 ---
 
-# STEP 11 — BILLING
+# STEP 11 â€” BILLING
 
 Billing must use Stripe.
 
@@ -185,7 +192,7 @@ Premium features must require active subscription.
 
 ---
 
-# STEP 12 — DEVELOPMENT PRINCIPLES
+# STEP 12 â€” DEVELOPMENT PRINCIPLES
 
 The system must follow these principles:
 
@@ -197,7 +204,7 @@ strict user data isolation
 
 ---
 
-# STEP 13 — SAFETY RULES
+# STEP 13 â€” SAFETY RULES
 
 The agent must never:
 
@@ -210,7 +217,7 @@ All sensitive actions require confirmation.
 
 ---
 
-# STEP 14 — FUTURE EXTENSIONS
+# STEP 14 â€” FUTURE EXTENSIONS
 
 The architecture must allow future support for:
 
@@ -218,3 +225,4 @@ multiple AI providers
 local AI models
 business accounts
 advanced analytics
+

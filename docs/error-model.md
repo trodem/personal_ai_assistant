@@ -43,6 +43,10 @@ Examples:
 - `query.ambiguous_intent`
 - `query.no_results`
 - `storage.upload_failed`
+- `storage.unsupported_file_type`
+- `storage.attachment_orphaned`
+- `ocr.processing_failed`
+- `ocr.low_confidence`
 - `ai.provider_unavailable`
 - `rate.limit_exceeded`
 - `internal.unexpected_error`
@@ -58,7 +62,7 @@ Examples:
 | 403 | forbidden | `auth.forbidden` |
 | 404 | not found | `memory.not_found`, `query.no_results` |
 | 409 | conflict | `memory.version_conflict` |
-| 422 | semantic validation | `memory.confirmation_required`, `memory.missing_required_fields`, `query.ambiguous_intent` |
+| 422 | semantic validation | `memory.confirmation_required`, `memory.missing_required_fields`, `query.ambiguous_intent`, `storage.unsupported_file_type`, `ocr.low_confidence` |
 | 429 | rate limit | `rate.limit_exceeded` |
 | 500 | internal | `internal.unexpected_error` |
 | 502/503 | dependency outage | `ai.provider_unavailable`, `db.unavailable` |

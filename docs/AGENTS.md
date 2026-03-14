@@ -44,6 +44,12 @@ When to consult each document:
 
 If a conflict remains unresolved after precedence, the agent must stop and ask the user.
 
+Alignment Invariant (non-negotiable):
+
+- every change must be aligned across all impacted files (`PROJECT_CONTEXT.md`, `docs/`, `specs/`, `TODO.md`)
+- no partial update is allowed if it creates contradictions
+- if full alignment cannot be completed in the same change, the agent must stop and report the blocker
+
 ---
 
 # Documentation Protection
