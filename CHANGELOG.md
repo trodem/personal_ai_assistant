@@ -26,6 +26,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added MFA policy enforcement for privileged roles (`admin`/`author`) on admin endpoints with explicit `auth.mfa_required` blocking and integration tests.
 - Aligned OpenAPI spec with implemented endpoints and auth guards (`/health/live`, `/health/ready`, `/metrics`, tenant header semantics on protected tenant-aware routes).
 - Hardened FastAPI Swagger/OpenAPI metadata for implemented endpoints (typed response models, operation summaries/descriptions, documented 401/403 responses, and bearer security scheme exposure) with automated `/openapi.json` regression tests.
+- Added API backward-compatibility regression tests (`backend/tests/test_api_backward_compatibility.py`) to enforce v1 path stability and preserve required response fields for current and previously shipped clients.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
