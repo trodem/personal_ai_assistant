@@ -90,11 +90,11 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Object storage ready:
 - [x] Supabase local Storage (via Supabase CLI/Docker) for development
 - [x] Supabase Storage buckets configured for staging/prod
-- [ ] Stripe account with test mode enabled (for billing phase).
+<!-- - [ ] Stripe account with test mode enabled (for billing phase). -->
 
 ### Recommended accounts (to reduce risk)
-- [ ] Error monitoring account (e.g., Sentry or equivalent).
-- [ ] Uptime/observability platform account (metrics, dashboards, alerts).
+<!-- - [ ] Error monitoring account (e.g., Sentry or equivalent). -->
+<!-- - [ ] Uptime/observability platform account (metrics, dashboards, alerts). -->
 - [ ] CI platform connected to repository (GitHub Actions or equivalent).
 - [ ] Secret manager available for staging/production credentials.
 - [ ] Transactional email provider account (provider TBD; decision tracked separately).
