@@ -30,6 +30,9 @@ function Wait-Healthy {
 Write-Host "[lint] docker compose config"
 docker compose config -q
 
+Write-Host "[lint] environment matrix alignment"
+./scripts/environment-matrix-check.ps1
+
 Write-Host "[runtime] docker compose up -d"
 docker compose up -d
 
