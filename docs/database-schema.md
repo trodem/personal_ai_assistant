@@ -21,16 +21,19 @@ role (text)
 status (text)
 created_at (timestamp)
 subscription_plan (text)
+billing_exempt (boolean)
 
 Role values:
 
 user
 admin
+author
 
 Status values:
 
 active
 suspended
+canceled
 
 ---
 

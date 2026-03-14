@@ -1,4 +1,4 @@
-# Monetization Model
+﻿# Monetization Model
 
 This document defines the pricing and monetization strategy for the Personal AI Assistant.
 
@@ -12,7 +12,7 @@ Users can start for free and upgrade to unlock advanced capabilities.
 
 Target pricing:
 
-Premium plan: **10–15 € per month**
+Premium plan: **10-15 EUR per month**
 
 This price point balances:
 
@@ -58,7 +58,12 @@ Priority AI processing
 
 Price range:
 
-10–15 € per month
+10-15 EUR per month
+
+Role-based exception:
+
+- `admin` and `author` accounts are always `premium` and billing-exempt
+- no subscription payment is charged for these privileged operational roles
 
 ---
 
@@ -90,7 +95,7 @@ Higher API limits
 
 Example pricing:
 
-25–40 € per user per month
+25-40 EUR per user per month
 
 ---
 

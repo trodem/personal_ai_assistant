@@ -82,6 +82,7 @@ Use documentation by task type:
 - memory extraction/storage changes: `docs/contract.md` + `docs/domain-model.md` + `specs/memory-extraction.md` + `docs/database-schema.md`
 - question-answering changes: `docs/query-contract.md` + `docs/ai-pipeline.md` + `docs/error-model.md` + `specs/api.yaml`
 - auth/security changes: `docs/security-threat-model.md` + `docs/risk-analysis.md`
+- auth/role/permission changes: `docs/rbac-matrix.md` + `docs/security-threat-model.md`
 - infra/deployment changes: `docs/environment-matrix.md` + `docs/operations-runbook.md`
 - testing/quality changes: `docs/testing-strategy.md` + `TODO.md`
 - architecture tradeoffs: create/update ADR in `ADR/`

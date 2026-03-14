@@ -358,6 +358,14 @@ GET /memories
 DELETE /memory/{id}
 POST /attachments
 GET /dashboard
+GET /me/settings
+PATCH /me/settings/profile
+PATCH /me/settings/security
+POST /billing/subscription/change-plan
+GET /admin/users
+PATCH /admin/users/{id}/status
+PATCH /author/users/{id}/role
+GET /author/dashboard
 
 ---
 
@@ -384,7 +392,8 @@ Question recording
 Dashboard
 Memory list
 Settings
-Admin user management (admin role only)
+Admin user management (admin/author role)
+Author supervision dashboard (author role only)
 
 ---
 
@@ -463,12 +472,25 @@ Authorization model:
 roles:
 user
 admin
+author
+
+Role naming note:
+
+`subscriber` in product language maps to technical role `user`.
 
 account status:
 active
 suspended
+canceled
 
 Suspended users must not access protected product flows until reactivated.
+Canceled users must not access protected product flows unless reactivated by policy.
+
+Role hierarchy:
+
+author > admin > user
+
+`author` inherits admin capabilities and can also update user roles (`user` <-> `admin`).
 
 ---
 
@@ -485,6 +507,13 @@ plan upgrades
 plan downgrades
 
 Users must be able to manage subscription in app settings (`free` <-> `premium`) according to billing policy.
+
+Role-based billing policy:
+
+- `admin` and `author` are always `premium`
+- `admin` and `author` are billing-exempt (no payment required)
+- role promotion to `admin`/`author` auto-enforces `premium` + billing exemption
+- role demotion to `user` removes billing exemption and returns to normal user billing policy
 
 ---
 
@@ -507,9 +536,31 @@ Admin users must have a dedicated management surface with:
 
 user list
 search/filter
-account status actions (suspend/reactivate)
+account status actions (suspend/reactivate/cancel)
 
 Admin actions must be audited and protected by role-based access control.
+
+---
+
+# AUTHOR CAPABILITIES
+
+Author is the highest privileged role.
+
+Author must have:
+
+all admin capabilities
+ability to promote/demote user roles (`user` <-> `admin`)
+global supervision dashboard with cross-app metrics (users, plans, operational health, usage)
+
+Author actions must be strictly audited.
+
+Author safety policy (mandatory):
+
+- author cannot change own role
+- author cannot suspend/cancel own account
+- system must always keep at least one active author
+- operations that would remove the last active author must be rejected
+- all role/status changes by author require explicit audit trail
 
 ---
 

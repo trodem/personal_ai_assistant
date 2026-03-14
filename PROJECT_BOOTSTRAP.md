@@ -6,7 +6,7 @@ The agent must follow these rules strictly.
 
 ---
 
-# STEP 1 â€” READ PROJECT CONTEXT
+# STEP 1 - READ PROJECT CONTEXT
 
 Before performing any action the agent must read:
 
@@ -18,7 +18,7 @@ No architectural decision may be ignored.
 
 ---
 
-# STEP 2 â€” CONFIRM UNDERSTANDING
+# STEP 2 - CONFIRM UNDERSTANDING
 
 After reading the context, the agent must summarize:
 
@@ -32,7 +32,7 @@ Only after confirming understanding may implementation begin.
 
 ---
 
-# STEP 3 â€” IMPLEMENTATION PRIORITY
+# STEP 3 - IMPLEMENTATION PRIORITY
 
 The implementation must follow this order:
 
@@ -50,7 +50,7 @@ The agent must never start with UI before backend APIs exist.
 
 ---
 
-# STEP 4 â€” BACKEND FOUNDATION
+# STEP 4 - BACKEND FOUNDATION
 
 The backend must be built first.
 
@@ -70,7 +70,7 @@ ai_pipeline
 
 ---
 
-# STEP 5 â€” DATABASE SETUP
+# STEP 5 - DATABASE SETUP
 
 Database:
 
@@ -90,7 +90,7 @@ embeddings
 
 ---
 
-# STEP 6 â€” AI PIPELINE IMPLEMENTATION
+# STEP 6 - AI PIPELINE IMPLEMENTATION
 
 The AI pipeline must implement:
 
@@ -106,7 +106,7 @@ All calculations must be performed in the backend.
 
 ---
 
-# STEP 7 â€” API IMPLEMENTATION
+# STEP 7 - API IMPLEMENTATION
 
 Required endpoints:
 
@@ -117,12 +117,21 @@ GET /memories
 DELETE /memory/{id}
 POST /attachments
 GET /dashboard
+GET /admin/users
+PATCH /admin/users/{id}/status
+GET /author/dashboard
+PATCH /author/users/{id}/role
+GET /me/settings
+PATCH /me/settings/profile
+PATCH /me/settings/security
+POST /billing/subscription/change-plan
 
 The API must enforce user authentication.
+Role and permission enforcement must follow `docs/rbac-matrix.md`.
 
 ---
 
-# STEP 8 â€” MOBILE APPLICATION
+# STEP 8 - MOBILE APPLICATION
 
 Technology:
 
@@ -140,7 +149,7 @@ Voice recording must use push-to-talk.
 
 ---
 
-# STEP 9 â€” STORAGE
+# STEP 9 - STORAGE
 
 Attachments must be stored in cloud object storage.
 
@@ -161,7 +170,7 @@ The database stores only file metadata.
 
 ---
 
-# STEP 10 â€” AUTHENTICATION
+# STEP 10 - AUTHENTICATION
 
 Authentication must use an external provider.
 
@@ -175,10 +184,12 @@ Auth0
 Supabase Auth
 
 The backend validates authentication tokens.
+Account status (`active`, `suspended`, `canceled`) must be enforced on protected endpoints.
+RBAC (`user`, `admin`, `author`) must be enforced on privileged endpoints.
 
 ---
 
-# STEP 11 â€” BILLING
+# STEP 11 - BILLING
 
 Billing must use Stripe.
 
@@ -189,10 +200,14 @@ payment processing
 subscription validation
 
 Premium features must require active subscription.
+Role policy exception:
+- `admin` and `author` are always `premium`
+- `admin` and `author` are billing-exempt
+- role policy must follow `docs/rbac-matrix.md` and `docs/monetization.md`
 
 ---
 
-# STEP 12 â€” DEVELOPMENT PRINCIPLES
+# STEP 12 - DEVELOPMENT PRINCIPLES
 
 The system must follow these principles:
 
@@ -204,7 +219,7 @@ strict user data isolation
 
 ---
 
-# STEP 13 â€” SAFETY RULES
+# STEP 13 - SAFETY RULES
 
 The agent must never:
 
@@ -217,7 +232,7 @@ All sensitive actions require confirmation.
 
 ---
 
-# STEP 14 â€” FUTURE EXTENSIONS
+# STEP 14 - FUTURE EXTENSIONS
 
 The architecture must allow future support for:
 

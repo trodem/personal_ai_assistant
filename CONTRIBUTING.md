@@ -33,6 +33,7 @@ Before opening PR:
 - [ ] docs updated when behavior/contract changes
 - [ ] no secrets in code/config
 - [ ] changed endpoints aligned with `specs/api.yaml`
+- [ ] role/permission changes aligned with `docs/rbac-matrix.md`
 - [ ] changelog updated in `CHANGELOG.md` when applicable
 - [ ] pre-commit hooks run locally without violations
 - [ ] mini-audit notes added for milestone-level changes
@@ -45,6 +46,7 @@ Reviewers should verify:
 
 - architecture alignment with `PROJECT_CONTEXT.md` and `docs/`
 - security/user-isolation correctness
+- RBAC correctness and role-policy alignment (`docs/rbac-matrix.md`)
 - error model consistency (`docs/error-model.md`)
 - test adequacy for risk level of change
 - coding standards alignment (`docs/coding-standards.md`)

@@ -80,6 +80,13 @@ GET /memories
 DELETE /memory/{id}
 POST /attachments
 GET /dashboard
+GET /me/settings
+PATCH /me/settings/profile
+PATCH /me/settings/security
+GET /admin/users
+PATCH /admin/users/{id}/status
+PATCH /author/users/{id}/role
+GET /author/dashboard
 
 Deliverable:
 
@@ -200,10 +207,13 @@ Goal: Add account administration and self-service settings.
 
 Tasks:
 
-* Add role model (`user`, `admin`) and account status (`active`, `suspended`)
-* Build admin user management APIs and UI (list/search/suspend/reactivate)
+* Add role model (`user`, `admin`, `author`) and account status (`active`, `suspended`, `canceled`)
+* Build admin user management APIs and UI (list/search/suspend/reactivate/cancel)
+* Build author role-management APIs/UI (`user` <-> `admin`) and global supervision dashboard
 * Build user settings APIs and UI (profile, security, subscription)
-* Enforce RBAC and audit logs for admin actions
+* Enforce RBAC and audit logs for admin/author actions
+* Enforce author safety invariants (no self-role-change, no self-suspend/cancel, keep at least one active author)
+* Enforce role-based billing lock (`admin`/`author` always premium + billing-exempt)
 
 Deliverable:
 

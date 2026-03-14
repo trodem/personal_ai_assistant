@@ -37,6 +37,8 @@ Examples:
 - `auth.missing_token`
 - `auth.invalid_token`
 - `auth.forbidden`
+- `auth.last_author_protection`
+- `auth.self_role_change_forbidden`
 - `memory.validation_failed`
 - `memory.confirmation_required`
 - `memory.missing_required_fields`
@@ -48,6 +50,7 @@ Examples:
 - `ocr.processing_failed`
 - `ocr.low_confidence`
 - `ai.provider_unavailable`
+- `billing.plan_locked_by_role`
 - `rate.limit_exceeded`
 - `internal.unexpected_error`
 
@@ -59,7 +62,7 @@ Examples:
 |---|---|---|
 | 400 | bad request | `memory.validation_failed` |
 | 401 | unauthorized | `auth.missing_token`, `auth.invalid_token` |
-| 403 | forbidden | `auth.forbidden` |
+| 403 | forbidden | `auth.forbidden`, `auth.last_author_protection`, `auth.self_role_change_forbidden`, `billing.plan_locked_by_role` |
 | 404 | not found | `memory.not_found`, `query.no_results` |
 | 409 | conflict | `memory.version_conflict` |
 | 422 | semantic validation | `memory.confirmation_required`, `memory.missing_required_fields`, `query.ambiguous_intent`, `storage.unsupported_file_type`, `ocr.low_confidence` |

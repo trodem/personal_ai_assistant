@@ -145,8 +145,16 @@ The system supports role-based access:
 
 user
 admin
+author
 
-Admin capabilities include user management actions (for example suspend/reactivate), protected by RBAC and audit logging.
+Admin capabilities include user management actions (for example suspend/reactivate/cancel), protected by RBAC and audit logging.
+Author is the highest role and can also manage user roles (`user` <-> `admin`) plus access global supervision dashboards.
+
+Author safety constraints:
+
+- author cannot change own role
+- author cannot suspend/cancel own account
+- system must keep at least one active author
 
 ---
 
@@ -209,6 +217,10 @@ Premium features:
 unlimited memories
 receipt photo attachments
 advanced insights
+
+Role-based billing rule:
+
+- `admin` and `author` are always `premium` and billing-exempt
 
 ---
 

@@ -28,17 +28,24 @@ Fields:
 - role
 - status
 - subscription status
+- billing_exempt
 - created_at
 
 Role values:
 
 - user
 - admin
+- author
+
+Role naming note:
+
+- `subscriber` in product language maps to technical role `user`
 
 Status values:
 
 - active
 - suspended
+- canceled
 
 ---
 

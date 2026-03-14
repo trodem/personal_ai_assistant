@@ -9,6 +9,7 @@ This document complements:
 - `docs/risk-analysis.md`
 - `docs/error-model.md`
 - `docs/operations-runbook.md`
+- `docs/rbac-matrix.md`
 
 ---
 
@@ -52,13 +53,17 @@ Controls:
 
 Risk:
 
-- unauthorized or excessive admin actions on user accounts
+- unauthorized or excessive privileged actions on user accounts
 
 Controls:
 
-- strict RBAC (`user` vs `admin`) on admin endpoints
+- strict RBAC (`user` vs `admin` vs `author`) on privileged endpoints
 - audit log for every admin action (who/when/target/change)
 - dual review for high-impact admin operations where feasible
+- explicit policy and tests for account status transitions (`active`, `suspended`, `canceled`)
+- explicit policy and tests for role transitions (`user` <-> `admin`) by `author` only
+- reject self-targeted destructive author actions (self-role-change, self-suspend, self-cancel)
+- enforce "last active author" protection invariant
 
 ---
 
@@ -73,6 +78,20 @@ Controls:
 - send notifications only from backend trusted triggers
 - deduplicate/retry controls with delivery logs
 - clear signed sender domain and template governance
+
+---
+
+### Role-based billing exemption abuse
+
+Risk:
+
+- unauthorized role elevation to avoid subscription payment
+
+Controls:
+
+- author-only role transition endpoint
+- immutable role-to-plan policy checks (`admin`/`author` => `premium` + billing-exempt)
+- audit and alerting on every privileged role transition
 
 ---
 
@@ -137,6 +156,8 @@ Controls:
 
 - auth negative tests pass
 - cross-user authorization tests pass
+- admin/author RBAC tests pass
+- endpoint-role permissions are aligned with `docs/rbac-matrix.md`
 - input validation tests pass
 - no secret found in logs/code
 - attachment security checks pass

@@ -53,6 +53,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Test scope is aligned with `docs/testing-strategy.md` for touched components.
 - [ ] Environment/config choices are aligned with `docs/environment-matrix.md`.
 - [ ] Security-sensitive changes are checked against `docs/security-threat-model.md`.
+- [ ] Auth/role/permission changes are aligned with `docs/rbac-matrix.md`.
 
 ---
 
@@ -84,7 +85,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [ ] Create separate credentials for `dev`, `staging`, and `prod`.
 - [ ] Restrict API keys by environment and rotate keys policy documented.
 - [ ] Store secrets only in env/secret manager, never in source control.
-- [ ] Define team access roles (owner/admin/developer/read-only).
+- [ ] Define team access roles (author/admin/developer/read-only).
 
 ### Environment readiness checks
 - [ ] `.env.example` completed with all required variables for local startup.
@@ -189,6 +190,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Set up migrations (Alembic or equivalent).
 - [ ] Enable `pgvector` extension.
 - [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
+- [ ] Add user billing-policy fields (`role`, `subscription_plan`, `billing_exempt`) with constraints.
 - [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
 - [ ] Implement memory versioning strategy (`memory_versions` append-only).
 - [ ] Enforce per-user isolation policy across all repository queries.
@@ -231,8 +233,10 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `DELETE /memory/{id}`
 - [ ] `POST /attachments`
 - [ ] `GET /dashboard`
-- [ ] `GET /admin/users` (admin only)
-- [ ] `PATCH /admin/users/{id}/status` (admin only: suspend/reactivate)
+- [ ] `GET /admin/users` (admin/author)
+- [ ] `PATCH /admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
+- [ ] `PATCH /author/users/{id}/role` (author only: `user` <-> `admin`)
+- [ ] `GET /author/dashboard` (author only global supervision)
 - [ ] `GET /me/settings`
 - [ ] `PATCH /me/settings/profile`
 - [ ] `PATCH /me/settings/security` (password/email change flow trigger)
@@ -241,6 +245,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
 - [ ] Add API contract tests for core success/error responses.
+- [ ] Add privileged-policy tests (`last active author protection`, `self-role-change forbidden`, `billing.plan_locked_by_role`).
 - [ ] Add consistent error model and status code mapping.
 
 ---
@@ -251,14 +256,22 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.
-- [ ] Add role-based access control (`user`, `admin`) and enforce on admin endpoints.
-- [ ] Add user account status control (`active`, `suspended`) and block access when suspended.
+- [ ] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
+- [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
+- [ ] Enforce author safety invariants:
+- [ ] author cannot change own role
+- [ ] author cannot suspend/cancel own account
+- [ ] system must always keep at least one active author
 - [ ] Negative auth tests:
 - [ ] missing token
 - [ ] expired token
 - [ ] valid token but cross-user resource access
 - [ ] suspended user access blocked
+- [ ] canceled user access blocked
 - [ ] non-admin access blocked on admin routes
+- [ ] non-author access blocked on author routes
+- [ ] admin cannot change roles (author-only role transition endpoint)
+- [ ] role change to `admin`/`author` auto-enforces `premium` + billing exemption
 
 ---
 
@@ -305,7 +318,9 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Memory timeline with basic filters.
 - [ ] MVP dashboard screen.
 - [ ] Build user `Settings` screen (profile, security, subscription).
-- [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate).
+- [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate/cancel).
+- [ ] Build author `Supervision Dashboard` screen (global metrics + oversight panels).
+- [ ] Build author role-management UI (promote/demote `user` <-> `admin`).
 - [ ] User-friendly error handling (retry, offline state, timeout).
 - [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
@@ -317,6 +332,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P8 - Dashboard and Insights
 
 - [ ] Endpoint `GET /dashboard` with core metrics.
+- [ ] Endpoint `GET /author/dashboard` with global supervision metrics (author only).
 - [ ] MVP blocks:
 - [ ] current-month expenses vs previous month
 - [ ] latest memory events
@@ -353,6 +369,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [ ] Integrate Stripe checkout + backend webhook handling.
 - [ ] Implement `free` and `premium` plans in backend authorization logic.
+- [ ] Enforce role-based plan lock: `admin`/`author` are always `premium` and billing-exempt.
 - [ ] Enforce free plan limits:
 - [ ] monthly memories
 - [ ] monthly AI queries
@@ -362,6 +379,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Graceful degradation when limits are exceeded.
 - [ ] Billing webhook and plan-switch tests.
 - [ ] In-app subscription management UX for user (`upgrade`, `downgrade`, current plan visibility).
+- [ ] Restrict subscription self-service to `user` role; `admin`/`author` plan changes follow role policy.
 - [ ] Grace period and downgrade policy defined and enforced.
 
 ---

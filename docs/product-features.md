@@ -144,10 +144,26 @@ Sensitive changes must trigger transactional notifications.
 Admin users must have a management interface for:
 
 User list with search/filter
-Account status control (`suspend`/`reactivate`)
+Account status control (`suspend`/`reactivate`/`cancel`)
 Operational user oversight
 
 Admin actions require strict role checks and audit logging.
+
+`Admin` accounts are always `premium` and billing-exempt by role policy.
+
+---
+
+# Author Panel
+
+Author users (highest role) must have:
+
+All admin capabilities
+Role management (`user` <-> `admin`)
+Global supervision dashboard (user stats, plan distribution, operational KPIs, risk signals)
+
+Author actions require strict audit and access controls.
+
+`Author` accounts are always `premium` and billing-exempt by role policy.
 
 ---
 

@@ -59,7 +59,8 @@ Question recording
 Dashboard
 Memory list
 Settings
-Admin user management (admin role only)
+Admin user management (admin/author role)
+Author supervision dashboard (author role only)
 
 Voice interaction uses **push-to-talk recording**.
 
@@ -84,6 +85,18 @@ Responsibilities:
 * billing plan changes
 * transactional notification triggers
 
+User account status model:
+
+active
+suspended
+canceled
+
+Role model:
+
+user
+admin
+author
+
 Example endpoints:
 
 POST /voice/memory
@@ -91,6 +104,13 @@ POST /voice/question
 POST /memory
 GET /memories
 DELETE /memory/{id}
+GET /me/settings
+PATCH /me/settings/profile
+PATCH /me/settings/security
+GET /admin/users
+PATCH /admin/users/{id}/status
+PATCH /author/users/{id}/role
+GET /author/dashboard
 
 The backend controls all AI interactions.
 
@@ -251,6 +271,11 @@ The backend checks subscription status before allowing premium features.
 
 Users can manage plan changes in settings (`free` <-> `premium`) through backend billing orchestration.
 
+Role-based billing policy:
+
+- `admin` and `author` are always `premium`
+- `admin` and `author` are billing-exempt
+
 ---
 
 # Transactional Notifications
@@ -265,6 +290,12 @@ account suspension/reactivation
 plan change and billing failures
 
 Provider is abstracted behind backend service (provider choice decided separately).
+
+Author safety invariants:
+
+- self-role change is forbidden
+- self-suspend/self-cancel is forbidden
+- last active author cannot be removed
 
 ---
 
