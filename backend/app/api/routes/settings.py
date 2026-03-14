@@ -4,20 +4,12 @@ from fastapi import APIRouter, Depends
 
 from app.api.schemas import UpdateProfileRequest, UserSettingsResponse
 from app.core.auth import AuthenticatedUser, get_current_user
-from app.core.i18n import DEFAULT_LANGUAGE, normalize_preferred_language
+from app.services.user_preferences import get_preferred_language, set_preferred_language
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
-_USER_PROFILE_LANGUAGE: dict[tuple[str, str], str] = {}
-
-
-def _settings_key(user: AuthenticatedUser) -> tuple[str, str]:
-    return (user.tenant_id, user.user_id)
-
-
 def _build_settings_response(user: AuthenticatedUser) -> UserSettingsResponse:
-    language = _USER_PROFILE_LANGUAGE.get(_settings_key(user), DEFAULT_LANGUAGE)
-    effective_language = normalize_preferred_language(language)
+    effective_language = get_preferred_language(user.tenant_id, user.user_id)
     billing_exempt = user.role in {"admin", "author"}
     role: Literal["user", "admin", "author"] = cast(Literal["user", "admin", "author"], user.role)
     return UserSettingsResponse(
@@ -61,5 +53,5 @@ async def update_profile_settings(
     payload: UpdateProfileRequest,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> UserSettingsResponse:
-    _USER_PROFILE_LANGUAGE[_settings_key(current_user)] = payload.preferred_language
+    set_preferred_language(current_user.tenant_id, current_user.user_id, payload.preferred_language)
     return _build_settings_response(current_user)

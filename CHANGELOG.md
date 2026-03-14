@@ -31,6 +31,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Aligned API error mapping with `docs/error-model.md`: removed undocumented error codes, standardized `404 -> memory.not_found`, `422 -> memory.missing_required_fields`, and added retryable policy for `429/502/503` plus dedicated error-model contract tests.
 - Added memory-ingestion E2E baseline with modular extraction service and protected endpoints (`POST /api/v1/voice/memory`, `POST /api/v1/memory`) enforcing clarification for missing fields, explicit confirmation before persistence, and persistence verification via `GET /api/v1/memories`.
 - Added question-engine database-first baseline (`POST /api/v1/question`) with deterministic backend aggregation over persisted user memories and no-result fallback, plus tests proving backend-side sum/filter behavior and source-memory traceability.
+- Extended question-engine behavior to align with `docs/query-contract.md`: latest/last deterministic lookup, multi-currency separation (no silent conversion), ambiguity handling via `query.ambiguous_intent`, out-of-scope boundary response, no-result Add Memory suggestion, and answer language from `preferred_language` (`en/it/de` fallback `en`).
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
