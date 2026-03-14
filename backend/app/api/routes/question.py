@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from starlette import status
 
 from app.api.routes.memories import _MEMORY_FIXTURES
@@ -16,6 +16,7 @@ from app.services.semantic_cache import (
 )
 from app.services.user_preferences import get_preferred_language
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.services.ai_safety import enforce_input_safety, enforce_output_safety
 
 router = APIRouter(prefix="/api/v1", tags=["Voice"])
 
@@ -29,8 +30,15 @@ router = APIRouter(prefix="/api/v1", tags=["Voice"])
 )
 async def ask_text_question(
     payload: TextQuestionRequest,
+    request: Request,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> QuestionResponse:
+    session_id = request.headers.get("x-session-id", "question")
+    payload.question = enforce_input_safety(
+        text=payload.question,
+        path="/api/v1/question",
+        session_id=session_id,
+    )
     scoped_memories = [
         item
         for item in _MEMORY_FIXTURES
@@ -65,6 +73,11 @@ async def ask_text_question(
         )
 
     answer = format_answer_from_structured_result(structured, preferred_language)
+    enforce_output_safety(
+        text=answer,
+        path="/api/v1/question",
+        session_id=session_id,
+    )
     token_in, token_out, estimated_cost = estimate_tokens_and_cost(
         input_text=payload.question,
         output_text=answer,

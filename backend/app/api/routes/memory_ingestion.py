@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Request, UploadFile
 from starlette import status
 
 from app.api.schemas import MemoryProposalResponse, MemoryRecordResponse, SaveMemoryRequest
@@ -15,6 +15,7 @@ from app.services.memory_ingestion import (
 from app.services.semantic_cache import invalidate_user_cache
 from app.services.attachments import mark_attachment_persisted, validate_signed_attachment_url
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.services.ai_safety import enforce_input_safety
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
 
@@ -27,6 +28,7 @@ router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
     responses={401: {"description": "Unauthorized. Missing or invalid bearer token."}},
 )
 async def upload_voice_memory(
+    request: Request,
     audio: UploadFile = File(...),
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> MemoryProposalResponse:
@@ -35,6 +37,12 @@ async def upload_voice_memory(
     transcript = payload.decode("utf-8", errors="ignore").strip()
     if not transcript:
         transcript = audio.filename or "voice memory"
+    session_id = request.headers.get("x-session-id", "voice-memory")
+    transcript = enforce_input_safety(
+        text=transcript,
+        path="/api/v1/voice/memory",
+        session_id=session_id,
+    )
 
     proposal = extract_memory_proposal(transcript)
     output_text = (
@@ -88,8 +96,20 @@ async def upload_voice_memory(
 )
 async def save_memory(
     payload: SaveMemoryRequest,
+    request: Request,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> MemoryRecordResponse:
+    session_id = request.headers.get("x-session-id", "save-memory")
+    payload.raw_text = enforce_input_safety(
+        text=payload.raw_text,
+        path="/api/v1/memory",
+        session_id=session_id,
+    )
+    _ = enforce_input_safety(
+        text=str(payload.structured_data),
+        path="/api/v1/memory",
+        session_id=session_id,
+    )
     if not payload.confirmed:
         raise AppError(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

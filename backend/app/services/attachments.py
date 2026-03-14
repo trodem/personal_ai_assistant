@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from app.core.auth import AuthenticatedUser
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.services.ai_safety import enforce_input_safety
 from app.services.memory_ingestion import extract_memory_proposal
 
 ALLOWED_ATTACHMENT_CONTENT_TYPES = {
@@ -130,7 +131,12 @@ def create_attachment(
         return record
 
     ocr_text_preview = _fake_ocr_preview(file_name, content)
-    proposal = extract_memory_proposal(ocr_text_preview)
+    sanitized_preview = enforce_input_safety(
+        text=ocr_text_preview,
+        path="/api/v1/attachments",
+        session_id=f"attachment-{user.user_id}",
+    )
+    proposal = extract_memory_proposal(sanitized_preview)
     output_text = (
         proposal.memory_type
         + "|"
@@ -139,7 +145,7 @@ def create_attachment(
         + "|".join(proposal.clarification_questions)
     )
     token_in, token_out, estimated_cost = estimate_tokens_and_cost(
-        input_text=ocr_text_preview,
+        input_text=sanitized_preview,
         output_text=output_text,
     )
     record_ai_usage(

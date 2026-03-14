@@ -36,6 +36,9 @@ Write-Host "[lint] environment matrix alignment"
 Write-Host "[test] security threat-model alignment"
 ./scripts/security-threat-model-check.ps1
 
+Write-Host "[test] ai safety alignment"
+./scripts/ai-safety-check.ps1
+
 Write-Host "[runtime] docker compose up -d"
 docker compose up -d
 
