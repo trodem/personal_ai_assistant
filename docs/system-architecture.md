@@ -238,6 +238,11 @@ aggregations
 user isolation
 vector search
 
+Tenant isolation (B2B path):
+
+- tenant-aware entities include `tenant_id`
+- authorization and queries must enforce tenant boundary rules from `docs/multi-tenancy.md`
+
 ---
 
 # Vector Search
@@ -400,6 +405,8 @@ files are stored securely in cloud storage
 AI cannot modify data without confirmation
 
 Sensitive operations require backend validation.
+
+Data lifecycle/deletion must follow `docs/data-lifecycle.md`.
 
 ---
 

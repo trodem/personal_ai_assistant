@@ -44,6 +44,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added planning for AI answer feedback loop (`Like`/`Dislike`) and churn-management cancellation flow (reason capture + retention preview), including API contract, RBAC, roadmap, UX, monetization, and analytics alignment.
 - Added formal rollout/lifecycle governance docs: `docs/feature-flags-experiments.md` and `docs/api-compatibility.md`, with alignment across AGENTS, TODO, roadmap, architecture, decisions, context, and analytics event taxonomy.
 - Added `docs/semantic-caching.md` with user-scoped cache strategy, thresholds/TTL, invalidation rules, and quality guardrails; aligned across AGENTS, TODO, query contract, roadmap, architecture, cost-control, LLMOps, and context docs.
+- Added `docs/multi-tenancy.md` and `docs/data-lifecycle.md` to formalize B2B tenant isolation and automated retention/deletion workflows (including right-to-be-forgotten), with alignment updates across AGENTS, TODO, roadmap, architecture, security threat model, context, and file structure docs.
 
 ---
 

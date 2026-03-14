@@ -39,6 +39,8 @@ Precedence order when conflicts appear:
 - `docs/feature-flags-experiments.md`
 - `docs/api-compatibility.md`
 - `docs/semantic-caching.md`
+- `docs/multi-tenancy.md`
+- `docs/data-lifecycle.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -53,6 +55,8 @@ When to consult each document:
 - AI safety/privacy pipeline change: read `docs/content-moderation.md`, `docs/data-sanitization.md`, and `docs/security-threat-model.md`
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation
+- B2B/tenant isolation change: read `docs/multi-tenancy.md`, `docs/rbac-matrix.md`, and `docs/security-threat-model.md`
+- retention/deletion/GDPR lifecycle change: read `docs/data-lifecycle.md`, `docs/security-threat-model.md`, and `docs/operations-runbook.md`
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
 - feature rollout/experiment change: read `docs/feature-flags-experiments.md`, `docs/product-analytics.md`, and `docs/model-registry.md`
 - API lifecycle/versioning change: read `docs/api-compatibility.md`, `docs/decisions.md`, and `specs/api.yaml`

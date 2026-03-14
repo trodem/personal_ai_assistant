@@ -278,6 +278,8 @@ data-sanitization.md
 feature-flags-experiments.md
 api-compatibility.md
 semantic-caching.md
+multi-tenancy.md
+data-lifecycle.md
 
 ---
 

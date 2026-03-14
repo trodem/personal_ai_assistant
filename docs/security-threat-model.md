@@ -47,6 +47,10 @@ Controls:
 - auth middleware on all protected endpoints
 - negative tests for cross-user access
 
+For B2B tenant mode:
+
+- enforce `tenant_id` boundary checks on all tenant-aware resources (`docs/multi-tenancy.md`)
+
 ---
 
 ### Admin privilege abuse
@@ -78,6 +82,20 @@ Controls:
 - send notifications only from backend trusted triggers
 - deduplicate/retry controls with delivery logs
 - clear signed sender domain and template governance
+
+---
+
+### Incomplete deletion / retention violations
+
+Risk:
+
+- user data remains partially stored after deletion/closure requests
+
+Controls:
+
+- enforce lifecycle policy in `docs/data-lifecycle.md`
+- idempotent deletion jobs across DB/storage/embeddings/cache
+- auditable deletion status and retry handling
 
 ---
 

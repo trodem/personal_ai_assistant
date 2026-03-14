@@ -35,6 +35,7 @@ Tasks:
 * Setup Supabase Postgres
 * Enable pgvector extension
 * Create database tables
+* Define tenant-ready schema extension plan (`tenant_id`) for B2B evolution
 
 Tables:
 
@@ -274,6 +275,7 @@ Tasks:
 * Implement runtime feature flags with cohort targeting and kill-switch operations
 * Add A/B experimentation framework for UI and AI variants
 * Validate API backward compatibility and deprecation workflow for previous client versions
+* Implement automated lifecycle deletion jobs and monitoring from `docs/data-lifecycle.md`
 * Setup deployment pipeline
 
 Deliverable:

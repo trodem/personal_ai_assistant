@@ -704,6 +704,14 @@ Cache usage must remain user-scoped and preserve database-first constraints.
 
 ---
 
+# MULTI-TENANCY AND DATA LIFECYCLE
+
+B2B tenant isolation rules must follow `docs/multi-tenancy.md`.
+
+Automated retention/deletion/right-to-be-forgotten workflows must follow `docs/data-lifecycle.md`.
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

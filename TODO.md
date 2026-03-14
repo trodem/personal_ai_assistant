@@ -39,6 +39,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Product analytics events follow `docs/product-analytics.md` schema and naming contract.
 - [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
+- [ ] For B2B tenant changes: strict `tenant_id` + `user_id` isolation rules are enforced per `docs/multi-tenancy.md`.
 - [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
 - [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple).
 - [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
@@ -211,6 +212,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
 - [ ] Implement memory versioning strategy (`memory_versions` append-only).
 - [ ] Enforce per-user isolation policy across all repository queries.
+- [ ] Prepare tenant-ready schema strategy (`tenant_id` support) for B2B isolation path.
 - [ ] Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries.
 - [ ] Add soft-delete + audit trail strategy for sensitive memory operations (update/delete).
 - [ ] Add `structured_data_schema_version` support for forward-compatible payload evolution.
@@ -295,6 +297,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `admin` and `author` must have `mfa_enabled = true`
 - [ ] `user` can opt in/out unless tightened later by policy change
 - [ ] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
+- [ ] Add tenant-aware authorization guardrails for future B2B mode (`tenant_id` context propagation + checks).
 - [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
 - [ ] Enforce author safety invariants:
 - [ ] author cannot change own role
@@ -496,6 +499,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] data export
 - [ ] account and data deletion
 - [ ] explicit data retention policy
+- [ ] Implement automated data-lifecycle jobs for account closure (`canceled_pending_deletion -> deletion_completed`).
+- [ ] Ensure deletion covers DB + storage + embeddings + caches with idempotent retries.
 - [ ] Serious secret management (no secrets in repo/logs).
 - [ ] Minimal threat model + OWASP API Top 10 checklist.
 - [ ] Define GDPR-ready privacy baseline (consent, data export/delete SLA, retention policy enforcement).
