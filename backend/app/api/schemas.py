@@ -41,6 +41,20 @@ class SaveMemoryRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class TextQuestionRequest(BaseModel):
+    question: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class QuestionResponse(BaseModel):
+    answer: str
+    confidence: Literal["high", "medium", "low"]
+    source_memory_ids: list[str]
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class AdminUserResponse(BaseModel):
     id: str
     role: str
