@@ -127,7 +127,7 @@ Complete this checklist before implementation to avoid setup blockers.
 ### Legal and operational minimum
 - [x] Draft privacy policy baseline (data stored, retention, deletion process).
 - [x] Draft terms baseline for MVP users.
-- [ ] Define support contact and incident response owner.
+- [x] Define support contact and incident response owner.
 
 ### Day 0 (owner checklist, 2-4 hours)
 <!-- - [ ] Create/verify accounts: OpenAI, Supabase, Stripe (test mode).
