@@ -64,6 +64,7 @@ Mandatory MVP e2e flows:
 - runtime smoke checks in every deployment environment
 - security negative tests for unauthorized and cross-user access
 - performance sanity checks on critical query paths
+- analytics event schema checks for core tracked events (`docs/product-analytics.md`)
 
 ---
 

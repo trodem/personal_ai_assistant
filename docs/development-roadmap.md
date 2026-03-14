@@ -242,6 +242,8 @@ Tasks:
 * Configure zero-downtime rollout strategy (rolling or blue/green)
 * Configure environment secrets
 * Setup monitoring
+* Implement product analytics event tracking based on `docs/product-analytics.md`
+* Validate KPI dashboards from canonical event stream
 * Setup deployment pipeline
 
 Deliverable:

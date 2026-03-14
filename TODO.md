@@ -35,6 +35,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Every feature includes automated tests (unit + integration where needed).
 - [ ] No merge without green CI.
 - [ ] Structured logging + metrics + consistent error handling are active.
+- [ ] Product analytics events follow `docs/product-analytics.md` schema and naming contract.
 - [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
@@ -433,6 +434,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Model routing policy (cost-efficient default, escalation for complex cases).
 - [ ] Add circuit breaker/fallback behavior for AI provider outages and elevated error rates.
 - [ ] Load-test simulation to estimate monthly cost.
+- [ ] Implement product analytics event pipeline (capture, validation, storage/export) aligned with `docs/product-analytics.md`.
+- [ ] Track core funnels and KPI derivations from canonical events (first memory, first question, receipt flow).
 
 ---
 
@@ -483,6 +486,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] API contract validation: `specs/api.yaml` vs implementation.
 - [ ] Keep `CHANGELOG.md` updated for user-visible and developer-relevant changes.
 - [ ] Add automated log schema contract tests for backend structured logs (required fields + redaction guarantees).
+- [ ] Add automated analytics event schema tests for core events and event versioning compatibility.
 - [ ] Realistic multilingual (IT/EN) extraction test datasets.
 - [ ] Prompt evaluation suite with precision/recall benchmarks.
 - [ ] Hallucination and safety eval suite for ambiguous user questions.

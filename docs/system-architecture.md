@@ -368,3 +368,16 @@ caching layer
 AI model routing
 analytics pipeline
 multi-region deployment
+
+---
+
+# Product Analytics
+
+Product and operational analytics must follow `docs/product-analytics.md`.
+
+Event tracking must cover:
+
+- onboarding and activation funnels
+- memory/question/attachment flow outcomes
+- notification engagement
+- operational error classes and dependency failures

@@ -600,6 +600,20 @@ Provider choice is intentionally abstracted (to be selected separately where nee
 
 ---
 
+# PRODUCT ANALYTICS
+
+Product behavior and operational analytics must follow `docs/product-analytics.md`.
+
+Tracking must include:
+
+memory funnel
+question funnel
+receipt funnel
+notification engagement
+error/dependency events
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

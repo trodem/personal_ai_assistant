@@ -32,6 +32,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Security settings API contract extended to cover 2FA operations (`enable_2fa`, `disable_2fa`, `verify_2fa`) and user settings now include `mfa_enabled`/`auth_provider`.
 - Infrastructure scalability planning made explicit: cloud multi-instance backend, managed load balancer, health-check routing, autoscaling policy, and zero-downtime rollout requirements across roadmap/TODO/environment matrix.
 - Notification system planning expanded from email-only to multi-channel (`in-app`, `push`, `email`) with settings preferences, in-app feed/read endpoints, RBAC alignment, and architecture/roadmap/TODO coverage.
+- Added `docs/product-analytics.md` with canonical event taxonomy, funnels, KPI mapping, payload schema rules, and privacy constraints; linked into AGENTS routing, TODO quality gates, roadmap, architecture context, and testing strategy.
 
 ---
 

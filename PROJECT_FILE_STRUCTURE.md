@@ -255,6 +255,7 @@ ai-pipeline.md
 product-features.md
 monetization.md
 decisions.md
+product-analytics.md
 
 ---
 
