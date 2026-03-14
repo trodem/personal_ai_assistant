@@ -168,7 +168,7 @@ docker compose config
 docker compose up -d
 docker compose ps
 powershell -ExecutionPolicy Bypass -File scripts/quality-check.ps1
-Invoke-WebRequest http://localhost:8000
+Invoke-WebRequest http://localhost:8000/health/live
 ```
 
 Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).

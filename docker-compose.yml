@@ -1,20 +1,27 @@
 services:
   backend:
-    image: python:3.12-slim
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: personal_ai_backend
     working_dir: /app
-    command: ["sh", "-c", "python -m http.server ${API_PORT:-8000}"]
+    command: ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${API_PORT:-8000} --no-access-log"]
     environment:
       API_PORT: ${API_PORT:-8000}
+      APP_ENV: ${APP_ENV:-dev}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
     ports:
       - "${API_PORT:-8000}:${API_PORT:-8000}"
     volumes:
       - ./backend:/app
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     healthcheck:
       test:
         - CMD-SHELL
-        - python -c "import urllib.request; urllib.request.urlopen('http://localhost:${API_PORT:-8000}', timeout=2)"
+        - python -c "import urllib.request; urllib.request.urlopen('http://localhost:${API_PORT:-8000}/health/live', timeout=2)"
       interval: 10s
       timeout: 5s
       retries: 5

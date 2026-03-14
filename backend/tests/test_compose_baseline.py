@@ -11,6 +11,7 @@ class ComposeBaselineTests(unittest.TestCase):
         self.assertIn("backend:", content)
         self.assertIn("postgres:", content)
         self.assertIn("healthcheck:", content)
+        self.assertIn("/health/live", content)
 
 
 if __name__ == "__main__":

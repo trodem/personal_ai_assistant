@@ -14,6 +14,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Aligned .env.example, docker-compose.yml, and local setup instructions in README.md (shared API_PORT and POSTGRES_* variables with matching connection details).
 - Added integration runtime tests (`backend/tests/test_runtime_integration.py`) and wired them into `scripts/quality-check.ps1` with automatic container startup and health waiting.
 - Added GitHub Actions CI workflow (.github/workflows/ci.yml) to run scripts/quality-check.ps1 on push and pull_request before merge.
+- Added modular FastAPI backend baseline with structured JSON logging (`request_id`, `trace_id`, optional `user_id`), Prometheus-style `/metrics`, and standardized API error schema/handlers aligned to `docs/error-model.md`.
+- Added LLMOps-aligned metrics foundation (`backend/app/core/llmops.py`) with required dimensions and MVP alert thresholds exposed via `/metrics` and covered by automated tests.
+- Added product-analytics contract foundation (`backend/app/core/analytics.py`) with snake_case schema validation and automatic operational events (`api_error_4xx`/`api_error_5xx`) emitted in structured logs.
+- Added production-grade log redaction in `backend/app/core/logging_config.py` (secret/token/password/email masking) with contract tests in `backend/tests/test_logging_redaction.py`.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
@@ -67,6 +71,12 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Update this file whenever a change is user-visible or developer-relevant.
 - Prefer updating `Unreleased` in the same PR/iteration as the change.
 - If a changelog update is skipped, document the reason in the PR notes.
+
+
+
+
+
+
 
 
 
