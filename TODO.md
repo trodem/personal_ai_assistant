@@ -33,7 +33,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] `.env.example`, compose config, and setup docs are aligned.
 - [x] `CHANGELOG.md` is updated for relevant behavior/contract/process changes.
 - [x] Every feature includes automated tests (unit + integration where needed).
-- [ ] No merge without green CI.
+- [x] No merge without green CI.
 - [ ] Structured logging + metrics + consistent error handling are active.
 - [ ] LLMOps dashboards and alert thresholds are aligned with `docs/llmops-dashboard-spec.md`.
 - [ ] Product analytics events follow `docs/product-analytics.md` schema and naming contract.
