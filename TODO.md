@@ -54,7 +54,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
 - [x] For semantic caching changes: behavior is aligned with `docs/semantic-caching.md`.
 - [x] For AI UX changes: behavior is aligned with `docs/ai-ux-contract.md`.
-- [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
+- [x] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
 - [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
 - [ ] For AI model/prompt changes: `docs/model-registry.md` is updated with active version mapping and rollback entry.

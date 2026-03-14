@@ -13,6 +13,7 @@ from app.services.memory_ingestion import (
     missing_required_fields,
 )
 from app.services.semantic_cache import invalidate_user_cache
+from app.services.attachments import mark_attachment_persisted, validate_signed_attachment_url
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
 
@@ -79,6 +80,24 @@ async def save_memory(
             message="Memory payload misses required fields.",
             details={"missing_required_fields": missing_fields},
         )
+
+    attachment_url = payload.structured_data.get("attachment_url")
+    if attachment_url is not None:
+        if not isinstance(attachment_url, str):
+            raise AppError(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                code="memory.validation_failed",
+                message="attachment_url must be a string.",
+            )
+        record = validate_signed_attachment_url(attachment_url, current_user)
+        if record is None:
+            raise AppError(
+                status_code=status.HTTP_403_FORBIDDEN,
+                code="auth.forbidden",
+                message="Attachment signed URL is not authorized for this user.",
+            )
+        mark_attachment_persisted(record)
+        payload.structured_data["attachment_id"] = record.id
 
     record = {
         "id": str(uuid4()),

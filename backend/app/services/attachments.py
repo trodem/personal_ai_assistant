@@ -1,0 +1,143 @@
+import base64
+import hashlib
+import hmac
+import os
+import time
+from dataclasses import dataclass
+from typing import Any
+from uuid import uuid4
+
+from app.core.auth import AuthenticatedUser
+from app.services.memory_ingestion import extract_memory_proposal
+
+ALLOWED_ATTACHMENT_CONTENT_TYPES = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+}
+
+
+@dataclass
+class AttachmentRecord:
+    id: str
+    tenant_id: str
+    user_id: str
+    file_type: str
+    file_name: str
+    status: str
+    ocr_status: str
+    ocr_text_preview: str
+    signed_url: str
+    memory_proposal: dict[str, Any]
+
+
+_ATTACHMENTS_BY_ID: dict[str, AttachmentRecord] = {}
+
+
+def _secret() -> str:
+    return os.getenv("APP_DEV_JWT_SECRET", "dev_jwt_secret")
+
+
+def _sign(value: str) -> str:
+    digest = hmac.new(_secret().encode("utf-8"), value.encode("utf-8"), hashlib.sha256).digest()
+    return base64.urlsafe_b64encode(digest).decode("utf-8").rstrip("=")
+
+
+def build_signed_attachment_url(attachment_id: str, user: AuthenticatedUser, ttl_seconds: int = 900) -> str:
+    expires = int(time.time()) + ttl_seconds
+    payload = f"{attachment_id}:{user.user_id}:{user.tenant_id}:{expires}"
+    signature = _sign(payload)
+    return f"signed://attachment/{attachment_id}?expires={expires}&sig={signature}"
+
+
+def _parse_signed_attachment_url(url: str) -> tuple[str, int, str]:
+    if not url.startswith("signed://attachment/"):
+        raise ValueError("Unsupported signed URL format.")
+    path_part, query = url.split("?", maxsplit=1)
+    attachment_id = path_part.rsplit("/", maxsplit=1)[1]
+    parts = dict(part.split("=", maxsplit=1) for part in query.split("&") if "=" in part)
+    expires = int(parts.get("expires", "0"))
+    signature = parts.get("sig", "")
+    return attachment_id, expires, signature
+
+
+def validate_signed_attachment_url(url: str, user: AuthenticatedUser) -> AttachmentRecord | None:
+    try:
+        attachment_id, expires, signature = _parse_signed_attachment_url(url)
+    except (ValueError, KeyError):
+        return None
+    if expires <= int(time.time()):
+        return None
+    payload = f"{attachment_id}:{user.user_id}:{user.tenant_id}:{expires}"
+    expected = _sign(payload)
+    if not hmac.compare_digest(signature, expected):
+        return None
+    record = _ATTACHMENTS_BY_ID.get(attachment_id)
+    if record is None:
+        return None
+    if record.user_id != user.user_id or record.tenant_id != user.tenant_id:
+        return None
+    return record
+
+
+def _fake_ocr_preview(file_name: str, content: bytes) -> str:
+    extracted = content.decode("utf-8", errors="ignore").strip()
+    if extracted:
+        return extracted
+    lowered_name = file_name.lower()
+    if "bread" in lowered_name:
+        return "I bought bread for 3 chf"
+    return "Receipt total 12 CHF"
+
+
+def create_attachment(
+    *,
+    file_name: str,
+    file_type: str,
+    content: bytes,
+    user: AuthenticatedUser,
+) -> AttachmentRecord:
+    attachment_id = str(uuid4())
+    # Deterministic lifecycle progression for MVP happy path.
+    status = "uploaded"
+    ocr_status = "pending"
+    status = "ocr_processing"
+    ocr_status = "processing"
+
+    ocr_text_preview = _fake_ocr_preview(file_name, content)
+    proposal = extract_memory_proposal(ocr_text_preview)
+    status = "proposal_ready"
+    ocr_status = "completed"
+
+    signed_url = build_signed_attachment_url(attachment_id, user)
+    record = AttachmentRecord(
+        id=attachment_id,
+        tenant_id=user.tenant_id,
+        user_id=user.user_id,
+        file_type=file_type,
+        file_name=file_name,
+        status=status,
+        ocr_status=ocr_status,
+        ocr_text_preview=ocr_text_preview,
+        signed_url=signed_url,
+        memory_proposal={
+            "transcript": proposal.transcript,
+            "memory_type": proposal.memory_type,
+            "structured_data": proposal.structured_data,
+            "clarification_questions": proposal.clarification_questions,
+            "missing_required_fields": proposal.missing_required_fields,
+            "needs_confirmation": proposal.needs_confirmation,
+        },
+    )
+    _ATTACHMENTS_BY_ID[attachment_id] = record
+    return record
+
+
+def mark_attachment_persisted(record: AttachmentRecord) -> None:
+    record.status = "confirmed"
+    record.status = "persisted"
+
+
+def get_attachment(attachment_id: str) -> AttachmentRecord | None:
+    return _ATTACHMENTS_BY_ID.get(attachment_id)

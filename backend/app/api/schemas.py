@@ -60,6 +60,19 @@ class QuestionResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class AttachmentResponse(BaseModel):
+    id: str
+    file_url: str
+    file_type: str
+    status: Literal["uploaded", "ocr_processing", "proposal_ready", "confirmed", "persisted", "failed"]
+    ocr_status: Literal["pending", "processing", "completed", "failed"]
+    ocr_text_preview: str | None = None
+    error_code: str | None = None
+    memory_proposal: dict[str, Any] | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class AdminUserResponse(BaseModel):
     id: str
     role: str

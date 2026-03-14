@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routes.admin import router as admin_router
+from app.api.routes.attachments import router as attachments_router
 from app.api.routes.health import router as health_router
 from app.api.routes.memory_ingestion import router as memory_ingestion_router
 from app.api.routes.memories import router as memories_router
@@ -36,6 +37,7 @@ app.include_router(health_router)
 app.include_router(metrics_router)
 app.include_router(memories_router)
 app.include_router(memory_ingestion_router)
+app.include_router(attachments_router)
 app.include_router(question_router)
 app.include_router(admin_router)
 app.include_router(settings_router)
