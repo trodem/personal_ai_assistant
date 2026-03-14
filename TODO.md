@@ -87,9 +87,9 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] PostgreSQL environment ready:
 - [x] Supabase local Postgres (via Supabase CLI/Docker) for development
 - [x] Supabase managed Postgres for staging/prod
-- [ ] Object storage ready:
+- [x] Object storage ready:
 - [x] Supabase local Storage (via Supabase CLI/Docker) for development
-- [ ] Supabase Storage buckets configured for staging/prod
+- [x] Supabase Storage buckets configured for staging/prod
 - [ ] Stripe account with test mode enabled (for billing phase).
 
 ### Recommended accounts (to reduce risk)
