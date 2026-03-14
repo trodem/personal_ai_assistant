@@ -54,17 +54,29 @@ class AppError(Exception):
 
 
 def map_http_error_code(status_code: int) -> str:
+    if status_code == status.HTTP_400_BAD_REQUEST:
+        return "memory.validation_failed"
     if status_code == status.HTTP_401_UNAUTHORIZED:
         return "auth.invalid_token"
     if status_code == status.HTTP_403_FORBIDDEN:
         return "auth.forbidden"
     if status_code == status.HTTP_404_NOT_FOUND:
-        return "http.not_found"
+        return "memory.not_found"
     if status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
-        return "request.validation_failed"
+        return "memory.missing_required_fields"
     if status_code == status.HTTP_429_TOO_MANY_REQUESTS:
         return "rate.limit_exceeded"
+    if status_code in {status.HTTP_502_BAD_GATEWAY, status.HTTP_503_SERVICE_UNAVAILABLE}:
+        return "ai.provider_unavailable"
     return "internal.unexpected_error"
+
+
+def is_retryable_http_status(status_code: int) -> bool:
+    return status_code in {
+        status.HTTP_429_TOO_MANY_REQUESTS,
+        status.HTTP_502_BAD_GATEWAY,
+        status.HTTP_503_SERVICE_UNAVAILABLE,
+    }
 
 
 def app_error_to_response(error: AppError) -> JSONResponse:
@@ -81,7 +93,7 @@ def validation_error_to_response(exc: Exception) -> JSONResponse:
     details = getattr(exc, "errors", lambda: [])()
     return build_error_response(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        code="request.validation_failed",
+        code="memory.missing_required_fields",
         message="Request validation failed.",
         details={"errors": details},
         retryable=False,
@@ -94,7 +106,7 @@ def http_error_to_response(status_code: int, request: Request) -> JSONResponse:
         code=map_http_error_code(status_code),
         message=f"Request failed for path {request.url.path}.",
         details={},
-        retryable=False,
+        retryable=is_retryable_http_status(status_code),
     )
 
 

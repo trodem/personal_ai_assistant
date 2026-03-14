@@ -50,7 +50,7 @@ async def app_error_handler(_: Request, exc: AppError) -> JSONResponse:
 
 @app.exception_handler(RequestValidationError)
 async def request_validation_error_handler(_: Request, exc: RequestValidationError) -> JSONResponse:
-    logger.warning("request_validation_error", extra={"error_code": "request.validation_failed"})
+    logger.warning("request_validation_error", extra={"error_code": "memory.missing_required_fields"})
     return validation_error_to_response(exc)
 
 

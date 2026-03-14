@@ -50,6 +50,8 @@ class I18nConsistencyTests(unittest.TestCase):
             json={"preferred_language": "fr"},
         )
         self.assertEqual(response.status_code, 422)
+        payload = response.json()
+        self.assertEqual(payload["error"]["code"], "memory.missing_required_fields")
 
     def test_flutter_arb_languages_match_backend_supported_languages(self) -> None:
         project_root = Path(__file__).resolve().parents[2]

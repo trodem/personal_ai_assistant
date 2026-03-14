@@ -33,7 +33,7 @@ class RuntimeIntegrationTests(unittest.TestCase):
         self.assertEqual(exc.exception.code, 404)
         payload = json.loads(exc.exception.read().decode("utf-8"))
         self.assertIn("error", payload)
-        self.assertEqual(payload["error"]["code"], "http.not_found")
+        self.assertEqual(payload["error"]["code"], "memory.not_found")
         self.assertIn("request_id", payload["error"])
         self.assertIn("retryable", payload["error"])
 
