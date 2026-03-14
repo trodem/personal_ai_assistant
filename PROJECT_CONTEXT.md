@@ -466,6 +466,18 @@ Authentication is handled by Supabase Auth.
 
 The backend validates tokens from the provider.
 
+MVP authentication methods:
+
+email/password
+Google OAuth SSO
+Apple OAuth SSO
+
+2FA policy:
+
+2FA is available for all users
+2FA is mandatory for `admin` and `author`
+privileged actions must be blocked when required 2FA is missing
+
 Authorization model:
 
 roles:

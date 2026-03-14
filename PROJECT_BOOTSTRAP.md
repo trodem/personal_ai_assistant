@@ -196,6 +196,8 @@ Recommended provider:
 Supabase Auth
 
 The backend validates authentication tokens.
+MVP auth methods include email/password and OAuth SSO (`Google`, `Apple`).
+2FA must be available for all users and mandatory for `admin`/`author`.
 Account status (`active`, `suspended`, `canceled`) must be enforced on protected endpoints.
 RBAC (`user`, `admin`, `author`) must be enforced on privileged endpoints.
 

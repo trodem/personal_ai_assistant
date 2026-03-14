@@ -109,6 +109,21 @@ Controls:
 
 ---
 
+### Account takeover
+
+Risk:
+
+- compromised credentials used to access user/admin accounts
+
+Controls:
+
+- support OAuth SSO for trusted providers (`Google`, `Apple`)
+- 2FA/TOTP support for all users
+- mandatory 2FA for `admin` and `author`
+- re-auth + 2FA challenge for sensitive security changes
+
+---
+
 ### Prompt/data leakage
 
 Risk:

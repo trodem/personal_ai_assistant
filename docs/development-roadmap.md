@@ -102,8 +102,11 @@ Goal: Secure user access.
 Tasks:
 
 * Integrate Supabase Auth
+* Enable Supabase OAuth SSO providers (Google, Apple)
 * Validate tokens in backend
 * Connect users to database records
+* Implement 2FA/TOTP enrollment and verification flow
+* Enforce role-based 2FA policy (`admin`/`author` mandatory, `user` optional)
 
 Deliverable:
 

@@ -38,6 +38,8 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
+- [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple).
+- [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
 - [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
@@ -155,6 +157,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P0 - Product Lock and Setup (blocking)
 
 - [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper, Stripe.
+- [ ] Lock authentication policy for MVP: Supabase OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
 - [ ] Freeze MVP scope and non-goals in one source of truth document.
 - [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
 - [ ] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
@@ -244,7 +247,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `GET /api/v1/author/dashboard` (author only global supervision)
 - [ ] `GET /api/v1/me/settings`
 - [ ] `PATCH /api/v1/me/settings/profile`
-- [ ] `PATCH /api/v1/me/settings/security` (password/email change flow trigger)
+- [ ] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
@@ -258,9 +261,14 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P5 - Auth and Access Control
 
 - [ ] Integrate Supabase Auth JWT validation in backend.
+- [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`).
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.
+- [ ] Implement 2FA/TOTP enrollment and verification flow in security settings.
+- [ ] Enforce 2FA policy by role:
+- [ ] `admin` and `author` must have `mfa_enabled = true`
+- [ ] `user` can opt in/out unless tightened later by policy change
 - [ ] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
 - [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
 - [ ] Enforce author safety invariants:
@@ -270,6 +278,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Negative auth tests:
 - [ ] missing token
 - [ ] expired token
+- [ ] missing/invalid 2FA code on sensitive security action
+- [ ] admin/author with 2FA disabled blocked from privileged access until remediation
 - [ ] valid token but cross-user resource access
 - [ ] suspended user access blocked
 - [ ] canceled user access blocked
@@ -323,6 +333,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Memory timeline with basic filters.
 - [ ] MVP dashboard screen.
 - [ ] Build user `Settings` screen (profile, security, subscription).
+- [ ] Add auth settings UX for SSO visibility (linked provider) and 2FA management (enable/disable/verify).
 - [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate/cancel).
 - [ ] Build author `Supervision Dashboard` screen (global metrics + oversight panels).
 - [ ] Build author role-management UI (promote/demote `user` <-> `admin`).

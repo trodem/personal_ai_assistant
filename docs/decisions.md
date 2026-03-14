@@ -153,6 +153,23 @@ Alternative auth/storage providers are out of scope for MVP unless explicitly re
 
 ---
 
+# Authentication Policy
+
+Authentication provider: Supabase Auth.
+
+MVP auth modes:
+
+- email/password
+- SSO via OAuth providers (`Google`, `Apple`)
+
+2FA policy:
+
+- 2FA must be available to all users
+- 2FA is mandatory for `admin` and `author` roles
+- privileged operations should be blocked if mandatory 2FA is not enabled
+
+---
+
 # Roles and Administration
 
 The system supports role-based access:

@@ -281,7 +281,7 @@ paths:
     patch:
       tags: [Settings]
       summary: Trigger security-sensitive settings change
-      description: Starts email/password change flow and must trigger transactional notification.
+      description: Starts email/password/2FA security flow and must trigger transactional notification.
       security:
         - bearerAuth: []
       requestBody:
@@ -595,12 +595,18 @@ components:
           format: uuid
         email:
           type: string
+        auth_provider:
+          type: string
+          enum: [password, google, apple, mixed]
         role:
           type: string
           enum: [user, admin, author]
         status:
           type: string
           enum: [active, suspended, canceled]
+        mfa_enabled:
+          type: boolean
+          description: Two-factor authentication status for the current account.
         subscription_plan:
           type: string
           enum: [free, premium]
@@ -614,11 +620,18 @@ components:
 
     UpdateSecurityRequest:
       type: object
+      required: [action]
       properties:
+        action:
+          type: string
+          enum: [change_email, change_password, enable_2fa, disable_2fa, verify_2fa]
         email:
           type: string
         password:
           type: string
+        totp_code:
+          type: string
+          description: Required for `verify_2fa` and for sensitive changes when challenge is active.
       additionalProperties: false
 
     ChangePlanRequest:

@@ -242,10 +242,22 @@ Provider:
 
 Supabase Auth
 
+SSO policy (MVP):
+
+Google OAuth
+Apple OAuth
+
+2FA policy:
+
+- `admin` and `author` must have 2FA enabled
+- `user` can enable 2FA optionally
+
 Responsibilities:
 
 user registration
 login
+SSO login
+2FA challenge/verification
 session validation
 subscription status
 
