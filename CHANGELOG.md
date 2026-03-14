@@ -32,6 +32,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added memory-ingestion E2E baseline with modular extraction service and protected endpoints (`POST /api/v1/voice/memory`, `POST /api/v1/memory`) enforcing clarification for missing fields, explicit confirmation before persistence, and persistence verification via `GET /api/v1/memories`.
 - Added question-engine database-first baseline (`POST /api/v1/question`) with deterministic backend aggregation over persisted user memories and no-result fallback, plus tests proving backend-side sum/filter behavior and source-memory traceability.
 - Extended question-engine behavior to align with `docs/query-contract.md`: latest/last deterministic lookup, multi-currency separation (no silent conversion), ambiguity handling via `query.ambiguous_intent`, out-of-scope boundary response, no-result Add Memory suggestion, and answer language from `preferred_language` (`en/it/de` fallback `en`).
+- Added user-scoped semantic cache policy baseline for question flow with similarity threshold, filter-context-aware cache keys (language/currency/period), volatile/default TTLs (1h/24h), bypass on low confidence/ambiguity, and cache invalidation on memory create; covered by dedicated policy tests.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.

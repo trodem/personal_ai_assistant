@@ -27,7 +27,17 @@ def _sorted_by_latest(memories: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return sorted(memories, key=lambda m: str(m.get("created_at", "")), reverse=True)
 
 
-def _expense_totals_by_currency(memories: list[dict[str, Any]]) -> tuple[dict[str, float], list[str]]:
+def _currency_constraint(question: str) -> str | None:
+    lowered = question.lower()
+    for token in ("chf", "eur", "usd"):
+        if token in lowered:
+            return token.upper()
+    return None
+
+
+def _expense_totals_by_currency(
+    memories: list[dict[str, Any]], currency_constraint: str | None
+) -> tuple[dict[str, float], list[str]]:
     totals: dict[str, float] = {}
     source_ids: list[str] = []
     for memory in memories:
@@ -37,6 +47,8 @@ def _expense_totals_by_currency(memories: list[dict[str, Any]]) -> tuple[dict[st
         if amount is None:
             continue
         currency = str(memory.get("structured_data", {}).get("currency", "CHF")).upper()
+        if currency_constraint and currency != currency_constraint:
+            continue
         totals[currency] = round(totals.get(currency, 0.0) + amount, 2)
         source_ids.append(str(memory.get("id")))
     return totals, source_ids
@@ -93,7 +105,7 @@ def compute_structured_result(question: str, memories: list[dict[str, Any]]) -> 
         )
 
     if "how much" in lowered and "spend" in lowered:
-        totals, source_ids = _expense_totals_by_currency(memories)
+        totals, source_ids = _expense_totals_by_currency(memories, _currency_constraint(lowered))
         if not source_ids:
             return StructuredQuestionResult(
                 kind="no_result",

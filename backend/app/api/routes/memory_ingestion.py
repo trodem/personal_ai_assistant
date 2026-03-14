@@ -12,6 +12,7 @@ from app.services.memory_ingestion import (
     extract_memory_proposal,
     missing_required_fields,
 )
+from app.services.semantic_cache import invalidate_user_cache
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
 
@@ -84,6 +85,7 @@ async def save_memory(
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     _MEMORY_FIXTURES.append(record)
+    invalidate_user_cache(current_user.tenant_id, current_user.user_id)
     return MemoryRecordResponse(
         id=record["id"],
         memory_type=record["memory_type"],

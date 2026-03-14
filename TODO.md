@@ -52,7 +52,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [x] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
 - [x] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
-- [ ] For semantic caching changes: behavior is aligned with `docs/semantic-caching.md`.
+- [x] For semantic caching changes: behavior is aligned with `docs/semantic-caching.md`.
 - [ ] For AI UX changes: behavior is aligned with `docs/ai-ux-contract.md`.
 - [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).

@@ -9,6 +9,11 @@ from app.services.question_engine import (
     compute_structured_result,
     format_answer_from_structured_result,
 )
+from app.services.semantic_cache import (
+    extract_filter_context,
+    get_cached_answer,
+    put_cached_answer,
+)
 from app.services.user_preferences import get_preferred_language
 
 router = APIRouter(prefix="/api/v1", tags=["Voice"])
@@ -39,7 +44,38 @@ async def ask_text_question(
         )
 
     preferred_language = get_preferred_language(current_user.tenant_id, current_user.user_id)
+    filter_context = extract_filter_context(payload.question)
+    context_signature = f"{structured.kind}|{','.join(sorted(structured.source_memory_ids))}"
+    cached = None
+    if structured.confidence in {"high", "medium"}:
+        cached = get_cached_answer(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            question=payload.question,
+            language=preferred_language,
+            filter_context=filter_context,
+            context_signature=context_signature,
+        )
+    if cached is not None:
+        return QuestionResponse(
+            answer=cached.answer,
+            confidence=cached.confidence,  # type: ignore[arg-type]
+            source_memory_ids=cached.source_memory_ids,
+        )
+
     answer = format_answer_from_structured_result(structured, preferred_language)
+    if structured.confidence in {"high", "medium"}:
+        put_cached_answer(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            question=payload.question,
+            language=preferred_language,
+            filter_context=filter_context,
+            answer=answer,
+            confidence=structured.confidence,
+            source_memory_ids=structured.source_memory_ids,
+            context_signature=context_signature,
+        )
     return QuestionResponse(
         answer=answer,
         confidence=structured.confidence,  # type: ignore[arg-type]
