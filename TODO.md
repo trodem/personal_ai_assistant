@@ -41,7 +41,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [x] For B2B tenant changes: strict `tenant_id` + `user_id` isolation rules are enforced per `docs/multi-tenancy.md`.
 - [x] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
-- [ ] For auth changes: email/password login flow succeeds.
+- [x] For auth changes: email/password login flow succeeds.
 - [ ] For auth changes: SSO login flow succeeds for enabled providers (MVP: Google, Apple).
 - [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
