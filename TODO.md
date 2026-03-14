@@ -108,9 +108,9 @@ Complete this checklist before implementation to avoid setup blockers.
 
 ### Environment readiness checks
 - [x] `.env.example` completed with all required variables for local startup.
-- [ ] Supabase Auth test users and token validation path verified.
-- [ ] OpenAI key validated with a minimal API test call.
-- [ ] Postgres connection, migration run, and rollback test completed.
+- [x] Supabase Auth test users and token validation path verified.
+- [x] OpenAI key validated with a minimal API test call.
+- [x] Postgres connection, migration run, and rollback test completed.
 - [ ] Object storage upload/download test completed.
 - [ ] Stripe test webhook delivery validated locally.
 
