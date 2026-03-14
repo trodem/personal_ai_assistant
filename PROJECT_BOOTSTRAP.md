@@ -130,6 +130,10 @@ GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
 PATCH /api/v1/me/settings/notifications
+GET /api/v1/me/settings/payment-methods
+POST /api/v1/me/settings/payment-methods/setup-intent
+POST /api/v1/me/settings/payment-methods/{id}/default
+DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
@@ -216,6 +220,7 @@ Required features:
 subscription plans
 payment processing
 subscription validation
+payment method management
 
 Premium features must require active subscription.
 Role policy exception:

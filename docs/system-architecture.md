@@ -123,6 +123,10 @@ GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
 PATCH /api/v1/me/settings/notifications
+GET /api/v1/me/settings/payment-methods
+POST /api/v1/me/settings/payment-methods/setup-intent
+POST /api/v1/me/settings/payment-methods/{id}/default
+DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
 GET /api/v1/admin/users
@@ -305,6 +309,7 @@ plan upgrades
 The backend checks subscription status before allowing premium features.
 
 Users can manage plan changes in settings (`free` <-> `premium`) through backend billing orchestration.
+Users can manage payment methods in settings (add/update via setup intent, set default, remove) when role policy allows.
 
 Role-based billing policy:
 

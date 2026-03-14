@@ -65,6 +65,12 @@ Role-based exception:
 - `admin` and `author` accounts are always `premium` and billing-exempt
 - no subscription payment is charged for these privileged operational roles
 
+Payment method management policy:
+
+- regular `user` accounts can manage payment methods in settings (add/update, set default, remove)
+- payment method data exposed to client must be masked
+- `admin` and `author` cannot use self-service billing/payment-method flows
+
 ---
 
 # AI Cost Control

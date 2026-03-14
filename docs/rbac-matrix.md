@@ -45,6 +45,10 @@ Role hierarchy:
 | `PATCH /api/v1/me/settings/profile` | allow | allow | allow | own settings only |
 | `PATCH /api/v1/me/settings/security` | allow | allow | allow | own settings only + notification + 2FA challenge for sensitive changes |
 | `PATCH /api/v1/me/settings/notifications` | allow | allow | allow | own preferences only |
+| `GET /api/v1/me/settings/payment-methods` | allow | deny | deny | own payment methods, role-locked billing policy applies |
+| `POST /api/v1/me/settings/payment-methods/setup-intent` | allow | deny | deny | own payment methods, role-locked billing policy applies |
+| `POST /api/v1/me/settings/payment-methods/{id}/default` | allow | deny | deny | own payment methods, role-locked billing policy applies |
+| `DELETE /api/v1/me/settings/payment-methods/{id}` | allow | deny | deny | own payment methods, role-locked billing policy applies |
 | `GET /api/v1/notifications` | allow | allow | allow | own in-app notifications only |
 | `POST /api/v1/notifications/{id}/read` | allow | allow | allow | own notification only |
 | `POST /api/v1/billing/subscription/change-plan` | allow | deny | deny | `admin`/`author` plan locked by role policy |

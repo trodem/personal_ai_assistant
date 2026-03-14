@@ -86,6 +86,10 @@ GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
 PATCH /api/v1/me/settings/notifications
+GET /api/v1/me/settings/payment-methods
+POST /api/v1/me/settings/payment-methods/setup-intent
+POST /api/v1/me/settings/payment-methods/{id}/default
+DELETE /api/v1/me/settings/payment-methods/{id}
 GET /api/v1/notifications
 POST /api/v1/notifications/{id}/read
 GET /api/v1/admin/users
@@ -206,6 +210,7 @@ Tasks:
 * Create subscription plans
 * Validate subscription status
 * Add in-app settings plan management (upgrade/downgrade)
+* Add payment-method management (setup intent, list, default, remove)
 * Trigger transactional notifications for billing/account security events
 
 Deliverable:
@@ -223,7 +228,7 @@ Tasks:
 * Add role model (`user`, `admin`, `author`) and account status (`active`, `suspended`, `canceled`)
 * Build admin user management APIs and UI (list/search/suspend/reactivate/cancel)
 * Build author role-management APIs/UI (`user` <-> `admin`) and global supervision dashboard
-* Build user settings APIs and UI (profile, security, subscription)
+* Build user settings APIs and UI (profile, security, subscription, payment methods)
 * Build notifications UX (in-app notification center + channel preferences for in-app/push/email)
 * Enforce RBAC and audit logs for admin/author actions
 * Enforce author safety invariants (no self-role-change, no self-suspend/cancel, keep at least one active author)

@@ -132,6 +132,7 @@ settings/
 profile_service.py
 security_service.py
 notification_preferences_service.py
+payment_methods_service.py
 
 admin/
 
@@ -221,6 +222,10 @@ GET /api/v1/me/settings
 PATCH /api/v1/me/settings/profile
 PATCH /api/v1/me/settings/security
 PATCH /api/v1/me/settings/notifications
+GET /api/v1/me/settings/payment-methods
+POST /api/v1/me/settings/payment-methods/setup-intent
+POST /api/v1/me/settings/payment-methods/{id}/default
+DELETE /api/v1/me/settings/payment-methods/{id}
 
 notifications.py
 

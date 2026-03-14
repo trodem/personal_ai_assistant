@@ -256,6 +256,10 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)
 - [ ] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
 - [ ] `PATCH /api/v1/me/settings/notifications` (notification channels preferences)
+- [ ] `GET /api/v1/me/settings/payment-methods` (masked cards list)
+- [ ] `POST /api/v1/me/settings/payment-methods/setup-intent` (provider setup intent for add/update)
+- [ ] `POST /api/v1/me/settings/payment-methods/{id}/default` (set default payment method)
+- [ ] `DELETE /api/v1/me/settings/payment-methods/{id}` (remove payment method)
 - [ ] `GET /api/v1/notifications` (in-app notifications feed)
 - [ ] `POST /api/v1/notifications/{id}/read` (mark notification as read)
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
@@ -356,6 +360,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Add language selection in Settings (`English`, `Italian`, `German`) bound to backend `preferred_language`.
 - [ ] Add auth settings UX for SSO visibility (linked provider) and 2FA management (enable/disable/verify).
 - [ ] Add notification preferences UI in settings (in-app/push/email toggles).
+- [ ] Add payment methods section in Settings (add card, set default, remove card, masked card display only).
 - [ ] Build in-app notification center with unread/read state and deep links to related screens.
 - [ ] Build admin `User Management` screen (list users, search/filter, suspend/reactivate/cancel).
 - [ ] Build author `Supervision Dashboard` screen (global metrics + oversight panels).
@@ -409,6 +414,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [ ] Integrate Stripe checkout + backend webhook handling.
 - [ ] Implement `free` and `premium` plans in backend authorization logic.
+- [ ] Integrate Stripe setup-intent flow for payment method onboarding/update.
 - [ ] Enforce role-based plan lock: `admin`/`author` are always `premium` and billing-exempt.
 - [ ] Enforce free plan limits:
 - [ ] monthly memories
@@ -419,6 +425,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Graceful degradation when limits are exceeded.
 - [ ] Billing webhook and plan-switch tests.
 - [ ] In-app subscription management UX for user (`upgrade`, `downgrade`, current plan visibility).
+- [ ] In-app payment methods management UX for `user` role.
 - [ ] Restrict subscription self-service to `user` role; `admin`/`author` plan changes follow role policy.
 - [ ] Grace period and downgrade policy defined and enforced.
 

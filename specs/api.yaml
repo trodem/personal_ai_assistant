@@ -331,6 +331,108 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
+  /api/v1/me/settings/payment-methods:
+    get:
+      tags: [Settings]
+      summary: List user payment methods
+      description: Returns masked payment methods for the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Payment method list.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/PaymentMethodRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan billing is locked by role policy.
+
+  /api/v1/me/settings/payment-methods/setup-intent:
+    post:
+      tags: [Settings]
+      summary: Create setup intent for payment method
+      description: Creates a provider setup intent/client secret to add or update a payment method.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Setup intent created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentMethodSetupIntentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan billing is locked by role policy.
+
+  /api/v1/me/settings/payment-methods/{id}/default:
+    post:
+      tags: [Settings]
+      summary: Set default payment method
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Default payment method updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan billing is locked by role policy.
+        "404":
+          description: Payment method not found.
+
+  /api/v1/me/settings/payment-methods/{id}:
+    delete:
+      tags: [Settings]
+      summary: Remove payment method
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payment method removed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleted:
+                    type: boolean
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Plan billing is locked by role policy.
+        "404":
+          description: Payment method not found.
+
   /api/v1/notifications:
     get:
       tags: [Notifications]
@@ -706,6 +808,11 @@ components:
         billing_exempt:
           type: boolean
           description: True for `admin` and `author` roles by policy.
+        payment_methods_enabled:
+          type: boolean
+          description: False for role-locked billing accounts (`admin`, `author`).
+        default_payment_method:
+          $ref: "#/components/schemas/PaymentMethodRecord"
         notification_preferences:
           $ref: "#/components/schemas/NotificationPreferences"
 
@@ -773,6 +880,30 @@ components:
         created_at:
           type: string
           format: date-time
+
+    PaymentMethodRecord:
+      type: object
+      required: [id, brand, last4, exp_month, exp_year, is_default]
+      properties:
+        id:
+          type: string
+        brand:
+          type: string
+        last4:
+          type: string
+        exp_month:
+          type: integer
+        exp_year:
+          type: integer
+        is_default:
+          type: boolean
+
+    PaymentMethodSetupIntentResponse:
+      type: object
+      required: [client_secret]
+      properties:
+        client_secret:
+          type: string
 
     ChangePlanRequest:
       type: object
