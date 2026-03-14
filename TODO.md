@@ -274,6 +274,11 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] `POST /api/v1/billing/subscription/cancel-preview` (churn prevention preview)
 - [ ] `POST /api/v1/billing/subscription/cancel` (cancel with mandatory reason)
+- [ ] `GET /api/v1/me/retention/status` (churn risk + recommended retention actions)
+- [ ] `POST /api/v1/billing/trial/activate` (trial activation for eligible users)
+- [ ] `POST /api/v1/billing/coupons/apply` (coupon apply for eligible users)
+- [ ] `POST /api/v1/me/data-export` (start export job: `json/csv/pdf`)
+- [ ] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
@@ -449,6 +454,9 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Grace period and downgrade policy defined and enforced.
 - [ ] Add cancellation retention flow (`cancel-preview`): reason capture, pause/downgrade alternatives, final cancel confirmation.
 - [ ] Persist and analyze churn reasons to guide product/pricing improvements.
+- [ ] Add proactive churn-risk scoring and trigger retention interventions before cancel intent.
+- [ ] Implement trial lifecycle management (`trial` plan state, eligibility, expiry transition).
+- [ ] Implement coupon/discount logic (validity window, usage limits, anti-abuse controls).
 
 ---
 
@@ -499,6 +507,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] data export
 - [ ] account and data deletion
 - [ ] explicit data retention policy
+- [ ] Data portability exports support `json`, `csv`, and `pdf` via asynchronous jobs.
 - [ ] Implement automated data-lifecycle jobs for account closure (`canceled_pending_deletion -> deletion_completed`).
 - [ ] Ensure deletion covers DB + storage + embeddings + caches with idempotent retries.
 - [ ] Serious secret management (no secrets in repo/logs).

@@ -134,6 +134,11 @@ POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
+GET /api/v1/me/retention/status
+POST /api/v1/billing/trial/activate
+POST /api/v1/billing/coupons/apply
+POST /api/v1/me/data-export
+GET /api/v1/me/data-export/{job_id}
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -330,12 +335,15 @@ payment processing
 billing events
 plan upgrades
 plan cancellation retention flow
+trial activation/expiry
+coupon and temporary discount application
 
 The backend checks subscription status before allowing premium features.
 
 Users can manage plan changes in settings (`free` <-> `premium`) through backend billing orchestration.
 Users can manage payment methods in settings (add/update via setup intent, set default, remove) when role policy allows.
 Before cancellation, the app must capture reason and show retention alternatives (pause/downgrade) via preview flow.
+Proactive churn-risk status can trigger pre-cancel retention interventions.
 
 Role-based billing policy:
 

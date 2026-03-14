@@ -45,6 +45,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added formal rollout/lifecycle governance docs: `docs/feature-flags-experiments.md` and `docs/api-compatibility.md`, with alignment across AGENTS, TODO, roadmap, architecture, decisions, context, and analytics event taxonomy.
 - Added `docs/semantic-caching.md` with user-scoped cache strategy, thresholds/TTL, invalidation rules, and quality guardrails; aligned across AGENTS, TODO, query contract, roadmap, architecture, cost-control, LLMOps, and context docs.
 - Added `docs/multi-tenancy.md` and `docs/data-lifecycle.md` to formalize B2B tenant isolation and automated retention/deletion workflows (including right-to-be-forgotten), with alignment updates across AGENTS, TODO, roadmap, architecture, security threat model, context, and file structure docs.
+- Expanded churn/trial/portability planning with proactive churn-risk policy, trial/coupon governance, and data portability export policy (`json`/`csv`/`pdf`) including API contracts, RBAC, analytics KPIs, error codes, roadmap, and architecture/context alignment.
 
 ---
 

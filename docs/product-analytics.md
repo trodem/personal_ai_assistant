@@ -102,6 +102,13 @@ Billing and settings:
 - `subscription_cancel_reason_submitted`
 - `subscription_retained`
 - `subscription_canceled`
+- `retention_offer_shown`
+- `trial_activated`
+- `trial_expired`
+- `coupon_applied`
+- `coupon_rejected`
+- `data_export_requested`
+- `data_export_completed`
 - `settings_profile_updated`
 - `settings_security_updated`
 - `settings_notification_preferences_updated`
@@ -187,6 +194,8 @@ Receipt funnel:
 - `answer_feedback_positive_rate` = `like / (like + dislike)`
 - `subscription_retention_rate_after_cancel_preview` = `subscription_retained / subscription_cancel_previewed`
 - `experiment_variant_conversion_rate` = `experiment_converted / experiment_exposed` (per experiment variant)
+- `trial_to_premium_conversion_rate` = premium upgrades after trial / `trial_activated`
+- `data_export_success_rate` = `data_export_completed / data_export_requested`
 
 ---
 

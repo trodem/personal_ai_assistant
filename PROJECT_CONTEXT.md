@@ -380,6 +380,11 @@ POST /api/v1/notifications/{id}/read
 POST /api/v1/billing/subscription/change-plan
 POST /api/v1/billing/subscription/cancel-preview
 POST /api/v1/billing/subscription/cancel
+GET /api/v1/me/retention/status
+POST /api/v1/billing/trial/activate
+POST /api/v1/billing/coupons/apply
+POST /api/v1/me/data-export
+GET /api/v1/me/data-export/{job_id}
 GET /api/v1/admin/users
 PATCH /api/v1/admin/users/{id}/status
 PATCH /api/v1/author/users/{id}/role
@@ -542,9 +547,12 @@ payments
 billing events
 plan upgrades
 plan downgrades
+trial activation/expiry
+coupon and temporary discount handling
 
 Users must be able to manage subscription in app settings (`free` <-> `premium`) according to billing policy.
 Before cancellation, the system must capture reason and show retention alternatives (for example pause/downgrade) before final cancel.
+Churn-risk status should support proactive retention actions before explicit cancel intent.
 
 Role-based billing policy:
 
@@ -567,6 +575,7 @@ payment methods (add/default/remove, masked display only)
 subscription cancellation flow with reason capture and retention preview
 notification channel preferences (in-app/push/email)
 language preference (`preferred_language`: `en`/`it`/`de`, fallback `en`)
+data portability export (`json`/`csv`/`pdf`) with asynchronous export job flow
 
 Question/answer experience should include feedback actions (`Like` / `Dislike`) for continuous quality improvement.
 

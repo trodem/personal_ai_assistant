@@ -41,6 +41,9 @@ Precedence order when conflicts appear:
 - `docs/semantic-caching.md`
 - `docs/multi-tenancy.md`
 - `docs/data-lifecycle.md`
+- `docs/churn-management.md`
+- `docs/trial-and-freemium.md`
+- `docs/data-portability.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -57,6 +60,9 @@ When to consult each document:
 - auth/role/permission change: read `docs/rbac-matrix.md` and `docs/security-threat-model.md` before implementation
 - B2B/tenant isolation change: read `docs/multi-tenancy.md`, `docs/rbac-matrix.md`, and `docs/security-threat-model.md`
 - retention/deletion/GDPR lifecycle change: read `docs/data-lifecycle.md`, `docs/security-threat-model.md`, and `docs/operations-runbook.md`
+- churn/retention change: read `docs/churn-management.md`, `docs/monetization.md`, and `docs/product-analytics.md`
+- trial/coupon/pricing promotion change: read `docs/trial-and-freemium.md`, `docs/monetization.md`, and `docs/rbac-matrix.md`
+- user export/portability change: read `docs/data-portability.md`, `docs/security-threat-model.md`, and `docs/data-lifecycle.md`
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
 - feature rollout/experiment change: read `docs/feature-flags-experiments.md`, `docs/product-analytics.md`, and `docs/model-registry.md`
 - API lifecycle/versioning change: read `docs/api-compatibility.md`, `docs/decisions.md`, and `specs/api.yaml`

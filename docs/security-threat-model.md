@@ -113,6 +113,34 @@ Controls:
 
 ---
 
+### Coupon/trial abuse
+
+Risk:
+
+- repeated/automated discount exploitation and unauthorized trial reuse
+
+Controls:
+
+- eligibility checks and one-trial policy
+- coupon validity window + usage limits
+- redemption rate limits and anti-duplication controls
+
+---
+
+### Data export abuse
+
+Risk:
+
+- unauthorized export or excessive export jobs leaking data
+
+Controls:
+
+- export strictly scoped to authenticated owner
+- short-lived signed download URLs
+- export job rate limits and audit logs
+
+---
+
 ### Token misuse / auth bypass
 
 Risk:

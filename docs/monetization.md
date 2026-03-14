@@ -42,6 +42,11 @@ Example limits:
 
 Attachments may be limited or disabled.
 
+Trial policy:
+
+- eligible users may activate a time-limited `trial` state
+- trial expiry transitions must follow deterministic billing policy
+
 ---
 
 # Premium Plan
@@ -76,6 +81,7 @@ Churn management policy:
 - cancellation flow must capture reason before final cancellation
 - cancellation preview should offer retention alternatives (for example downgrade/pause)
 - churn reasons must be tracked for pricing/product iteration
+- proactive churn-risk scoring may trigger pre-cancel retention offers
 
 ---
 

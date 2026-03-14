@@ -642,6 +642,120 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
+  /api/v1/me/retention/status:
+    get:
+      tags: [Billing]
+      summary: Get retention status and suggested actions
+      description: Returns churn-risk category and recommended retention actions for current user.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Retention status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RetentionStatusResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /api/v1/billing/trial/activate:
+    post:
+      tags: [Billing]
+      summary: Activate trial (if eligible)
+      description: Activates trial plan for eligible user account.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Trial activated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Not eligible or role-locked policy.
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/billing/coupons/apply:
+    post:
+      tags: [Billing]
+      summary: Apply coupon code
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplyCouponRequest"
+      responses:
+        "200":
+          description: Coupon applied.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSettingsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden. Not eligible or role-locked policy.
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/me/data-export:
+    post:
+      tags: [Settings]
+      summary: Request user data export
+      description: Starts asynchronous export job for current user data.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DataExportRequest"
+      responses:
+        "200":
+          description: Export job accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataExportJobResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /api/v1/me/data-export/{job_id}:
+    get:
+      tags: [Settings]
+      summary: Get export job status
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Export job status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DataExportJobStatusResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Export job not found.
+
   /api/v1/admin/users:
     get:
       tags: [Admin]
@@ -1075,6 +1189,59 @@ components:
           enum: [too_expensive, low_value, too_many_errors, not_using_enough, switched_alternative, other]
         comment:
           type: string
+
+    RetentionStatusResponse:
+      type: object
+      properties:
+        churn_risk:
+          type: string
+          enum: [low, medium, high]
+        recommended_actions:
+          type: array
+          items:
+            type: string
+
+    ApplyCouponRequest:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+
+    DataExportRequest:
+      type: object
+      required: [format]
+      properties:
+        format:
+          type: string
+          enum: [json, csv, pdf]
+
+    DataExportJobResponse:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+
+    DataExportJobStatusResponse:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [queued, processing, completed, failed]
+        download_url:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
 
     AdminUserRecord:
       type: object
