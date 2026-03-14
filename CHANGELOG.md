@@ -56,6 +56,11 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked legal minimum checklist item `Define support contact and incident response owner` as completed in `TODO.md`.
 - Completed Day 0 connectivity checks in `TODO.md` by validating OpenAI minimal API call, PostgreSQL connectivity (`select 1`), and Supabase Storage upload/download smoke.
 - Completed Day 1 toolchain readiness check in `TODO.md` by confirming local Docker, Python, package manager (`pip`), and Flutter SDK availability.
+- Completed Day 1 Docker readiness check in `TODO.md` by validating `docker compose config` and confirming backend/postgres services in healthy state.
+- Completed Day 1 local-stack completeness check in `TODO.md` by verifying running `backend` service plus Supabase local `auth`, `postgres+pgvector`, and `storage` services.
+- Completed Day 1 environment-config verification in `TODO.md` by passing `.env.example` completeness and environment-matrix checks against current runtime requirements.
+- Completed Day 1 smoke-path verification in `TODO.md` (`backend boot -> /health/live 200 -> /health/ready 200 -> DB readiness query`).
+- Updated `README.md` with a reproducible local setup command sequence covering Docker/Supabase startup, health checks, OpenAI/Supabase auth checks, migration smoke, storage smoke, and full quality checks; marked the related Day 1 checklist item as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

@@ -139,13 +139,13 @@ Complete this checklist before implementation to avoid setup blockers.
 
 ### Day 1 (project readiness, 2-4 hours)
 - [x] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
-- [ ] Validate `docker compose config` and ensure services become healthy.
-- [ ] Ensure local Docker stack includes at minimum: `backend` + Supabase local stack (`auth`, `postgres+pgvector`, `storage`).
-- [ ] Verify `.env.example` completeness against actual runtime needs.
-- [ ] Execute one full smoke path: backend boot -> health endpoints -> DB readiness.
-- [ ] Record all setup commands in `README.md` so setup is reproducible.
+- [x] Validate `docker compose config` and ensure services become healthy.
+- [x] Ensure local Docker stack includes at minimum: `backend` + Supabase local stack (`auth`, `postgres+pgvector`, `storage`).
+- [x] Verify `.env.example` completeness against actual runtime needs.
+- [x] Execute one full smoke path: backend boot -> health endpoints -> DB readiness.
+- [x] Record all setup commands in `README.md` so setup is reproducible.
 
-### Day 0 Operational Registry (fill this once, then maintain)
+<!-- ### Day 0 Operational Registry (fill this once, then maintain)
 
 Use this as your single source of truth for external dependencies and ownership.
 
@@ -157,7 +157,7 @@ Use this as your single source of truth for external dependencies and ownership.
 | Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |
 | Email Provider (TBD) | Transactional notifications | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Domain authentication + delivery monitoring |
 | CI Platform | Build/test automation | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Required checks enabled |
-| Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set |
+| Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set | -->
 
 ### Day 0 Credentials and Policy Checklist
 - [ ] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).

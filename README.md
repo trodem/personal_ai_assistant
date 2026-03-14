@@ -160,15 +160,30 @@ Do not start implementation before external dependencies are ready.
 
 1. Create local env file from `.env.example`.
 2. Start local services (`backend` + local PostgreSQL with `pgvector`) via `docker compose`.
-3. Verify services are healthy and run quality/smoke checks before implementation milestones.
+3. Start Supabase local stack (auth + postgres/vector + storage).
+4. Run runtime smoke and migration/storage smoke checks.
+5. Run full quality checks before implementation milestones.
 
 ```powershell
 Copy-Item .env.example .env
-docker compose config
+
+docker compose config -q
 docker compose up -d
 docker compose ps
+
+supabase start
+supabase status
+
+Invoke-WebRequest http://localhost:8000/health/live -UseBasicParsing
+Invoke-WebRequest http://localhost:8000/health/ready -UseBasicParsing
+docker compose exec -T postgres psql -U personal_ai -d personal_ai -c "select 1 as db_ready;"
+
+powershell -ExecutionPolicy Bypass -File scripts/openai-account-check.ps1
+powershell -ExecutionPolicy Bypass -File scripts/supabase-auth-smoke.ps1
+powershell -ExecutionPolicy Bypass -File scripts/migration-smoke-check.ps1
+powershell -ExecutionPolicy Bypass -File scripts/storage-upload-download-smoke.ps1
+
 powershell -ExecutionPolicy Bypass -File scripts/quality-check.ps1
-Invoke-WebRequest http://localhost:8000/health/live
 ```
 
 Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).
