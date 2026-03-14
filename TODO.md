@@ -77,7 +77,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Supabase project is created and reachable (Auth + Postgres + Storage).
 - [x] OpenAI API key is valid and billing is enabled.
 - [x] `.env.example` values are complete for local boot.
-- [ ] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
+- [x] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
 - [ ] MFA is enabled on Git hosting, OpenAI, Supabase, and Stripe accounts.
 
 ### Required accounts (MVP)
@@ -147,7 +147,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 | Service | Purpose | Environment(s) | Console URL | Secret/Key Name | Owner | Backup Owner | Status | Last Verified | Notes |
 |---|---|---|---|---|---|---|---|---|---|
-| OpenAI | LLM + Whisper APIs | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Billing enabled + spend cap set |
+| OpenAI | LLM + Whisper APIs | dev/staging/prod | TODO | TODO | Demtro | Ops Backup | planned | TODO | Billing enabled + spend cap set |
 | Supabase (managed) | Auth + Postgres + Storage | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | JWT settings, backups, storage buckets configured |
 | Supabase (local CLI/Docker) | Local Auth + Postgres + Storage | dev | local | n/a | TODO | TODO | planned | TODO | Local parity with managed project verified |
 | Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |

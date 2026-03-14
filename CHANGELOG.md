@@ -46,6 +46,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Assigned first primary/backup ownership entry in Day 0 Operational Registry (`OpenAI` row) and marked the related hard blocker as completed in `TODO.md`.
 - Expanded local bootstrap configuration with `APP_VERSION`, `APP_CORS_ALLOW_ORIGINS`, `AI_TOKEN_BUDGET_FREE`, and `AI_TOKEN_BUDGET_PREMIUM` in `.env.example` and backend compose env mapping; marked the corresponding hard blocker task as completed in `TODO.md`.
 - Architecture and governance docs aligned to receipt-photo-only attachment policy.
 - README and bootstrap guidance aligned to confirmation-first memory persistence.
