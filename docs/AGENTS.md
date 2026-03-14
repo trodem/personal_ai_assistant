@@ -44,6 +44,7 @@ Precedence order when conflicts appear:
 - `docs/churn-management.md`
 - `docs/trial-and-freemium.md`
 - `docs/data-portability.md`
+- `docs/completeness-matrix.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -63,6 +64,7 @@ When to consult each document:
 - churn/retention change: read `docs/churn-management.md`, `docs/monetization.md`, and `docs/product-analytics.md`
 - trial/coupon/pricing promotion change: read `docs/trial-and-freemium.md`, `docs/monetization.md`, and `docs/rbac-matrix.md`
 - user export/portability change: read `docs/data-portability.md`, `docs/security-threat-model.md`, and `docs/data-lifecycle.md`
+- planning completeness/review request: read `docs/completeness-matrix.md` with `TODO.md` and `PROJECT_CONTEXT.md`
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
 - feature rollout/experiment change: read `docs/feature-flags-experiments.md`, `docs/product-analytics.md`, and `docs/model-registry.md`
 - API lifecycle/versioning change: read `docs/api-compatibility.md`, `docs/decisions.md`, and `specs/api.yaml`

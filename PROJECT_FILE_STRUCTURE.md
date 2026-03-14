@@ -295,6 +295,7 @@ data-lifecycle.md
 churn-management.md
 trial-and-freemium.md
 data-portability.md
+completeness-matrix.md
 
 ---
 
