@@ -158,10 +158,18 @@ Do not start implementation before external dependencies are ready.
 
 # Local Development Start
 
-1. Prepare environment variables from `.env.example`.
-2. Start local services (`backend` + Supabase local stack).
-3. Verify health and readiness endpoints.
-4. Run lint/tests/smoke checks before implementation milestones.
+1. Create local env file from `.env.example`.
+2. Start local services (`backend` + local PostgreSQL with `pgvector`) via `docker compose`.
+3. Verify services are healthy and run quality/smoke checks before implementation milestones.
+
+```powershell
+Copy-Item .env.example .env
+docker compose config
+docker compose up -d
+docker compose ps
+powershell -ExecutionPolicy Bypass -File scripts/quality-check.ps1
+Invoke-WebRequest http://localhost:8000
+```
 
 Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).
 

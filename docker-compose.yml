@@ -3,18 +3,18 @@ services:
     image: python:3.12-slim
     container_name: personal_ai_backend
     working_dir: /app
-    command: ["python", "-m", "http.server", "8000"]
+    command: ["sh", "-c", "python -m http.server ${API_PORT:-8000}"]
+    environment:
+      API_PORT: ${API_PORT:-8000}
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:${API_PORT:-8000}"
     volumes:
       - ./backend:/app
     restart: unless-stopped
     healthcheck:
       test:
-        - CMD
-        - python
-        - -c
-        - "import urllib.request; urllib.request.urlopen('http://localhost:8000', timeout=2)"
+        - CMD-SHELL
+        - python -c "import urllib.request; urllib.request.urlopen('http://localhost:${API_PORT:-8000}', timeout=2)"
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,18 +24,18 @@ services:
     image: pgvector/pgvector:pg16
     container_name: personal_ai_postgres
     environment:
-      POSTGRES_DB: personal_ai
-      POSTGRES_USER: personal_ai
-      POSTGRES_PASSWORD: personal_ai
+      POSTGRES_DB: ${POSTGRES_DB:-personal_ai}
+      POSTGRES_USER: ${POSTGRES_USER:-personal_ai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-personal_ai}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test:
         - CMD-SHELL
-        - pg_isready -U personal_ai -d personal_ai
+        - pg_isready -U ${POSTGRES_USER:-personal_ai} -d ${POSTGRES_DB:-personal_ai}
       interval: 10s
       timeout: 5s
       retries: 5

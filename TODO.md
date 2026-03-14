@@ -30,8 +30,8 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] Required services are `healthy` in `docker compose ps`.
 - [x] Lint/tests/build pass for touched components.
 - [x] At least one runtime smoke check passes (not only unit tests).
-- [ ] `.env.example`, compose config, and setup docs are aligned.
-- [ ] `CHANGELOG.md` is updated for relevant behavior/contract/process changes.
+- [x] `.env.example`, compose config, and setup docs are aligned.
+- [x] `CHANGELOG.md` is updated for relevant behavior/contract/process changes.
 - [ ] Every feature includes automated tests (unit + integration where needed).
 - [ ] No merge without green CI.
 - [ ] Structured logging + metrics + consistent error handling are active.
