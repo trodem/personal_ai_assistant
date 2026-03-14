@@ -19,6 +19,12 @@ from app.core.request_context import tenant_id_ctx_var, user_id_ctx_var
 class AuthenticatedUser:
     user_id: str
     tenant_id: str
+    role: str
+    mfa_enabled: bool
+
+
+def _dev_hs256_secret() -> str:
+    return os.getenv("APP_DEV_JWT_SECRET", "dev_jwt_secret")
 
 
 def _urlsafe_b64encode(value: bytes) -> str:
@@ -48,10 +54,17 @@ def build_dev_token(
     user_id: str,
     *,
     tenant_id: str | None = "tenant-default",
+    role: str = "user",
+    mfa_enabled: bool = False,
     ttl_seconds: int = 3600,
 ) -> str:
-    secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
-    payload: dict[str, object] = {"sub": user_id, "exp": int(time.time()) + ttl_seconds}
+    secret = _dev_hs256_secret()
+    payload: dict[str, object] = {
+        "sub": user_id,
+        "role": role,
+        "mfa_enabled": mfa_enabled,
+        "exp": int(time.time()) + ttl_seconds,
+    }
     if tenant_id:
         payload["tenant_id"] = tenant_id
     return _encode_jwt(payload, secret)
@@ -77,7 +90,7 @@ def _decode_token(token: str) -> dict[str, object]:
         ) from exc
     alg = str(header.get("alg", ""))
     if alg == "HS256":
-        secret = os.getenv("SUPABASE_JWT_SECRET", "dev_jwt_secret")
+        secret = _dev_hs256_secret()
         expected_signature = _sign(f"{header_b64}.{payload_b64}", secret)
         if not hmac.compare_digest(signature, expected_signature):
             raise AppError(
@@ -174,6 +187,8 @@ def get_current_user(
     token = authorization.split(" ", maxsplit=1)[1].strip()
     payload = _decode_token(token)
     user_id = str(payload["sub"])
+    role = str(payload.get("role", "user"))
+    mfa_enabled = bool(payload.get("mfa_enabled", False))
     token_tenant_id = str(payload.get("tenant_id", "")).strip()
     if token_tenant_id:
         if not x_tenant_id:
@@ -202,4 +217,18 @@ def get_current_user(
 
     user_id_ctx_var.set(user_id)
     tenant_id_ctx_var.set(effective_tenant)
-    return AuthenticatedUser(user_id=user_id, tenant_id=effective_tenant)
+    return AuthenticatedUser(
+        user_id=user_id,
+        tenant_id=effective_tenant,
+        role=role,
+        mfa_enabled=mfa_enabled,
+    )
+
+
+def enforce_mfa_policy_for_role(user: AuthenticatedUser) -> None:
+    if user.role in {"admin", "author"} and not user.mfa_enabled:
+        raise AppError(
+            status_code=status.HTTP_403_FORBIDDEN,
+            code="auth.mfa_required",
+            message="MFA is required for this role.",
+        )
