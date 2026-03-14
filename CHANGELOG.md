@@ -18,6 +18,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added LLMOps-aligned metrics foundation (`backend/app/core/llmops.py`) with required dimensions and MVP alert thresholds exposed via `/metrics` and covered by automated tests.
 - Added product-analytics contract foundation (`backend/app/core/analytics.py`) with snake_case schema validation and automatic operational events (`api_error_4xx`/`api_error_5xx`) emitted in structured logs.
 - Added production-grade log redaction in `backend/app/core/logging_config.py` (secret/token/password/email masking) with contract tests in `backend/tests/test_logging_redaction.py`.
+- Added security-by-default backend baseline with bearer-token validation and strict user_id-scoped memory access (GET /api/v1/memories) plus negative auth tests (401 missing/invalid token).
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
@@ -71,6 +72,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Update this file whenever a change is user-visible or developer-relevant.
 - Prefer updating `Unreleased` in the same PR/iteration as the change.
 - If a changelog update is skipped, document the reason in the PR notes.
+
 
 
 

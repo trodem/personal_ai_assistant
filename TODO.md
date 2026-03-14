@@ -38,7 +38,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [x] LLMOps dashboards and alert thresholds are aligned with `docs/llmops-dashboard-spec.md`.
 - [x] Product analytics events follow `docs/product-analytics.md` schema and naming contract.
 - [x] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
-- [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
+- [x] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [ ] For B2B tenant changes: strict `tenant_id` + `user_id` isolation rules are enforced per `docs/multi-tenancy.md`.
 - [ ] For auth changes: Supabase Auth login/token -> protected API call succeeds (`401` without token, `200` with valid token).
 - [ ] For auth changes: email/password login flow succeeds.

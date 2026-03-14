@@ -17,7 +17,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
         request_id = request.headers.get("x-request-id", str(uuid.uuid4()))
         trace_id = request.headers.get("x-trace-id", request_id)
-        user_id = request.headers.get("x-user-id", "-")
+        user_id = "-"
         session_id = request.headers.get("x-session-id", request_id)
 
         token_request = request_id_ctx_var.set(request_id)

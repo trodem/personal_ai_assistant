@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routes.health import router as health_router
+from app.api.routes.memories import router as memories_router
 from app.api.routes.metrics import router as metrics_router
 from app.core.errors import (
     AppError,
@@ -25,6 +26,7 @@ app = FastAPI(title="Personal AI Assistant Backend", version="0.1.0")
 app.add_middleware(RequestContextMiddleware)
 app.include_router(health_router)
 app.include_router(metrics_router)
+app.include_router(memories_router)
 
 
 @app.get("/")
