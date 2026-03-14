@@ -50,6 +50,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
 - [ ] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
+- [ ] For semantic caching changes: behavior is aligned with `docs/semantic-caching.md`.
 - [ ] For AI UX changes: behavior is aligned with `docs/ai-ux-contract.md`.
 - [ ] For attachment changes: `receipt photo upload -> OCR extraction -> memory proposal -> explicit confirm -> persistence + authorized signed URL access` is verified.
 - [ ] For attachment changes: lifecycle states are verified end-to-end (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted` and failure branches).
@@ -329,6 +330,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] loan balances (who owes what)
 - [ ] inventory state from events
 - [ ] Semantic retrieval with pgvector for open-ended questions.
+- [ ] Implement semantic answer cache with user-scoped keying and similarity threshold.
+- [ ] Add semantic cache invalidation rules on memory create/update/delete.
 - [ ] Minimal context builder to reduce token usage.
 - [ ] Natural-language response generation from structured backend result.
 - [ ] Add pre-generation and post-generation moderation checks on question flow.
@@ -471,6 +474,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Automatic alerts for daily cost spikes.
 - [ ] Prompt budget with hard token cap.
 - [ ] Cache low-risk repeated responses.
+- [ ] Track semantic cache hit/miss ratio and latency/cost impact in LLMOps dashboards.
 - [ ] Model routing policy (cost-efficient default, escalation for complex cases).
 - [ ] Formalize per-use-case active model mapping and fallback chain in `docs/model-registry.md`.
 - [ ] Add circuit breaker/fallback behavior for AI provider outages and elevated error rates.

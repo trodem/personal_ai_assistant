@@ -143,6 +143,8 @@ recent memory queries
 
 Caching reduces repeated AI calls.
 
+Semantic cache policy and thresholds must follow `docs/semantic-caching.md`.
+
 ---
 
 # Token Optimization

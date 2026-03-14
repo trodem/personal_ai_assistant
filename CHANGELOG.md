@@ -43,6 +43,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added explicit AI content safety and data sanitization governance via `docs/content-moderation.md` and `docs/data-sanitization.md`, with aligned TODO/security/error-model/architecture/analytics/document-routing updates.
 - Added planning for AI answer feedback loop (`Like`/`Dislike`) and churn-management cancellation flow (reason capture + retention preview), including API contract, RBAC, roadmap, UX, monetization, and analytics alignment.
 - Added formal rollout/lifecycle governance docs: `docs/feature-flags-experiments.md` and `docs/api-compatibility.md`, with alignment across AGENTS, TODO, roadmap, architecture, decisions, context, and analytics event taxonomy.
+- Added `docs/semantic-caching.md` with user-scoped cache strategy, thresholds/TTL, invalidation rules, and quality guardrails; aligned across AGENTS, TODO, query contract, roadmap, architecture, cost-control, LLMOps, and context docs.
 
 ---
 

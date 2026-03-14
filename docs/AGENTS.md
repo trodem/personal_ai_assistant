@@ -38,6 +38,7 @@ Precedence order when conflicts appear:
 - `docs/data-sanitization.md`
 - `docs/feature-flags-experiments.md`
 - `docs/api-compatibility.md`
+- `docs/semantic-caching.md`
 - `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
@@ -46,6 +47,7 @@ When to consult each document:
 - API change: read `specs/api.yaml` and `docs/error-model.md`
 - memory extraction/storage change: read `docs/contract.md`, `docs/domain-model.md`, `specs/memory-extraction.md`, `docs/database-schema.md`
 - question-answering change: read `docs/query-contract.md`, `docs/ai-pipeline.md`, `docs/error-model.md`, `specs/api.yaml`
+- semantic retrieval/cache change: read `docs/query-contract.md`, `docs/semantic-caching.md`, and `docs/ai-cost-control.md`
 - AI UX behavior change: read `docs/ai-ux-contract.md`, `docs/contract.md`, and `docs/error-model.md`
 - AI model/prompt change: read `docs/model-registry.md`, `docs/ai-cost-control.md`, and `specs/memory-extraction.md`
 - AI safety/privacy pipeline change: read `docs/content-moderation.md`, `docs/data-sanitization.md`, and `docs/security-threat-model.md`

@@ -55,6 +55,7 @@ Panels:
 - question no-result rate
 - ambiguity rate (`query.ambiguous_intent`)
 - OCR failure rate and stuck `ocr_processing` count
+- semantic cache hit/miss ratio and estimated cost savings
 
 ---
 

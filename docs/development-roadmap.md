@@ -144,6 +144,7 @@ Tasks:
 * Implement intent detection
 * Implement database-first query execution
 * Generate final natural-language response
+* Implement semantic answer cache (user-scoped keying, threshold, invalidation)
 * Implement SSE streaming response path for text question endpoint with non-stream fallback
 * Enforce moderation checks before/after AI generation flow
 

@@ -696,6 +696,14 @@ API backward compatibility and deprecation process must follow:
 
 ---
 
+# SEMANTIC CACHING
+
+Semantic answer caching must follow `docs/semantic-caching.md`.
+
+Cache usage must remain user-scoped and preserve database-first constraints.
+
+---
+
 # PRODUCT POSITIONING
 
 Product type:

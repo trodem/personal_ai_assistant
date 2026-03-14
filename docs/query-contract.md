@@ -55,6 +55,12 @@ Numerical answers must be produced by backend/database logic, never by free-form
 1. Structured filters + SQL (primary)
 2. Semantic vector retrieval (fallback/augmentation)
 
+Semantic cache policy:
+
+- semantic cache may be used only after database-first constraints are preserved
+- cache hit requires user-scoped key + similarity threshold from `docs/semantic-caching.md`
+- cache must be bypassed for ambiguous intent or changed constraint context
+
 Vector retrieval must not override explicit structured constraints extracted from intent.
 
 ### Multi-currency queries

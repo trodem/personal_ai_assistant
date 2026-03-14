@@ -254,6 +254,11 @@ The system generates an embedding and retrieves similar memories.
 
 Embeddings are stored using pgvector.
 
+Semantic answer caching:
+
+- question answers may use user-scoped semantic cache per `docs/semantic-caching.md`
+- cache usage must preserve database-first constraints and provenance integrity
+
 ---
 
 # Object Storage
