@@ -14,6 +14,7 @@ from app.services.memory_ingestion import (
 )
 from app.services.semantic_cache import invalidate_user_cache
 from app.services.attachments import mark_attachment_persisted, validate_signed_attachment_url
+from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
 
@@ -36,6 +37,29 @@ async def upload_voice_memory(
         transcript = audio.filename or "voice memory"
 
     proposal = extract_memory_proposal(transcript)
+    output_text = (
+        proposal.memory_type
+        + "|"
+        + str(proposal.structured_data)
+        + "|"
+        + "|".join(proposal.clarification_questions)
+    )
+    token_in, token_out, estimated_cost = estimate_tokens_and_cost(
+        input_text=proposal.transcript,
+        output_text=output_text,
+    )
+    record_ai_usage(
+        use_case="memory_extraction",
+        provider="openai",
+        model_id="gpt-4o-mini",
+        model_version="mvp-v1",
+        prompt_version="memory_extraction_v1",
+        user_plan=plan_for_role(current_user.role),
+        token_in=token_in,
+        token_out=token_out,
+        estimated_cost=estimated_cost,
+    )
+
     ai_state = "ready_to_confirm" if proposal.needs_confirmation else "needs_clarification"
     return MemoryProposalResponse(
         transcript=proposal.transcript,

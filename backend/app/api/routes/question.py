@@ -15,6 +15,7 @@ from app.services.semantic_cache import (
     put_cached_answer,
 )
 from app.services.user_preferences import get_preferred_language
+from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
 
 router = APIRouter(prefix="/api/v1", tags=["Voice"])
 
@@ -64,6 +65,21 @@ async def ask_text_question(
         )
 
     answer = format_answer_from_structured_result(structured, preferred_language)
+    token_in, token_out, estimated_cost = estimate_tokens_and_cost(
+        input_text=payload.question,
+        output_text=answer,
+    )
+    record_ai_usage(
+        use_case="answer_generation",
+        provider="openai",
+        model_id="gpt-4o-mini",
+        model_version="mvp-v1",
+        prompt_version="answer_generation_v1",
+        user_plan=plan_for_role(current_user.role),
+        token_in=token_in,
+        token_out=token_out,
+        estimated_cost=estimated_cost,
+    )
     if structured.confidence in {"high", "medium"}:
         put_cached_answer(
             tenant_id=current_user.tenant_id,

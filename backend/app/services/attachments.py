@@ -8,6 +8,7 @@ from typing import Any
 from uuid import uuid4
 
 from app.core.auth import AuthenticatedUser
+from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
 from app.services.memory_ingestion import extract_memory_proposal
 
 ALLOWED_ATTACHMENT_CONTENT_TYPES = {
@@ -130,6 +131,28 @@ def create_attachment(
 
     ocr_text_preview = _fake_ocr_preview(file_name, content)
     proposal = extract_memory_proposal(ocr_text_preview)
+    output_text = (
+        proposal.memory_type
+        + "|"
+        + str(proposal.structured_data)
+        + "|"
+        + "|".join(proposal.clarification_questions)
+    )
+    token_in, token_out, estimated_cost = estimate_tokens_and_cost(
+        input_text=ocr_text_preview,
+        output_text=output_text,
+    )
+    record_ai_usage(
+        use_case="receipt_ocr_extraction",
+        provider="openai",
+        model_id="gpt-4o-mini",
+        model_version="mvp-v1",
+        prompt_version="receipt_extraction_v1",
+        user_plan=plan_for_role(user.role),
+        token_in=token_in,
+        token_out=token_out,
+        estimated_cost=estimated_cost,
+    )
     status = "proposal_ready"
     ocr_status = "completed"
     lifecycle_states.append("proposal_ready")

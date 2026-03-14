@@ -36,6 +36,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Aligned AI UX backend contract for memory flow: one clarification question per turn, explicit AI states (`needs_clarification`, `ready_to_confirm`, `saved`), confirmation actions (`Confirm/Modify/Cancel`), source context (`voice`), and editable absolute datetime in proposal response, with regression tests.
 - Added attachments E2E baseline: protected `POST /api/v1/attachments` for receipt-photo upload (image-only validation), deterministic OCR-to-memory-proposal response, explicit confirm-only persistence gate, and authorized signed-URL validation on memory save with attachment lifecycle transition to `persisted`.
 - Added attachment lifecycle state-machine verification coverage end-to-end with deterministic status history (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted`) plus OCR failure branch (`failed`, `ocr.processing_failed`) and persistence blocking for non-ready attachments.
+- Activated runtime AI telemetry for token usage and estimated cost in LLMOps metrics: added per-use-case counters in `/metrics`, structured `ai_usage_recorded` logs, and instrumentation for memory extraction, receipt OCR extraction, and answer generation flows with automated regression coverage.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
