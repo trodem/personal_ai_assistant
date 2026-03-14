@@ -96,7 +96,14 @@ async def save_memory(
                 code="auth.forbidden",
                 message="Attachment signed URL is not authorized for this user.",
             )
-        mark_attachment_persisted(record)
+        try:
+            mark_attachment_persisted(record)
+        except ValueError:
+            raise AppError(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                code="attachment.not_ready_for_persistence",
+                message="Attachment is not in a persistable lifecycle state.",
+            ) from None
         payload.structured_data["attachment_id"] = record.id
 
     record = {

@@ -65,6 +65,10 @@ class AttachmentFlowE2ETests(unittest.TestCase):
         persisted_attachment = get_attachment(attachment_id)
         self.assertIsNotNone(persisted_attachment)
         self.assertEqual(persisted_attachment.status, "persisted")
+        self.assertEqual(
+            persisted_attachment.lifecycle_states,
+            ["uploaded", "ocr_processing", "proposal_ready", "confirmed", "persisted"],
+        )
 
     def test_attachment_rejects_pdf_and_non_images(self) -> None:
         upload = self.client.post(
@@ -74,6 +78,37 @@ class AttachmentFlowE2ETests(unittest.TestCase):
         )
         self.assertEqual(upload.status_code, 422)
         self.assertEqual(upload.json()["error"]["code"], "storage.unsupported_file_type")
+
+    def test_attachment_ocr_failure_branch_blocks_persistence(self) -> None:
+        upload = self.client.post(
+            "/api/v1/attachments",
+            headers=self.headers,
+            files={"file": ("fail-ocr.jpg", b"FORCE_OCR_FAIL", "image/jpeg")},
+        )
+        self.assertEqual(upload.status_code, 200)
+        attachment_payload = upload.json()
+        self.assertEqual(attachment_payload["status"], "failed")
+        self.assertEqual(attachment_payload["ocr_status"], "failed")
+        self.assertEqual(attachment_payload["error_code"], "ocr.processing_failed")
+        signed_url = attachment_payload["file_url"]
+
+        blocked = self.client.post(
+            "/api/v1/memory",
+            headers=self.headers,
+            json={
+                "memory_type": "expense_event",
+                "raw_text": "Failed OCR receipt",
+                "structured_data": {"item": "bread", "amount": 3.0, "attachment_url": signed_url},
+                "confirmed": True,
+            },
+        )
+        self.assertEqual(blocked.status_code, 422)
+        self.assertEqual(blocked.json()["error"]["code"], "attachment.not_ready_for_persistence")
+
+        failed_attachment = get_attachment(attachment_payload["id"])
+        self.assertIsNotNone(failed_attachment)
+        self.assertEqual(failed_attachment.status, "failed")
+        self.assertEqual(failed_attachment.lifecycle_states, ["uploaded", "ocr_processing", "failed"])
 
 
 if __name__ == "__main__":

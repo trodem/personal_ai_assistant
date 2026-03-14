@@ -47,5 +47,6 @@ async def upload_attachment(
         status=record.status,  # type: ignore[arg-type]
         ocr_status=record.ocr_status,  # type: ignore[arg-type]
         ocr_text_preview=record.ocr_text_preview,
+        error_code=record.error_code,
         memory_proposal=record.memory_proposal,
     )

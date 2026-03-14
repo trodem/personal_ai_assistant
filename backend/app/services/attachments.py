@@ -29,6 +29,8 @@ class AttachmentRecord:
     ocr_status: str
     ocr_text_preview: str
     signed_url: str
+    error_code: str | None
+    lifecycle_states: list[str]
     memory_proposal: dict[str, Any]
 
 
@@ -99,16 +101,38 @@ def create_attachment(
     user: AuthenticatedUser,
 ) -> AttachmentRecord:
     attachment_id = str(uuid4())
-    # Deterministic lifecycle progression for MVP happy path.
-    status = "uploaded"
-    ocr_status = "pending"
+    lifecycle_states = ["uploaded", "ocr_processing"]
     status = "ocr_processing"
     ocr_status = "processing"
+
+    fail_ocr = "fail-ocr" in file_name.lower() or b"FORCE_OCR_FAIL" in content
+    if fail_ocr:
+        status = "failed"
+        ocr_status = "failed"
+        lifecycle_states.append("failed")
+        signed_url = build_signed_attachment_url(attachment_id, user)
+        record = AttachmentRecord(
+            id=attachment_id,
+            tenant_id=user.tenant_id,
+            user_id=user.user_id,
+            file_type=file_type,
+            file_name=file_name,
+            status=status,
+            ocr_status=ocr_status,
+            ocr_text_preview="",
+            signed_url=signed_url,
+            error_code="ocr.processing_failed",
+            lifecycle_states=lifecycle_states,
+            memory_proposal={},
+        )
+        _ATTACHMENTS_BY_ID[attachment_id] = record
+        return record
 
     ocr_text_preview = _fake_ocr_preview(file_name, content)
     proposal = extract_memory_proposal(ocr_text_preview)
     status = "proposal_ready"
     ocr_status = "completed"
+    lifecycle_states.append("proposal_ready")
 
     signed_url = build_signed_attachment_url(attachment_id, user)
     record = AttachmentRecord(
@@ -121,6 +145,8 @@ def create_attachment(
         ocr_status=ocr_status,
         ocr_text_preview=ocr_text_preview,
         signed_url=signed_url,
+        error_code=None,
+        lifecycle_states=lifecycle_states,
         memory_proposal={
             "transcript": proposal.transcript,
             "memory_type": proposal.memory_type,
@@ -135,8 +161,14 @@ def create_attachment(
 
 
 def mark_attachment_persisted(record: AttachmentRecord) -> None:
+    if record.status == "failed":
+        raise ValueError("Attachment is in failed state.")
+    if record.status != "proposal_ready":
+        raise ValueError("Attachment is not ready for persistence.")
     record.status = "confirmed"
+    record.lifecycle_states.append("confirmed")
     record.status = "persisted"
+    record.lifecycle_states.append("persisted")
 
 
 def get_attachment(attachment_id: str) -> AttachmentRecord | None:
