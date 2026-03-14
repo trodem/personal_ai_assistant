@@ -1,0 +1,337 @@
+openapi: 3.0.3
+info:
+  title: Personal AI Assistant API
+  version: 1.0.0
+servers:
+  - url: https://api.assistant.app
+  - url: http://localhost:8000
+
+tags:
+  - name: Voice
+  - name: Memory
+  - name: Attachments
+  - name: Dashboard
+
+paths:
+  /voice/memory:
+    post:
+      tags: [Voice]
+      summary: Upload voice memory
+      description: Upload audio for transcription, extraction, and confirmation proposal.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Transcription and extracted memory proposal.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryProposalResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /voice/question:
+    post:
+      tags: [Voice]
+      summary: Upload voice question
+      description: Upload audio and receive an answer based on stored memories.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [audio]
+              properties:
+                audio:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Assistant response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /memory:
+    post:
+      tags: [Memory]
+      summary: Save confirmed memory
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveMemoryRequest"
+      responses:
+        "200":
+          description: Memory stored.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /memory/{id}:
+    delete:
+      tags: [Memory]
+      summary: Delete memory
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Memory deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteMemoryResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: Memory not found.
+
+  /memories:
+    get:
+      tags: [Memory]
+      summary: List user memories
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: memory_type
+          schema:
+            $ref: "#/components/schemas/MemoryType"
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+            default: 50
+      responses:
+        "200":
+          description: List of memories.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/MemoryRecord"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+  /attachments:
+    post:
+      tags: [Attachments]
+      summary: Upload receipt photo attachment
+      description: Accepts only receipt photos. PDF and non-image files are rejected.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Allowed content types are `image/jpeg`, `image/png`, `image/webp`, `image/heic`.
+                memory_id:
+                  type: string
+                  format: uuid
+      responses:
+        "200":
+          description: Attachment stored.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+
+  /dashboard:
+    get:
+      tags: [Dashboard]
+      summary: Dashboard statistics
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Dashboard data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+components:
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      required: false
+      schema:
+        type: string
+      description: Optional key to make POST operations idempotent on client retries.
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    Unauthorized:
+      description: Unauthorized.
+    ValidationError:
+      description: Validation error.
+
+  schemas:
+    MemoryType:
+      type: string
+      enum:
+        - expense_event
+        - inventory_event
+        - loan_event
+        - note
+        - document
+
+    SaveMemoryRequest:
+      type: object
+      required: [memory_type, raw_text, structured_data, confirmed]
+      properties:
+        memory_type:
+          $ref: "#/components/schemas/MemoryType"
+        raw_text:
+          type: string
+        structured_data:
+          type: object
+          additionalProperties: true
+        confirmed:
+          type: boolean
+          description: Must be true. Memory cannot be persisted otherwise.
+      description: >
+        Persistence contract: required fields in `structured_data` depend on `memory_type`.
+        If missing, server must return 422 with `memory.missing_required_fields`.
+
+    MemoryRecord:
+      type: object
+      required: [id, memory_type, raw_text, structured_data, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        memory_type:
+          $ref: "#/components/schemas/MemoryType"
+        raw_text:
+          type: string
+        structured_data:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+          format: date-time
+
+    MemoryProposalResponse:
+      type: object
+      required: [transcript, memory_type, structured_data, needs_confirmation]
+      properties:
+        transcript:
+          type: string
+        memory_type:
+          $ref: "#/components/schemas/MemoryType"
+        structured_data:
+          type: object
+          additionalProperties: true
+        clarification_questions:
+          type: array
+          items:
+            type: string
+        missing_required_fields:
+          type: array
+          items:
+            type: string
+        needs_confirmation:
+          type: boolean
+
+    QuestionResponse:
+      type: object
+      required: [answer]
+      properties:
+        answer:
+          type: string
+        confidence:
+          type: string
+          enum: [high, medium, low]
+        source_memory_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    AttachmentResponse:
+      type: object
+      required: [id, file_url, file_type]
+      properties:
+        id:
+          type: string
+          format: uuid
+        file_url:
+          type: string
+        file_type:
+          type: string
+
+    DashboardResponse:
+      type: object
+      additionalProperties: true
+
+    DeleteMemoryResponse:
+      type: object
+      required: [deleted]
+      properties:
+        deleted:
+          type: boolean

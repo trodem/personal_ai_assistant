@@ -1,0 +1,265 @@
+# System Architecture
+
+This document describes the technical architecture of the Personal AI Assistant.
+
+The system is designed to be:
+
+* scalable
+* modular
+* cloud-native
+* AI-ready
+
+---
+
+# High-Level Architecture
+
+The platform consists of five main components:
+
+1. Mobile Application (Flutter)
+2. API Backend
+3. AI Processing Layer
+4. Database Layer
+5. Storage Layer
+
+System overview:
+
+Mobile App
+↓
+API Backend
+↓
+AI Pipeline
+↓
+Database + Vector Search
+↓
+Object Storage
+
+---
+
+# Mobile Application
+
+Technology:
+
+Flutter + Dart
+
+Responsibilities:
+
+* voice recording
+* user interface
+* memory confirmation
+* displaying answers
+* dashboard visualization
+* authentication
+
+Main screens:
+
+Home
+Memory recording
+Question recording
+Dashboard
+Memory list
+
+Voice interaction uses **push-to-talk recording**.
+
+---
+
+# API Backend
+
+Technology:
+
+Python (FastAPI)
+
+Responsibilities:
+
+* API endpoints
+* authentication validation
+* AI orchestration
+* database queries
+* memory processing
+* attachment uploads
+
+Example endpoints:
+
+POST /voice/memory
+POST /voice/question
+POST /memory
+GET /memories
+DELETE /memory/{id}
+
+The backend controls all AI interactions.
+
+---
+
+# AI Processing Layer
+
+The AI system follows a multi-stage pipeline.
+
+Voice pipeline:
+
+Audio
+↓
+Whisper transcription
+↓
+Memory extraction
+↓
+Clarification
+↓
+Confirmation
+↓
+Database storage
+
+Question pipeline:
+
+Audio question
+↓
+Whisper transcription
+↓
+Intent detection
+↓
+Database query
+↓
+LLM response generation
+
+AI is used only for language understanding and natural responses.
+
+Calculations are always handled by the backend.
+
+---
+
+# Database Layer
+
+Technology:
+
+PostgreSQL
+
+Extension:
+
+pgvector
+
+Tables include:
+
+users
+memories
+memory_versions
+attachments
+embeddings
+
+PostgreSQL handles:
+
+structured queries
+aggregations
+user isolation
+vector search
+
+---
+
+# Vector Search
+
+Vector search enables semantic retrieval of memories.
+
+Example:
+
+User question:
+
+"Where did I put the drill?"
+
+The system generates an embedding and retrieves similar memories.
+
+Embeddings are stored using pgvector.
+
+---
+
+# Object Storage
+
+Files are stored in cloud object storage.
+
+Examples:
+
+S3-compatible storage
+Cloudflare R2
+Supabase storage
+
+Stored files include:
+
+photos
+receipts
+receipt-photo attachments only (no PDF/documents in MVP)
+
+The database stores only file URLs.
+
+---
+
+# Authentication
+
+Authentication is handled by an external identity provider.
+
+Recommended options:
+
+Clerk
+Auth0
+Supabase Auth
+
+Responsibilities:
+
+user registration
+login
+session validation
+subscription status
+
+The backend trusts the authentication provider.
+
+---
+
+# Subscription and Billing
+
+Subscriptions are required for premium features.
+
+Recommended provider:
+
+Stripe
+
+Responsibilities:
+
+subscription management
+payment processing
+billing events
+plan upgrades
+
+The backend checks subscription status before allowing premium features.
+
+---
+
+# Scalability Strategy
+
+The architecture supports scaling through:
+
+stateless backend services
+cloud object storage
+PostgreSQL scaling
+vector indexing
+
+AI workloads are handled by external AI APIs.
+
+---
+
+# Security Principles
+
+Key security rules:
+
+users can access only their own data
+all API requests require authentication
+files are stored securely in cloud storage
+AI cannot modify data without confirmation
+
+Sensitive operations require backend validation.
+
+---
+
+# Future Infrastructure Improvements
+
+Future versions may include:
+
+background job workers
+caching layer
+AI model routing
+analytics pipeline
+multi-region deployment

@@ -1,0 +1,465 @@
+# Personal AI Assistant - Execution TODO (World-Class MVP)
+
+This TODO is designed for real execution: atomic tasks, clear dependencies, integrated quality.
+
+## Agent Operating Contract (non-negotiable)
+- Work only on the first incomplete task in this file unless the user explicitly overrides.
+- Use document routing from `docs/AGENTS.md` before making implementation decisions.
+- If documents conflict, stop and ask the user before coding.
+- Do not modify architecture, memory model, or security rules unless explicitly requested.
+- Run end-of-milestone mini-audit before starting the next milestone.
+- Treat missing prerequisites as blockers, not assumptions.
+
+## Execution protocol (always-on)
+- Follow milestone order unless explicitly overridden.
+- Complete only the first incomplete item of the active milestone.
+- Respect strict dependency order: backend + DB first, then AI pipeline and API contracts, then auth enforcement, then user-facing features.
+- Use a Docker-first development strategy: run backend + database + storage locally in containers whenever feasible.
+- Use external SaaS only where local parity is not practical (`OpenAI`, `Clerk`, later `Stripe`).
+- Keep security controls enabled by default.
+- Never introduce arbitrary command execution.
+- Keep architecture modular; avoid monolithic files.
+- Keep docs and implementation aligned in the same milestone.
+
+## Global quality gates (single Definition of Done)
+- [ ] `docker compose config` passes.
+- [ ] Required services are `healthy` in `docker compose ps`.
+- [ ] Lint/tests/build pass for touched components.
+- [ ] At least one runtime smoke check passes (not only unit tests).
+- [ ] `.env.example`, compose config, and setup docs are aligned.
+- [ ] Every feature includes automated tests (unit + integration where needed).
+- [ ] No merge without green CI.
+- [ ] Structured logging + metrics + consistent error handling are active.
+- [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
+- [ ] For auth changes: Clerk login/token -> protected API call succeeds (`401` without token, `200` with valid token).
+- [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
+- [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
+- [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
+- [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
+- [ ] For question-engine changes: behavior is aligned with `docs/query-contract.md`.
+- [ ] For attachment changes: `receipt photo upload -> object storage persistence -> authorized access via signed URL` is verified.
+- [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
+- [ ] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
+- [ ] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
+- [ ] Test scope is aligned with `docs/testing-strategy.md` for touched components.
+- [ ] Environment/config choices are aligned with `docs/environment-matrix.md`.
+- [ ] Security-sensitive changes are checked against `docs/security-threat-model.md`.
+
+---
+
+## Founder/Developer Prerequisites (accounts and access)
+
+Complete this checklist before implementation to avoid setup blockers.
+
+### Required accounts (MVP)
+- [ ] Git hosting account and repository access configured.
+- [ ] OpenAI account with active API billing and API key.
+- [ ] Authentication provider account (Clerk recommended) with app created.
+- [ ] PostgreSQL environment ready:
+- [ ] local Docker Postgres for development
+- [ ] managed Postgres for staging (recommended)
+- [ ] Object storage ready:
+- [ ] local Docker MinIO for development (recommended)
+- [ ] managed storage for staging/prod (S3-compatible, Cloudflare R2, or Supabase Storage)
+- [ ] Stripe account with test mode enabled (for billing phase).
+
+### Recommended accounts (to reduce risk)
+- [ ] Error monitoring account (e.g., Sentry or equivalent).
+- [ ] Uptime/observability platform account (metrics, dashboards, alerts).
+- [ ] CI platform connected to repository (GitHub Actions or equivalent).
+- [ ] Secret manager available for staging/production credentials.
+
+### Access and security setup
+- [ ] Enable MFA on all critical services (Git, OpenAI, auth provider, cloud, Stripe).
+- [ ] Create separate credentials for `dev`, `staging`, and `prod`.
+- [ ] Restrict API keys by environment and rotate keys policy documented.
+- [ ] Store secrets only in env/secret manager, never in source control.
+- [ ] Define team access roles (owner/admin/developer/read-only).
+
+### Environment readiness checks
+- [ ] `.env.example` completed with all required variables for local startup.
+- [ ] Clerk test users and token validation path verified.
+- [ ] OpenAI key validated with a minimal API test call.
+- [ ] Postgres connection, migration run, and rollback test completed.
+- [ ] Object storage upload/download test completed.
+- [ ] Stripe test webhook delivery validated locally.
+
+### Budget and limits safeguards
+- [ ] Set monthly spending cap for OpenAI usage.
+- [ ] Configure usage alerts for AI spend spikes.
+- [ ] Set free-tier limits to prevent runaway costs during tests.
+- [ ] Define ownership of billing notifications and incident escalation.
+
+### Legal and operational minimum
+- [ ] Draft privacy policy baseline (data stored, retention, deletion process).
+- [ ] Draft terms baseline for MVP users.
+- [ ] Define support contact and incident response owner.
+
+### Day 0 (owner checklist, 2-4 hours)
+- [ ] Create/verify accounts: OpenAI, Clerk, Postgres target, object storage.
+- [ ] Enable MFA everywhere and store recovery codes securely.
+- [ ] Generate dev-only keys/secrets and place them in local secret storage.
+- [ ] Set OpenAI budget cap and spend alerts.
+- [ ] Run minimal connectivity checks (OpenAI test call, DB connect, storage upload).
+- [ ] Mark this section done only when no external dependency remains blocked.
+
+### Day 1 (project readiness, 2-4 hours)
+- [ ] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
+- [ ] Validate `docker compose config` and ensure services become healthy.
+- [ ] Ensure local Docker stack includes at minimum: `backend`, `postgres+pgvector`, `minio`.
+- [ ] Verify `.env.example` completeness against actual runtime needs.
+- [ ] Execute one full smoke path: backend boot -> health endpoints -> DB readiness.
+- [ ] Record all setup commands in `README.md` so setup is reproducible.
+
+### Day 0 Operational Registry (fill this once, then maintain)
+
+Use this as your single source of truth for external dependencies and ownership.
+
+| Service | Purpose | Environment(s) | Console URL | Secret/Key Name | Owner | Backup Owner | Status | Last Verified | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+| OpenAI | LLM + Whisper APIs | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Billing enabled + spend cap set |
+| Clerk | Authentication | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | JWT template and webhook configured |
+| PostgreSQL (managed) | Primary DB | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Backups + restore policy defined |
+| PostgreSQL (local Docker) | Local development DB | dev | local | n/a | TODO | TODO | planned | TODO | pgvector enabled |
+| MinIO (local Docker) | Local object storage for receipt photo attachments | dev | local | TODO | TODO | TODO | planned | TODO | S3-compatible endpoint configured |
+| Object Storage (managed) | Receipt photo attachments | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Signed URL strategy decided |
+| Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |
+| CI Platform | Build/test automation | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Required checks enabled |
+| Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set |
+
+### Day 0 Credentials and Policy Checklist
+- [ ] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).
+- [ ] Secret rotation cadence defined (recommended: every 90 days).
+- [ ] Access revocation process defined for team offboarding.
+- [ ] Incident contact list documented (primary + backup).
+- [ ] Billing alert thresholds defined (warning/critical).
+
+---
+
+## P0 - Product Lock and Setup (blocking)
+
+- [ ] Confirm final stack: Flutter, FastAPI, PostgreSQL, pgvector, Whisper, Clerk, Stripe.
+- [ ] Freeze MVP scope and non-goals in one source of truth document.
+- [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
+- [ ] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
+- [ ] Define review cadence for governance docs (recommended: at each milestone mini-audit).
+- [ ] Define MVP KPIs:
+- [ ] `memory_save_success_rate >= 95%`
+- [ ] `avg_question_latency_p95 <= 3s` (text query only)
+- [ ] `voice_pipeline_latency_p95 <= 12s`
+- [ ] `extraction_confirmation_rate >= 85%`
+- [ ] `time_to_first_successful_memory <= 2 minutes` (new user onboarding success)
+- [ ] Define `dev/staging/prod` environments and required variables.
+- [ ] Set up repository quality gates: lint, format, type check, test.
+- [ ] Set up baseline CI (build + test + lightweight security scan).
+
+---
+
+## P1 - Backend Foundation
+
+- [ ] Create modular FastAPI structure (`api`, `services`, `repositories`, `domain`).
+- [ ] Implement typed config management (env validation).
+- [ ] Set up JSON logging with `request_id` and `user_id` (when available).
+- [ ] Add request tracing (`trace_id`) to support cross-service debugging.
+- [ ] Add error-handling middleware with standard error codes.
+- [ ] Define asynchronous job boundary (API request path vs background worker path).
+- [ ] Health endpoints:
+- [ ] `GET /health/live`
+- [ ] `GET /health/ready`
+- [ ] Backend Dockerfile + local `docker-compose` with Postgres.
+- [ ] Backend startup smoke test + health checks.
+
+---
+
+## P2 - Database and Migrations
+
+- [ ] Set up migrations (Alembic or equivalent).
+- [ ] Enable `pgvector` extension.
+- [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
+- [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
+- [ ] Implement memory versioning strategy (`memory_versions` append-only).
+- [ ] Enforce per-user isolation policy across all repository queries.
+- [ ] Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries.
+- [ ] Add soft-delete + audit trail strategy for sensitive memory operations (update/delete).
+- [ ] Add `structured_data_schema_version` support for forward-compatible payload evolution.
+- [ ] Create realistic local seed dataset for tests.
+- [ ] Test migration up/down in CI.
+
+---
+
+## P3 - AI Memory Ingestion Pipeline
+
+- [ ] Endpoint `POST /voice/memory` with robust audio upload handling.
+- [ ] Whisper integration with timeout and controlled retry.
+- [ ] Versioned extraction prompt (`specs/memory-extraction.md`).
+- [ ] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
+- [ ] Enforce required fields per `memory_type` before persistence (`required_by_type` contract).
+- [ ] Typed + semantic field extraction (`who/what/where/when/why/how`).
+- [ ] Apply default `when = current timestamp` when user does not provide explicit date/time.
+- [ ] Normalize relative time expressions (`today`, `yesterday`, etc.) to absolute date/time before confirmation and save.
+- [ ] Clarification engine for missing fields (configurable max turns).
+- [ ] Confirmation contract: `confirm/modify/cancel` before persistence.
+- [ ] Persist memory only after explicit confirmation.
+- [ ] Move expensive AI tasks (transcription/embeddings when applicable) to background jobs where latency requires it.
+- [ ] Generate embeddings only for confirmed create/update events.
+- [ ] Capture per-request AI telemetry (model, token usage, estimated cost, latency).
+- [ ] Add strict anti-hallucination guardrails for extraction output schema.
+- [ ] End-to-end test: voice -> extraction -> confirmation -> storage.
+
+---
+
+## P4 - API Endpoints and Contracts
+
+- [ ] Implement and wire endpoint handlers:
+- [ ] `POST /voice/memory`
+- [ ] `POST /voice/question`
+- [ ] `POST /memory`
+- [ ] `GET /memories`
+- [ ] `DELETE /memory/{id}`
+- [ ] `POST /attachments`
+- [ ] `GET /dashboard`
+- [ ] Ensure request/response schemas align with `specs/api.yaml`.
+- [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
+- [ ] Add API contract tests for core success/error responses.
+- [ ] Add consistent error model and status code mapping.
+
+---
+
+## P5 - Auth and Access Control
+
+- [ ] Integrate Clerk JWT validation in backend.
+- [ ] Add mandatory auth middleware for protected endpoints.
+- [ ] Auto-provision user on first access.
+- [ ] Map token claims -> internal `user_id`.
+- [ ] Negative auth tests:
+- [ ] missing token
+- [ ] expired token
+- [ ] valid token but cross-user resource access
+
+---
+
+## P6 - Query Engine (Database-First)
+
+- [ ] Align question behaviors and edge cases with `docs/query-contract.md`.
+- [ ] Equivalent text-query endpoint for testing and fallback.
+- [ ] Intent detection oriented to SQL queries/aggregations.
+- [ ] Enforce strict rule: calculations in backend, never in LLM.
+- [ ] Implement deterministic rule for "latest/last": `ORDER BY when DESC LIMIT 1`.
+- [ ] Implement ambiguity handling with clarification question before final answer.
+- [ ] Implement no-result fallback response (no fabrication).
+- [ ] Define and enforce multi-currency policy (no silent conversion; explicit aggregation rules by currency).
+- [ ] Core aggregate queries:
+- [ ] expenses by period/category/object
+- [ ] loan balances (who owes what)
+- [ ] inventory state from events
+- [ ] Semantic retrieval with pgvector for open-ended questions.
+- [ ] Minimal context builder to reduce token usage.
+- [ ] Natural-language response generation from structured backend result.
+- [ ] Enforce retrieval priority: structured SQL first, semantic vector fallback.
+- [ ] Persist question-path AI telemetry for per-user/per-feature cost visibility.
+- [ ] Add answer confidence/provenance payload (source memory IDs used for response).
+- [ ] Regression tests for key questions from `README.md`.
+
+---
+
+## P7 - Flutter Mobile App
+
+- [ ] Bootstrap Flutter app with clean architecture (state management decided and fixed).
+- [ ] Login/logout with Clerk.
+- [ ] First-run onboarding focused on fast first value (first memory + first question).
+- [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
+- [ ] Push-to-talk memory capture.
+- [ ] Memory confirmation flow with `Confirm / Modify / Cancel` only.
+- [ ] Implement `Modify` as guided field editor by memory type.
+- [ ] Ask Assistant (voice + text).
+- [ ] Show absolute editable datetime in confirmation (`YYYY-MM-DD HH:mm`).
+- [ ] Implement one-question-per-turn clarification UX.
+- [ ] Memory timeline with basic filters.
+- [ ] MVP dashboard screen.
+- [ ] User-friendly error handling (retry, offline state, timeout).
+- [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
+- [ ] No-result UI: clear message + CTA to "Add Memory".
+- [ ] Widget tests on critical flows.
+
+---
+
+## P8 - Dashboard and Insights
+
+- [ ] Endpoint `GET /dashboard` with core metrics.
+- [ ] MVP blocks:
+- [ ] current-month expenses vs previous month
+- [ ] latest memory events
+- [ ] open loans
+- [ ] summarized inventory state
+- [ ] Dashboard caching (short TTL) to reduce cost.
+- [ ] Numeric consistency tests: dashboard vs raw DB queries.
+
+---
+
+## P9 - Attachments
+
+- [ ] Integrate S3-compatible object storage.
+- [ ] Endpoint `POST /attachments` with strict file type/size validation (receipt photos only).
+- [ ] Link attachment <-> memory with user ownership checks.
+- [ ] Temporary signed URLs for file access.
+- [ ] Minimum support: receipt photo images only (`jpg`, `jpeg`, `png`, `webp`, `heic`).
+- [ ] Explicitly reject `pdf` and every non-image content type on upload.
+- [ ] Basic malware scanning (if available in selected provider).
+- [ ] Upload/download authorization tests.
+
+---
+
+## P10 - Monetization and Limits
+
+- [ ] Integrate Stripe checkout + backend webhook handling.
+- [ ] Implement `free` and `premium` plans in backend authorization logic.
+- [ ] Enforce free plan limits:
+- [ ] monthly memories
+- [ ] monthly AI queries
+- [ ] attachment storage
+- [ ] Track per-user usage (monthly + cumulative).
+- [ ] Apply per-user and per-endpoint rate limiting by subscription plan.
+- [ ] Graceful degradation when limits are exceeded.
+- [ ] Billing webhook and plan-switch tests.
+
+---
+
+## P11 - AI Cost Control Optimization (mandatory before go-live)
+
+- [ ] Validate and harden per-request tracking quality: model, input/output tokens, estimated cost.
+- [ ] Internal dashboard for cost per user and per feature.
+- [ ] Automatic alerts for daily cost spikes.
+- [ ] Prompt budget with hard token cap.
+- [ ] Cache low-risk repeated responses.
+- [ ] Model routing policy (cost-efficient default, escalation for complex cases).
+- [ ] Add circuit breaker/fallback behavior for AI provider outages and elevated error rates.
+- [ ] Load-test simulation to estimate monthly cost.
+
+---
+
+## P12 - Security, Privacy, Compliance
+
+- [ ] Encryption in transit (TLS) and at rest (DB + object storage).
+- [ ] Harden input validation (audio/file/json) and rate limiting.
+- [ ] Audit logs for sensitive operations (delete, export, billing changes).
+- [ ] User privacy functions:
+- [ ] data export
+- [ ] account and data deletion
+- [ ] explicit data retention policy
+- [ ] Serious secret management (no secrets in repo/logs).
+- [ ] Minimal threat model + OWASP API Top 10 checklist.
+- [ ] Define GDPR-ready privacy baseline (consent, data export/delete SLA, retention policy enforcement).
+- [ ] Lightweight pre-release security test (manual + automated tooling).
+
+---
+
+## P13 - Production Readiness and Launch
+
+- [ ] Automated staging deployment.
+- [ ] Automated post-deploy smoke tests.
+- [ ] Full monitoring:
+- [ ] uptime
+- [ ] endpoint latency
+- [ ] error rate
+- [ ] job failure rate
+- [ ] SLI dashboard with error budget burn rate for core user journeys.
+- [ ] Automatic backups and tested restore procedure.
+- [ ] Incident runbook (AI outage, DB outage, storage outage).
+- [ ] Validate incident procedures against `docs/operations-runbook.md` with at least one tabletop simulation.
+- [ ] Define SLOs and error budget policy for API and voice pipelines.
+- [ ] Define and test backup/restore targets (`RPO`/`RTO`) with evidence.
+- [ ] Feature flags for controlled rollout.
+- [ ] Private beta with weekly feedback loop.
+- [ ] Signed go-live checklist.
+
+---
+
+## Continuous Quality Backlog (always active)
+
+- [ ] API contract validation: `specs/api.yaml` vs implementation.
+- [ ] Realistic multilingual (IT/EN) extraction test datasets.
+- [ ] Prompt evaluation suite with precision/recall benchmarks.
+- [ ] Hallucination and safety eval suite for ambiguous user questions.
+- [ ] Performance budget and quarterly profiling.
+- [ ] Truly tested multi-provider AI plan (not only abstract design).
+- [ ] Planned technical debt reduction in every sprint.
+- [ ] Record architecture-level tradeoffs as ADRs in `ADR/`.
+- [ ] Maintain golden dataset + automated eval harness for extraction and question-answer regressions.
+
+---
+
+## Recommended MVP Milestones
+
+- [ ] M1: P0-P3 complete (reliable foundations).
+- [ ] M2: P4-P6 complete (API + auth + question engine end-to-end).
+- [ ] M3: P7-P9 complete (mobile + dashboard + attachments).
+- [ ] M4: P10-P13 complete (billing + optimization + security + production).
+
+### Mandatory End-of-Milestone Mini-Audit
+- [ ] Confirm implementation is aligned with `PROJECT_CONTEXT.md`, `docs/`, and `specs/`.
+- [ ] Confirm no architecture decision was violated.
+- [ ] Confirm security controls and strict `user_id` isolation are still enforced.
+- [ ] Confirm touched API behavior matches `specs/api.yaml`.
+- [ ] Document open gaps, risks, and blockers before starting the next milestone.
+
+---
+
+## Sprint 1 Execution Plan (5 working days)
+
+Goal: deliver a production-grade backend foundation plus DB baseline (P0-P2 first slice).
+
+### Day 1 - Foundation decisions and repo baseline
+- [ ] Finalize P0 stack decisions in root docs already present (no architecture changes).
+- [ ] Create implementation directories (`backend/`, `mobile/`, `infra/`, `scripts/`) following `PROJECT_FILE_STRUCTURE.md`.
+- [ ] Initialize backend FastAPI app skeleton with modular packages.
+- [ ] Add baseline tooling (`ruff`/`black`/`mypy` or equivalent) and test runner.
+- [ ] Add `.env.example` with validated required vars for local startup.
+- [ ] Deliverable: backend starts locally and `GET /health/live` returns `200`.
+
+### Day 2 - Backend reliability baseline
+- [ ] Implement typed settings loader with fail-fast env validation.
+- [ ] Add structured JSON logging and request/trace IDs middleware.
+- [ ] Add centralized error handling with stable API error format.
+- [ ] Add readiness endpoint `GET /health/ready` checking DB connectivity contract (stub allowed if DB not wired yet).
+- [ ] Add smoke test script for startup + health checks.
+- [ ] Deliverable: startup smoke test green in local environment.
+
+### Day 3 - Database and migrations baseline
+- [ ] Add Postgres service + pgvector-enabled DB image in `docker-compose`.
+- [ ] Set up migration framework and first migration baseline.
+- [ ] Create core tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`.
+- [ ] Add key indexes and constraints for `user_id`, `created_at`, `memory_type`.
+- [ ] Add repository layer skeleton with mandatory per-user filtering contract.
+- [ ] Deliverable: migrations run up/down cleanly and schema matches docs.
+
+### Day 4 - Data access and robustness baseline
+- [ ] Add DB repository patterns with strict `user_id` scoping hooks.
+- [ ] Add idempotency key strategy draft for write endpoints.
+- [ ] Add migration + data integrity smoke checks.
+- [ ] Add basic rate-limit strategy placeholder for API safety.
+- [ ] Add security headers/CORS baseline for expected client calls.
+- [ ] Deliverable: DB access robustness checks validated end-to-end.
+
+### Day 5 - Quality closure and CI
+- [ ] Wire CI pipeline for lint + type-check + tests + migration check.
+- [ ] Ensure `docker compose config` and service health checks pass.
+- [ ] Ensure API spec sync workflow exists for touched endpoints.
+- [ ] Add short runbook in `README.md` for local setup, test, and smoke flow.
+- [ ] Sprint demo checklist: health, migration, data integrity, logging/tracing evidence.
+- [ ] Deliverable: Sprint 1 release tag candidate ready for M1 continuation.
+
+### Sprint 1 Exit Criteria
+- [ ] All Day 1-5 deliverables completed.
+- [ ] Global quality gates satisfied for touched components.
+- [ ] No open P0/P1/P2 blocker preventing P3 start.
+
+---
+
+## TODO Maturity Checklist (what "perfect" means)
+
+- [ ] Every task has a clear outcome that can be verified objectively.
+- [ ] Every critical dependency appears before dependent tasks.
+- [ ] Every external service has account + key + budget + alert readiness.
+- [ ] Every milestone has at least one end-to-end smoke scenario.
+- [ ] Security/privacy/cost controls are present both early and before launch.
+- [ ] The first 7 working days can be executed without asking "what next?".
