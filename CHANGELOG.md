@@ -17,6 +17,19 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `ACCESS_REVOCATION_OFFBOARDING.md` with team offboarding access-revocation checklist, SLA, validation steps, and audit-trail requirements.
 - Added `INCIDENT_CONTACT_LIST.md` documenting primary and backup incident contacts plus escalation usage rules.
 - Added `BILLING_ALERT_THRESHOLDS.md` documenting warning/critical billing alert thresholds and verification steps aligned with LLMOps runtime/test coverage.
+- Added `FINAL_STACK_CONFIRMATION.md` to record the confirmed MVP stack baseline and source references.
+- Added `MVP_LANGUAGE_MATRIX_LOCK.md` to formally lock MVP supported locales (`en`, `it`, `de`) and fallback policy (`en`).
+- Added `MVP_AUTH_POLICY_LOCK.md` to formally lock MVP authentication policy (Supabase Auth, email/password + Google/Apple SSO, mandatory 2FA for `admin`/`author`).
+- Added `MVP_SCOPE_SOURCE_OF_TRUTH.md` as the single source of truth for MVP in-scope capabilities and explicit non-goals.
+- Added `FEATURE_FLAG_GOVERNANCE_BASELINE.md` defining initial feature-flag governance (naming, ownership, expiry, kill-switch, required metadata).
+- Added `CANONICAL_MEMORY_TAXONOMY_LOCK.md` locking canonical memory types and semantic fields with cross-reference to API and extraction contracts.
+- Added `GOVERNANCE_DOC_OWNERS.md` assigning primary/backup owners for governance documents (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
+- Added `GOVERNANCE_REVIEW_CADENCE.md` defining mandatory governance-doc review cadence at milestone mini-audits and additional review triggers.
+- Added `MVP_KPI_BASELINE.md` locking initial MVP KPI targets and measurement/review rules.
+- Added `ENVIRONMENT_REQUIREMENTS_BASELINE.md` defining `dev/staging/prod` baseline environments and required variable groups.
+- Added `BRANDING_BASELINE.md` and placeholder logo asset `mobile/assets/branding/placeholder_logo.svg` with Flutter asset wiring in `mobile/pubspec.yaml`.
+- Added repository quality-gate scripts: `scripts/lint-check.ps1`, `scripts/type-check.ps1`, `scripts/test-check.ps1`, `scripts/targeted-tests-check.ps1`, and `scripts/lightweight-security-scan.ps1`.
+- Added `.pre-commit-config.yaml` with local hooks for `format`, `lint`, `type-check`, and targeted tests.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -71,6 +84,18 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked Day 0 credentials/policy checklist item `Access revocation process defined for team offboarding` as completed in `TODO.md`.
 - Marked Day 0 credentials/policy checklist item `Incident contact list documented (primary + backup)` as completed in `TODO.md`.
 - Marked Day 0 credentials/policy checklist item `Billing alert thresholds defined (warning/critical)` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Confirm final stack` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Lock MVP language matrix and fallback policy` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Lock authentication policy for MVP` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Freeze MVP scope and non-goals in one source of truth document` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Define initial feature-flag governance model` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Resolve and lock canonical memory taxonomy and fields across all specs` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Assign owners for governance docs` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Define review cadence for governance docs` as completed in `TODO.md`.
+- Marked P0 blocking checklist item `Define MVP KPIs` and all listed KPI thresholds as completed in `TODO.md`.
+- Completed remaining P0 product-lock tasks in `TODO.md`: environment baseline definition, repository quality gates, pre-commit hooks, branding baseline, and baseline CI with lightweight security scan.
+- Updated CI workflow (`.github/workflows/ci.yml`) to install backend/tooling dependencies and run the full quality-gate pipeline in automation.
+- Updated local setup instructions in `README.md` to include pre-commit installation and full hook execution.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

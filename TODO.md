@@ -170,25 +170,25 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P0 - Product Lock and Setup (blocking)
 
-- [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper.
-- [ ] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
-- [ ] Lock authentication policy for MVP: Supabase Auth with email/password + OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
-- [ ] Freeze MVP scope and non-goals in one source of truth document.
-- [ ] Define initial feature-flag governance model (naming, ownership, expiry, kill-switch requirements).
-- [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
-- [ ] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
-- [ ] Define review cadence for governance docs (recommended: at each milestone mini-audit).
-- [ ] Define MVP KPIs:
-- [ ] `memory_save_success_rate >= 95%`
-- [ ] `avg_question_latency_p95 <= 3s` (text query only)
-- [ ] `voice_pipeline_latency_p95 <= 12s`
-- [ ] `extraction_confirmation_rate >= 85%`
-- [ ] `time_to_first_successful_memory <= 2 minutes` (new user onboarding success)
-- [ ] Define `dev/staging/prod` environments and required variables.
-- [ ] Set up repository quality gates: lint, format, type check, test.
-- [ ] Add pre-commit hooks for fast local checks (format/lint/type-check + targeted tests).
-- [ ] Define branding baseline for MVP: app name `Personal AI Assistant` + placeholder logo asset usage.
-- [ ] Set up baseline CI (build + test + lightweight security scan).
+- [x] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper.
+- [x] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
+- [x] Lock authentication policy for MVP: Supabase Auth with email/password + OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
+- [x] Freeze MVP scope and non-goals in one source of truth document.
+- [x] Define initial feature-flag governance model (naming, ownership, expiry, kill-switch requirements).
+- [x] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
+- [x] Assign owners for governance docs (`testing-strategy`, `environment-matrix`, `error-model`, `operations-runbook`, `security-threat-model`).
+- [x] Define review cadence for governance docs (recommended: at each milestone mini-audit).
+- [x] Define MVP KPIs:
+- [x] `memory_save_success_rate >= 95%`
+- [x] `avg_question_latency_p95 <= 3s` (text query only)
+- [x] `voice_pipeline_latency_p95 <= 12s`
+- [x] `extraction_confirmation_rate >= 85%`
+- [x] `time_to_first_successful_memory <= 2 minutes` (new user onboarding success)
+- [x] Define `dev/staging/prod` environments and required variables.
+- [x] Set up repository quality gates: lint, format, type check, test.
+- [x] Add pre-commit hooks for fast local checks (format/lint/type-check + targeted tests).
+- [x] Define branding baseline for MVP: app name `Personal AI Assistant` + placeholder logo asset usage.
+- [x] Set up baseline CI (build + test + lightweight security scan).
 
 ---
 

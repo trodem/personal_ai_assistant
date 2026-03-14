@@ -69,17 +69,17 @@ Small teams/professionals are a future expansion path, while MVP remains persona
 
 # Architecture Overview
 
-Mobile App  
+Mobile App
 Flutter / Dart
 
-Backend  
+Backend
 Cloud backend responsible for:
 - user authentication
 - data storage
 - AI orchestration
 - analytics
 
-AI Layer  
+AI Layer
 Cloud-based LLM with backend logic for:
 - memory extraction
 - semantic search
@@ -184,6 +184,10 @@ powershell -ExecutionPolicy Bypass -File scripts/migration-smoke-check.ps1
 powershell -ExecutionPolicy Bypass -File scripts/storage-upload-download-smoke.ps1
 
 powershell -ExecutionPolicy Bypass -File scripts/quality-check.ps1
+
+python -m pip install pre-commit
+pre-commit install
+pre-commit run --all-files
 ```
 
 Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).

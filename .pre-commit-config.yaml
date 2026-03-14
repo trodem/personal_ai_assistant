@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: format-check
+        name: format-check
+        entry: pwsh -NoProfile -File scripts/format-check.ps1
+        language: system
+        pass_filenames: false
+      - id: lint-check
+        name: lint-check
+        entry: pwsh -NoProfile -File scripts/lint-check.ps1
+        language: system
+        pass_filenames: false
+      - id: type-check
+        name: type-check
+        entry: pwsh -NoProfile -File scripts/type-check.ps1
+        language: system
+        pass_filenames: false
+      - id: targeted-tests-check
+        name: targeted-tests-check
+        entry: pwsh -NoProfile -File scripts/targeted-tests-check.ps1
+        language: system
+        pass_filenames: false

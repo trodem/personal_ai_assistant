@@ -30,6 +30,15 @@ function Wait-Healthy {
 Write-Host "[lint] docker compose config"
 docker compose config -q
 
+Write-Host "[format] repository format checks"
+./scripts/format-check.ps1
+
+Write-Host "[lint] repository lint checks"
+./scripts/lint-check.ps1
+
+Write-Host "[type] repository type checks"
+./scripts/type-check.ps1
+
 Write-Host "[lint] environment matrix alignment"
 ./scripts/environment-matrix-check.ps1
 
@@ -58,9 +67,12 @@ Write-Host "[lint] python compileall backend/tests"
 python -m compileall backend/tests
 
 Write-Host "[test] python unittest (unit + integration)"
-python -m unittest discover -s backend/tests -p "test_*.py" -v
+./scripts/test-check.ps1
 
 Write-Host "[build] docker compose build"
 docker compose build
+
+Write-Host "[security] lightweight scan"
+./scripts/lightweight-security-scan.ps1
 
 Write-Host "quality checks passed"

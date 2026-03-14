@@ -21,6 +21,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install backend and quality dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r backend/requirements.txt
+          python -m pip install ruff==0.6.8 mypy==1.11.2
+
       - name: Run quality checks
         shell: pwsh
         run: ./scripts/quality-check.ps1
