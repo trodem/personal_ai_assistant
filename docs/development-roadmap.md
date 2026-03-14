@@ -146,6 +146,8 @@ Tasks:
 * Implement voice recording
 * Implement memory confirmation UI
 * Implement assistant response UI
+* Implement i18n localization framework (`en`, `it`, `de`) with English fallback
+* Add settings language selector and backend sync (`preferred_language`)
 
 Deliverable:
 

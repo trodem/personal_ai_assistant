@@ -541,6 +541,7 @@ email change flow
 password change flow
 subscription plan and billing status
 notification channel preferences (in-app/push/email)
+language preference (`preferred_language`: `en`/`it`/`de`, fallback `en`)
 
 All sensitive changes must trigger transactional notifications.
 

@@ -113,6 +113,13 @@ Question responses should include:
 - `source_memory_ids` (provenance list)
 - `confidence` (`high`/`medium`/`low`)
 
+Language behavior:
+
+- answer language should follow user `preferred_language` when configured
+- supported MVP languages: `en`, `it`, `de`
+- fallback language is `en`
+- response must avoid mixed-language fragments unless user input explicitly requests bilingual output
+
 When multi-currency totals are involved, response should preserve currency separation unless explicit conversion policy is applied.
 
 `source_memory_ids` must reflect the records actually used by the backend for the answer.

@@ -33,6 +33,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Infrastructure scalability planning made explicit: cloud multi-instance backend, managed load balancer, health-check routing, autoscaling policy, and zero-downtime rollout requirements across roadmap/TODO/environment matrix.
 - Notification system planning expanded from email-only to multi-channel (`in-app`, `push`, `email`) with settings preferences, in-app feed/read endpoints, RBAC alignment, and architecture/roadmap/TODO coverage.
 - Added `docs/product-analytics.md` with canonical event taxonomy, funnels, KPI mapping, payload schema rules, and privacy constraints; linked into AGENTS routing, TODO quality gates, roadmap, architecture context, and testing strategy.
+- Multi-language planning made explicit with MVP language matrix (`en`, `it`, `de`), deterministic fallback (`en`), settings-level `preferred_language` contract, and aligned roadmap/query/testing/TODO coverage.
 
 ---
 

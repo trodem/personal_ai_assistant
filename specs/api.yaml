@@ -684,6 +684,10 @@ components:
           format: uuid
         email:
           type: string
+        preferred_language:
+          type: string
+          enum: [en, it, de]
+          description: Preferred UI/assistant language. Fallback is `en`.
         auth_provider:
           type: string
           enum: [password, google, apple, mixed]
@@ -707,6 +711,10 @@ components:
 
     UpdateProfileRequest:
       type: object
+      properties:
+        preferred_language:
+          type: string
+          enum: [en, it, de]
       additionalProperties: true
 
     UpdateSecurityRequest:

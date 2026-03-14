@@ -43,6 +43,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For auth changes: 2FA policy is enforced (`admin`/`author` must have 2FA enabled; `user` can enable 2FA optionally).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
 - [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
+- [ ] For i18n changes: `preferred_language` behavior is consistent across backend responses and Flutter UI labels.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
@@ -158,6 +159,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P0 - Product Lock and Setup (blocking)
 
 - [ ] Confirm final stack: Flutter, FastAPI, Supabase (Auth + Postgres + Storage), pgvector, Whisper, Stripe.
+- [ ] Lock MVP language matrix and fallback policy (`en`, `it`, `de`; default fallback `en`).
 - [ ] Lock authentication policy for MVP: Supabase OAuth SSO (Google/Apple) + 2FA model (mandatory for `admin`/`author`).
 - [ ] Freeze MVP scope and non-goals in one source of truth document.
 - [ ] Resolve and lock canonical memory taxonomy and fields across all specs (`expense_event/inventory_event/loan_event/note/document` + semantic fields).
@@ -247,7 +249,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
 - [ ] `GET /api/v1/author/dashboard` (author only global supervision)
 - [ ] `GET /api/v1/me/settings`
-- [ ] `PATCH /api/v1/me/settings/profile`
+- [ ] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)
 - [ ] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
 - [ ] `PATCH /api/v1/me/settings/notifications` (notification channels preferences)
 - [ ] `GET /api/v1/notifications` (in-app notifications feed)
@@ -326,6 +328,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
 - [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
 - [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
+- [ ] Implement Flutter i18n architecture (arb-based keys, locale resolution, fallback to English).
 - [ ] Add architecture lint/static rules to block business logic inside Flutter widgets/screens.
 - [ ] Attachment button UX: support both `Take Photo` and `Choose from Gallery` for receipt photos.
 - [ ] Push-to-talk memory capture.
@@ -337,6 +340,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Memory timeline with basic filters.
 - [ ] MVP dashboard screen.
 - [ ] Build user `Settings` screen (profile, security, subscription).
+- [ ] Add language selection in Settings (`English`, `Italian`, `German`) bound to backend `preferred_language`.
 - [ ] Add auth settings UX for SSO visibility (linked provider) and 2FA management (enable/disable/verify).
 - [ ] Add notification preferences UI in settings (in-app/push/email toggles).
 - [ ] Build in-app notification center with unread/read state and deep links to related screens.
@@ -487,7 +491,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Keep `CHANGELOG.md` updated for user-visible and developer-relevant changes.
 - [ ] Add automated log schema contract tests for backend structured logs (required fields + redaction guarantees).
 - [ ] Add automated analytics event schema tests for core events and event versioning compatibility.
-- [ ] Realistic multilingual (IT/EN) extraction test datasets.
+- [ ] Realistic multilingual (EN/IT/DE) extraction and query test datasets.
 - [ ] Prompt evaluation suite with precision/recall benchmarks.
 - [ ] Hallucination and safety eval suite for ambiguous user questions.
 - [ ] Performance budget and quarterly profiling.

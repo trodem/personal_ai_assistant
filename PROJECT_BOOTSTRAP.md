@@ -136,6 +136,7 @@ POST /api/v1/billing/subscription/change-plan
 
 The API must enforce user authentication.
 Role and permission enforcement must follow `docs/rbac-matrix.md`.
+Localization behavior must follow MVP language matrix (`en`, `it`, `de`) with fallback `en`.
 
 ---
 

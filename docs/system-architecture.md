@@ -64,6 +64,12 @@ Author supervision dashboard (author role only)
 
 Voice interaction uses **push-to-talk recording**.
 
+Localization policy (MVP):
+
+- supported languages: English (`en`), Italian (`it`), German (`de`)
+- UI fallback language: English (`en`)
+- user-selected locale is managed in settings and propagated to backend preference (`preferred_language`)
+
 ---
 
 # API Backend
@@ -170,6 +176,11 @@ LLM response generation
 AI is used only for language understanding and natural responses.
 
 Calculations are always handled by the backend.
+
+Query/answer language policy:
+
+- answer language should follow `preferred_language` when available
+- if preferred language output is unavailable, fallback to English with no silent mixed-language fragments
 
 ---
 

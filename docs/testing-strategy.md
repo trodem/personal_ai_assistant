@@ -84,7 +84,7 @@ No merge is allowed unless all are true:
 
 - use deterministic test fixtures
 - separate synthetic data from any real user data
-- include multilingual examples (IT/EN) for extraction tests
+- include multilingual examples (EN/IT/DE) for extraction and query tests
 
 ---
 
