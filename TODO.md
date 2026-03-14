@@ -119,13 +119,13 @@ Complete this checklist before implementation to avoid setup blockers.
 <!-- - [ ] Stripe test webhook delivery validated locally. -->
 
 ### Budget and limits safeguards
-- [ ] Set monthly spending cap for OpenAI usage.
+<!-- - [ ] Set monthly spending cap for OpenAI usage.
 - [ ] Configure usage alerts for AI spend spikes.
 - [ ] Set free-tier limits to prevent runaway costs during tests.
-- [ ] Define ownership of billing notifications and incident escalation.
+- [ ] Define ownership of billing notifications and incident escalation. -->
 
 ### Legal and operational minimum
-- [ ] Draft privacy policy baseline (data stored, retention, deletion process).
+- [x] Draft privacy policy baseline (data stored, retention, deletion process).
 - [ ] Draft terms baseline for MVP users.
 - [ ] Define support contact and incident response owner.
 
