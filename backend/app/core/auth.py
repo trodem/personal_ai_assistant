@@ -2,7 +2,6 @@ import base64
 import hashlib
 import hmac
 import json
-import os
 import time
 from dataclasses import dataclass
 from functools import lru_cache
@@ -14,6 +13,7 @@ from starlette import status
 
 from app.core.errors import AppError
 from app.core.request_context import tenant_id_ctx_var, user_id_ctx_var
+from app.core.settings import get_settings
 
 
 @dataclass(frozen=True)
@@ -29,7 +29,7 @@ bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def _dev_hs256_secret() -> str:
-    return os.getenv("APP_DEV_JWT_SECRET", "dev_jwt_secret")
+    return get_settings().app_dev_jwt_secret
 
 
 def _urlsafe_b64encode(value: bytes) -> str:
@@ -143,7 +143,7 @@ def _decode_token(token: str) -> dict[str, object]:
 
 @lru_cache(maxsize=1)
 def _jwks_client() -> jwt.PyJWKClient:
-    supabase_url = os.getenv("SUPABASE_URL", "").rstrip("/")
+    supabase_url = get_settings().supabase_url
     if not supabase_url:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,

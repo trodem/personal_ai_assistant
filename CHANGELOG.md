@@ -30,6 +30,9 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added `BRANDING_BASELINE.md` and placeholder logo asset `mobile/assets/branding/placeholder_logo.svg` with Flutter asset wiring in `mobile/pubspec.yaml`.
 - Added repository quality-gate scripts: `scripts/lint-check.ps1`, `scripts/type-check.ps1`, `scripts/test-check.ps1`, `scripts/targeted-tests-check.ps1`, and `scripts/lightweight-security-scan.ps1`.
 - Added `.pre-commit-config.yaml` with local hooks for `format`, `lint`, `type-check`, and targeted tests.
+- Added backend modular package scaffolding for `repositories` and `domain` (`backend/app/repositories`, `backend/app/domain`) plus `backend/tests/test_backend_structure.py` to validate required FastAPI package layout.
+- Added typed backend config loader `backend/app/core/settings.py` with fail-fast environment validation (`APP_ENV`, `LOG_LEVEL`, integer budget/port parsing, CORS origins parsing) and centralized settings access via `get_settings()`.
+- Added `backend/tests/test_settings_validation.py` covering valid typed config parsing and invalid env failure modes.
 - Added `scripts/env-example-completeness-check.ps1` and wired it into `scripts/quality-check.ps1` to enforce `.env.example` and `docker-compose.yml` runtime variable completeness for local boot.
 - Baseline `docker-compose.yml` with local `backend` and `postgres` (`pgvector`) services so `docker compose config` validates successfully.
 - Added container healthchecks for backend and postgres so both services report healthy in `docker compose ps`.
@@ -96,6 +99,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Completed remaining P0 product-lock tasks in `TODO.md`: environment baseline definition, repository quality gates, pre-commit hooks, branding baseline, and baseline CI with lightweight security scan.
 - Updated CI workflow (`.github/workflows/ci.yml`) to install backend/tooling dependencies and run the full quality-gate pipeline in automation.
 - Updated local setup instructions in `README.md` to include pre-commit installation and full hook execution.
+- Marked P1 task `Create modular FastAPI structure (api, services, repositories, domain)` as completed in `TODO.md`.
+- Marked P1 task `Implement typed config management (env validation)` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

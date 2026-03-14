@@ -1,5 +1,4 @@
 import logging
-import os
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -24,18 +23,12 @@ from app.core.errors import (
 )
 from app.core.logging_config import configure_logging
 from app.core.middleware import RequestContextMiddleware
+from app.core.settings import get_settings
 
 
 configure_logging()
 logger = logging.getLogger(__name__)
-
-
-def _cors_origins() -> list[str]:
-    raw = os.getenv(
-        "APP_CORS_ALLOW_ORIGINS",
-        "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173",
-    )
-    return [value.strip() for value in raw.split(",") if value.strip()]
+settings = get_settings()
 
 
 app = FastAPI(
@@ -45,7 +38,7 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins(),
+    allow_origins=list(settings.app_cors_allow_origins),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

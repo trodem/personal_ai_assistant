@@ -1,7 +1,6 @@
 import base64
 import hashlib
 import hmac
-import os
 import time
 from dataclasses import dataclass
 from typing import Any
@@ -9,6 +8,7 @@ from uuid import uuid4
 
 from app.core.auth import AuthenticatedUser
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.core.settings import get_settings
 from app.services.ai_safety import enforce_input_safety
 from app.services.memory_ingestion import extract_memory_proposal
 
@@ -40,7 +40,7 @@ _ATTACHMENTS_BY_ID: dict[str, AttachmentRecord] = {}
 
 
 def _secret() -> str:
-    return os.getenv("APP_DEV_JWT_SECRET", "dev_jwt_secret")
+    return get_settings().app_dev_jwt_secret
 
 
 def _sign(value: str) -> str:

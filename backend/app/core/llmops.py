@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass
 import logging
 from collections import defaultdict
@@ -6,6 +5,7 @@ from datetime import datetime, timezone
 from math import ceil
 from typing import DefaultDict
 import hashlib
+from app.core.settings import get_settings
 
 
 STANDARD_DIMENSIONS = (
@@ -75,7 +75,7 @@ def _metric_key(
     prompt_version: str,
     user_plan: str,
 ) -> _MetricKey:
-    env = os.getenv("APP_ENV", "dev")
+    env = get_settings().app_env
     return (
         env,
         use_case,
@@ -113,8 +113,8 @@ def _user_hash(user_id: str) -> str:
 
 def _token_budget_for_plan(user_plan: str) -> int:
     if user_plan == "premium":
-        return int(os.getenv("AI_TOKEN_BUDGET_PREMIUM", "2000000"))
-    return int(os.getenv("AI_TOKEN_BUDGET_FREE", "200000"))
+        return get_settings().ai_token_budget_premium
+    return get_settings().ai_token_budget_free
 
 
 def _today_key(occurred_at: datetime) -> str:
@@ -236,7 +236,7 @@ def _labels_from_key(key: _MetricKey) -> str:
 
 
 def render_llmops_prometheus() -> str:
-    env = os.getenv("APP_ENV", "dev")
+    env = get_settings().app_env
     default_key = _metric_key(
         use_case="memory_extraction",
         provider="openai",

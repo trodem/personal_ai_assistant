@@ -194,8 +194,8 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P1 - Backend Foundation
 
-- [ ] Create modular FastAPI structure (`api`, `services`, `repositories`, `domain`).
-- [ ] Implement typed config management (env validation).
+- [x] Create modular FastAPI structure (`api`, `services`, `repositories`, `domain`).
+- [x] Implement typed config management (env validation).
 - [ ] Set up JSON logging with `request_id` and `user_id` (when available).
 - [ ] Add request tracing (`trace_id`) to support cross-service debugging.
 - [ ] Add error-handling middleware with standard error codes.

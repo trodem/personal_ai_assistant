@@ -1,11 +1,11 @@
 import json
 import logging
-import os
 import re
 from datetime import datetime, timezone
 from typing import Any
 
 from app.core.request_context import request_id_ctx_var, tenant_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
+from app.core.settings import get_settings
 
 
 class JsonFormatter(logging.Formatter):
@@ -99,7 +99,7 @@ class JsonFormatter(logging.Formatter):
 
 
 def configure_logging() -> None:
-    level_name = os.getenv("LOG_LEVEL", "INFO").upper()
+    level_name = get_settings().log_level
     level = getattr(logging, level_name, logging.INFO)
 
     root_logger = logging.getLogger()

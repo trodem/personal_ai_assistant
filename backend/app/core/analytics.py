@@ -1,11 +1,11 @@
 import logging
-import os
 import re
 import uuid
 from datetime import datetime, timezone
 from typing import Any
 
 from app.core.request_context import request_id_ctx_var, trace_id_ctx_var, user_id_ctx_var
+from app.core.settings import get_settings
 
 
 logger = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ def build_event(
         "user_id": user_id,
         "session_id": session_id,
         "platform": "backend",
-        "app_version": os.getenv("APP_VERSION", "dev"),
+        "app_version": get_settings().app_version,
         "request_id": request_id_ctx_var.get(),
         "trace_id": trace_id_ctx_var.get(),
     }
