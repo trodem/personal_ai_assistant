@@ -68,6 +68,10 @@ Work only on the first incomplete task.
 
 Do not skip steps.
 
+Follow coding quality rules in `docs/coding-standards.md`.
+
+Keep `CHANGELOG.md` updated whenever feasible for relevant changes.
+
 ---
 
 # Document Routing Rules
@@ -93,6 +97,11 @@ If documents conflict, follow precedence in `docs/AGENTS.md`.
 - separate responsibilities
 - write clear and readable code
 - prefer simple solutions
+- use reusable Flutter components where appropriate
+- keep UI style centralized (theme/tokens), no scattered hardcoded colors
+- keep business logic outside UI components
+- keep all code/comments/identifiers in English
+- keep FastAPI OpenAPI/Swagger docs aligned with every endpoint change
 
 ---
 
@@ -102,6 +111,7 @@ If documents conflict, follow precedence in `docs/AGENTS.md`.
 - validate all inputs
 - protect user data
 - verify authentication tokens
+- keep production-grade structured logs with traceable context and redaction
 
 ---
 

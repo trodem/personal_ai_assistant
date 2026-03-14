@@ -29,6 +29,10 @@ ADR/
 
 The agent must use the document routing rules in `docs/AGENTS.md` to decide which files to consult for each task type.
 
+For implementation quality rules, the agent must also read:
+
+`docs/coding-standards.md`
+
 The agent must not ignore any architectural decision defined in these documents.
 
 Mandatory alignment rule:
@@ -86,6 +90,7 @@ API endpoints
 AI orchestration
 database queries
 authentication validation
+OpenAPI/Swagger documentation alignment
 
 The mobile app must only consume backend APIs.
 
@@ -113,6 +118,10 @@ modular code structure
 clear separation of concerns
 scalable architecture
 secure data handling
+reusable Flutter components for recurring UI
+centralized Flutter theme/tokens (no scattered hardcoded styles)
+business logic separated from UI components
+English-only identifiers/comments in source code
 
 The agent must never introduce unnecessary complexity.
 

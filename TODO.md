@@ -11,6 +11,8 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - Treat missing prerequisites as blockers, not assumptions.
 - Enforce full-document alignment on every change: update all impacted files (`PROJECT_CONTEXT.md`, `docs/`, `specs/`, `TODO.md`) in the same iteration.
 - Never leave contradictions across documents; if alignment cannot be completed, stop and report blocker explicitly.
+- Follow `docs/coding-standards.md` for all implementation and refactoring decisions.
+- Keep `CHANGELOG.md` updated for relevant changes in the same iteration whenever feasible.
 
 ## Execution protocol (always-on)
 - Follow milestone order unless explicitly overridden.
@@ -29,12 +31,15 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] Lint/tests/build pass for touched components.
 - [ ] At least one runtime smoke check passes (not only unit tests).
 - [ ] `.env.example`, compose config, and setup docs are aligned.
+- [ ] `CHANGELOG.md` is updated for relevant behavior/contract/process changes.
 - [ ] Every feature includes automated tests (unit + integration where needed).
 - [ ] No merge without green CI.
 - [ ] Structured logging + metrics + consistent error handling are active.
+- [ ] Backend logs are production-grade (structured JSON, correlation IDs, user context, stack traces, secret/PII redaction).
 - [ ] Security by default: valid auth, strict `user_id` isolation, no data leak.
 - [ ] For auth changes: Clerk login/token -> protected API call succeeds (`401` without token, `200` with valid token).
 - [ ] For API changes: `specs/api.yaml` is updated and consistent with implementation.
+- [ ] For API changes: FastAPI OpenAPI/Swagger docs remain accurate and complete.
 - [ ] API errors follow `docs/error-model.md` (schema, codes, HTTP mapping).
 - [ ] For memory-ingestion changes: `input -> extraction -> clarification (if needed) -> explicit confirm -> DB persistence` is verified end-to-end.
 - [ ] For question-engine changes: database-first path is verified (`query/aggregation in backend`, LLM used only for final phrasing).
@@ -44,6 +49,7 @@ This TODO is designed for real execution: atomic tasks, clear dependencies, inte
 - [ ] For AI-related changes: token usage/cost logging remains active and visible in metrics.
 - [ ] AI cost controls stay active: token budget, per-user cost visibility, spike alerting.
 - [ ] For frontend-browser calls (if present): protected endpoint CORS preflight (`OPTIONS`) succeeds.
+- [ ] Flutter UI uses reusable components and centralized theme tokens (no scattered hardcoded styles/colors).
 - [ ] Test scope is aligned with `docs/testing-strategy.md` for touched components.
 - [ ] Environment/config choices are aligned with `docs/environment-matrix.md`.
 - [ ] Security-sensitive changes are checked against `docs/security-threat-model.md`.
@@ -154,6 +160,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `time_to_first_successful_memory <= 2 minutes` (new user onboarding success)
 - [ ] Define `dev/staging/prod` environments and required variables.
 - [ ] Set up repository quality gates: lint, format, type check, test.
+- [ ] Add pre-commit hooks for fast local checks (format/lint/type-check + targeted tests).
+- [ ] Define branding baseline for MVP: app name `Personal AI Assistant` + placeholder logo asset usage.
 - [ ] Set up baseline CI (build + test + lightweight security scan).
 
 ---
@@ -272,6 +280,9 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Login/logout with Clerk.
 - [ ] First-run onboarding focused on fast first value (first memory + first question).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
+- [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
+- [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
+- [ ] Add architecture lint/static rules to block business logic inside Flutter widgets/screens.
 - [ ] Attachment button UX: support both `Take Photo` and `Choose from Gallery` for receipt photos.
 - [ ] Push-to-talk memory capture.
 - [ ] Memory confirmation flow with `Confirm / Modify / Cancel` only.
@@ -282,6 +293,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Memory timeline with basic filters.
 - [ ] MVP dashboard screen.
 - [ ] User-friendly error handling (retry, offline state, timeout).
+- [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
 - [ ] No-result UI: clear message + CTA to "Add Memory".
 - [ ] Widget tests on critical flows.
@@ -391,6 +403,8 @@ Use this as your single source of truth for external dependencies and ownership.
 ## Continuous Quality Backlog (always active)
 
 - [ ] API contract validation: `specs/api.yaml` vs implementation.
+- [ ] Keep `CHANGELOG.md` updated for user-visible and developer-relevant changes.
+- [ ] Add automated log schema contract tests for backend structured logs (required fields + redaction guarantees).
 - [ ] Realistic multilingual (IT/EN) extraction test datasets.
 - [ ] Prompt evaluation suite with precision/recall benchmarks.
 - [ ] Hallucination and safety eval suite for ambiguous user questions.

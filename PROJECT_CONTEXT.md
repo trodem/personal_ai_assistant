@@ -386,6 +386,34 @@ Memory list
 
 ---
 
+# LANGUAGE AND NAMING POLICY
+
+Official product language is English.
+
+Codebase conventions:
+
+function names
+component names
+API field names
+comments
+logs
+
+must be written in English.
+
+---
+
+# MVP BRANDING
+
+App display name:
+
+Personal AI Assistant
+
+Logo policy:
+
+use a placeholder logo in MVP until final brand assets are defined.
+
+---
+
 # BACKEND
 
 Technology:

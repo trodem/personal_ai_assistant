@@ -30,6 +30,7 @@ Precedence order when conflicts appear:
 - `docs/error-model.md`
 - `docs/operations-runbook.md`
 - `docs/security-threat-model.md`
+- `docs/coding-standards.md`
 - `CONTRIBUTING.md`
 
 When to consult each document:
@@ -40,6 +41,7 @@ When to consult each document:
 - auth/security change: read `docs/security-threat-model.md` and `docs/risk-analysis.md`
 - infra/environment/deploy change: read `docs/environment-matrix.md` and `docs/operations-runbook.md`
 - test strategy/quality gate change: read `docs/testing-strategy.md` and `TODO.md`
+- code-structure/style/logging change: read `docs/coding-standards.md`, `CONTRIBUTING.md`, and `TODO.md`
 - architecture-level tradeoff: add/update ADR in `ADR/`
 
 If a conflict remains unresolved after precedence, the agent must stop and ask the user.
@@ -100,6 +102,7 @@ Mini-audit checklist (mandatory):
 - verify security and user-isolation requirements remain enforced
 - verify API and implementation remain consistent for touched endpoints
 - verify document-trigger usage was respected for changed scope
+- verify `CHANGELOG.md` was updated when relevant
 - document any gaps/blockers before starting the next milestone
 
 ---
@@ -111,6 +114,13 @@ Mini-audit checklist (mandatory):
 - separate responsibilities
 - prefer simple solutions
 - avoid premature optimization
+- use reusable Flutter components for repeated UI patterns
+- centralize Flutter style tokens; avoid scattered hardcoded colors/styles
+- keep UI logic and business logic separated
+- keep identifiers/comments/docs in code exclusively in English
+- maintain production-grade backend logging with traceability and redaction
+- respect architecture lint/static rules that prevent business logic in Flutter widgets/screens
+- keep pre-commit hooks green before finalizing implementation
 
 ---
 

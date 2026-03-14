@@ -107,4 +107,19 @@ The application follows a freemium model:
 
 ---
 
+# Language and Branding
+
+- Official app language: English
+- Source code identifiers/comments: English only
+- MVP app name: `Personal AI Assistant`
+- MVP logo: placeholder asset until final branding is available
+
+---
+
+# Changelog Policy
+
+Relevant project changes should be recorded in `CHANGELOG.md` in the same iteration whenever feasible.
+
+---
+
 # Repository Structure
