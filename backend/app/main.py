@@ -9,6 +9,7 @@ from app.api.routes.admin import router as admin_router
 from app.api.routes.health import router as health_router
 from app.api.routes.memories import router as memories_router
 from app.api.routes.metrics import router as metrics_router
+from app.api.routes.settings import router as settings_router
 from app.core.errors import (
     AppError,
     app_error_to_response,
@@ -33,6 +34,7 @@ app.include_router(health_router)
 app.include_router(metrics_router)
 app.include_router(memories_router)
 app.include_router(admin_router)
+app.include_router(settings_router)
 
 
 @app.get("/", summary="Service metadata", tags=["Health"])

@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -30,3 +30,26 @@ class AdminUserResponse(BaseModel):
 
 class AdminUsersListResponse(BaseModel):
     items: list[AdminUserResponse]
+
+
+class UpdateProfileRequest(BaseModel):
+    preferred_language: Literal["en", "it", "de"]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UserSettingsResponse(BaseModel):
+    user_id: str
+    email: str
+    preferred_language: Literal["en", "it", "de"]
+    auth_provider: Literal["password", "google", "apple", "mixed"]
+    role: Literal["user", "admin", "author"]
+    status: Literal["active", "suspended", "canceled"]
+    mfa_enabled: bool
+    subscription_plan: Literal["free", "premium"]
+    billing_exempt: bool
+    payment_methods_enabled: bool
+    default_payment_method: dict[str, Any] | None = None
+    notification_preferences: dict[str, bool]
+
+    model_config = ConfigDict(extra="forbid")

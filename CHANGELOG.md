@@ -27,6 +27,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Aligned OpenAPI spec with implemented endpoints and auth guards (`/health/live`, `/health/ready`, `/metrics`, tenant header semantics on protected tenant-aware routes).
 - Hardened FastAPI Swagger/OpenAPI metadata for implemented endpoints (typed response models, operation summaries/descriptions, documented 401/403 responses, and bearer security scheme exposure) with automated `/openapi.json` regression tests.
 - Added API backward-compatibility regression tests (`backend/tests/test_api_backward_compatibility.py`) to enforce v1 path stability and preserve required response fields for current and previously shipped clients.
+- Added preferred-language i18n baseline across backend and Flutter labels: `GET /api/v1/me/settings` + `PATCH /api/v1/me/settings/profile` now enforce `en/it/de` with fallback `en`, plus ARB label files (`mobile/lib/l10n/app_{en,it,de}.arb`) and contract tests for backend/UI locale consistency.
 - Coding standards document for Flutter/FastAPI quality, logging, and language rules.
 - Receipt-photo attachment and OCR workflow hardening rules across docs/specs.
 - Alignment invariant and documentation consistency requirements.
