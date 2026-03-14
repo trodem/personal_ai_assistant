@@ -111,6 +111,11 @@ DerivedData/
 docker-data/
 *.tar
 
+# ---- Supabase local runtime ----
+supabase/.branches/
+supabase/.temp/
+supabase/snippets/
+
 # ---- Databases / local data ----
 *.sqlite3
 *.db

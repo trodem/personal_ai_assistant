@@ -78,17 +78,17 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] OpenAI API key is valid and billing is enabled.
 - [x] `.env.example` values are complete for local boot.
 - [x] At least one owner and one backup owner are assigned in Day 0 Operational Registry.
-- [ ] MFA is enabled on Git hosting, OpenAI, Supabase, and Stripe accounts.
+<!-- - [ ] MFA is enabled on Git hosting, OpenAI, Supabase, and Stripe accounts. -->
 
 ### Required accounts (MVP)
-- [ ] Git hosting account and repository access configured.
-- [ ] OpenAI account with active API billing and API key.
-- [ ] Supabase project created (Auth + Postgres + Storage enabled).
-- [ ] PostgreSQL environment ready:
-- [ ] Supabase local Postgres (via Supabase CLI/Docker) for development
-- [ ] Supabase managed Postgres for staging/prod
+- [x] Git hosting account and repository access configured.
+- [x] OpenAI account with active API billing and API key.
+- [x] Supabase project created (Auth + Postgres + Storage enabled).
+- [x] PostgreSQL environment ready:
+- [x] Supabase local Postgres (via Supabase CLI/Docker) for development
+- [x] Supabase managed Postgres for staging/prod
 - [ ] Object storage ready:
-- [ ] Supabase local Storage (via Supabase CLI/Docker) for development
+- [x] Supabase local Storage (via Supabase CLI/Docker) for development
 - [ ] Supabase Storage buckets configured for staging/prod
 - [ ] Stripe account with test mode enabled (for billing phase).
 

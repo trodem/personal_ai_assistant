@@ -46,6 +46,12 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Verified Supabase local development Storage availability via Supabase CLI (`supabase start` + `supabase status` showing active Storage endpoint) and marked `Supabase local Storage (via Supabase CLI/Docker) for development` as completed in `TODO.md`.
+- Verified managed Supabase environment target (`SUPABASE_URL` points to `*.supabase.co`) and successful Supabase Auth/PostgREST reachability checks; marked `Supabase managed Postgres for staging/prod` and parent `PostgreSQL environment ready` as completed in `TODO.md`.
+- Verified local PostgreSQL development readiness (`postgres` healthy in Docker and `pg_isready` accepting connections) and marked `Supabase local Postgres (via Supabase CLI/Docker) for development` as completed in `TODO.md`.
+- Verified Supabase project reachability across Auth, PostgREST, and Storage via `scripts/supabase-project-reachability-check.ps1` and marked the related prerequisite task as completed in `TODO.md`.
+- Verified OpenAI account readiness (API key + billing-enabled request) via `scripts/openai-account-check.ps1` and marked the related prerequisite task as completed in `TODO.md`.
+- Verified Git hosting repository access in local workspace via configured `origin` remote and marked the related prerequisite task as completed in `TODO.md`.
 - Assigned first primary/backup ownership entry in Day 0 Operational Registry (`OpenAI` row) and marked the related hard blocker as completed in `TODO.md`.
 - Expanded local bootstrap configuration with `APP_VERSION`, `APP_CORS_ALLOW_ORIGINS`, `AI_TOKEN_BUDGET_FREE`, and `AI_TOKEN_BUDGET_PREMIUM` in `.env.example` and backend compose env mapping; marked the corresponding hard blocker task as completed in `TODO.md`.
 - Architecture and governance docs aligned to receipt-photo-only attachment policy.
