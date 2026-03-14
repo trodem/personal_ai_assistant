@@ -50,6 +50,7 @@ Examples:
 - `ocr.processing_failed`
 - `ocr.low_confidence`
 - `ai.provider_unavailable`
+- `query.stream_unavailable`
 - `billing.plan_locked_by_role`
 - `rate.limit_exceeded`
 - `internal.unexpected_error`
@@ -68,7 +69,7 @@ Examples:
 | 422 | semantic validation | `memory.confirmation_required`, `memory.missing_required_fields`, `query.ambiguous_intent`, `storage.unsupported_file_type`, `ocr.low_confidence` |
 | 429 | rate limit | `rate.limit_exceeded` |
 | 500 | internal | `internal.unexpected_error` |
-| 502/503 | dependency outage | `ai.provider_unavailable`, `db.unavailable` |
+| 502/503 | dependency outage | `ai.provider_unavailable`, `db.unavailable`, `query.stream_unavailable` |
 
 ---
 

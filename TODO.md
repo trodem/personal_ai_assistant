@@ -243,6 +243,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] `POST /api/v1/voice/memory`
 - [ ] `POST /api/v1/voice/question`
 - [ ] `POST /api/v1/question`
+- [ ] `POST /api/v1/question/stream` (SSE streaming answer with chunk/done events)
 - [ ] `POST /api/v1/memory`
 - [ ] `GET /api/v1/memories`
 - [ ] `DELETE /api/v1/memory/{id}`
@@ -267,6 +268,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
 - [ ] Add API contract tests for core success/error responses.
+- [ ] Add streaming API tests (`chunk` ordering, terminal `done` event, fallback on stream failure).
 - [ ] Add privileged-policy tests (`last active author protection`, `self-role-change forbidden`, `billing.plan_locked_by_role`).
 - [ ] Add consistent error model and status code mapping.
 
@@ -368,6 +370,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [ ] User-friendly error handling (retry, offline state, timeout).
 - [ ] Keep UI widgets thin; move business logic to dedicated services/controllers/state layer.
 - [ ] Query answer UI: concise answer + expandable "Why this answer" panel (confidence + sources).
+- [ ] Add streaming answer UI mode (typing effect with SSE chunks + graceful fallback to non-stream endpoint).
 - [ ] No-result UI: clear message + CTA to "Add Memory".
 - [ ] Ensure AI microcopy/actions/error states follow `docs/ai-ux-contract.md`.
 - [ ] Widget tests on critical flows.

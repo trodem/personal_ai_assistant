@@ -36,6 +36,7 @@ Role hierarchy:
 | `POST /api/v1/voice/memory` | allow | allow | allow | blocked if status is `suspended`/`canceled` |
 | `POST /api/v1/voice/question` | allow | allow | allow | blocked if status is `suspended`/`canceled` |
 | `POST /api/v1/question` | allow | allow | allow | blocked if status is `suspended`/`canceled` |
+| `POST /api/v1/question/stream` | allow | allow | allow | blocked if status is `suspended`/`canceled`; fallback to non-stream endpoint required on stream failure |
 | `POST /api/v1/memory` | allow | allow | allow | explicit confirm required |
 | `GET /api/v1/memories` | allow | allow | allow | user-scoped data only |
 | `DELETE /api/v1/memory/{id}` | allow | allow | allow | user-scoped ownership checks |

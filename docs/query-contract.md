@@ -14,7 +14,7 @@ This document complements:
 
 ## Scope
 
-This contract applies to question answering features (`/api/v1/voice/question` and `/api/v1/question`).
+This contract applies to question answering features (`/api/v1/voice/question`, `/api/v1/question`, and `/api/v1/question/stream`).
 
 ---
 
@@ -123,6 +123,13 @@ Language behavior:
 When multi-currency totals are involved, response should preserve currency separation unless explicit conversion policy is applied.
 
 `source_memory_ids` must reflect the records actually used by the backend for the answer.
+
+Streaming behavior (`/api/v1/question/stream`):
+
+- transport: Server-Sent Events (SSE)
+- stream emits incremental `chunk` events and one terminal `done` event
+- terminal `done` event must include confidence and provenance fields
+- if streaming channel is unavailable, client must fallback to `/api/v1/question`
 
 Frontend presentation recommendation:
 

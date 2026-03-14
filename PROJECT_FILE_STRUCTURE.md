@@ -207,6 +207,7 @@ query.py
 
 GET /api/v1/memories
 POST /api/v1/question
+POST /api/v1/question/stream
 
 attachments.py
 

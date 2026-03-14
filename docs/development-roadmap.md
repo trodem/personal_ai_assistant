@@ -77,6 +77,7 @@ Endpoints:
 POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
+POST /api/v1/question/stream
 POST /api/v1/memory
 GET /api/v1/memories
 DELETE /api/v1/memory/{id}
@@ -134,6 +135,7 @@ Tasks:
 * Implement intent detection
 * Implement database-first query execution
 * Generate final natural-language response
+* Implement SSE streaming response path for text question endpoint with non-stream fallback
 
 Deliverable:
 

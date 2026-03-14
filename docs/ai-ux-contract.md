@@ -108,6 +108,12 @@ Ambiguity behavior:
 
 - ask clarification before final answer
 
+Streaming behavior:
+
+- when streaming endpoint is used, render incremental text chunks with typing effect
+- keep source-of-truth metadata (`confidence`, `source_memory_ids`) hidden until stream `done` event
+- if stream fails/interrupted, show actionable fallback to non-streaming retry
+
 ---
 
 ## Receipt/OCR UX Contract

@@ -101,6 +101,42 @@ paths:
         "422":
           $ref: "#/components/responses/ValidationError"
 
+  /api/v1/question/stream:
+    post:
+      tags: [Voice]
+      summary: Ask text question with streaming response
+      description: Streams answer chunks in real time using Server-Sent Events (SSE). If streaming is unavailable, client must fallback to `/api/v1/question`.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextQuestionRequest"
+      responses:
+        "200":
+          description: SSE stream with incremental answer events and final metadata event.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                example: |
+                  event: chunk
+                  data: {"text":"You spent "}
+
+                  event: chunk
+                  data: {"text":"720 CHF"}
+
+                  event: done
+                  data: {"confidence":"high","source_memory_ids":["uuid"]}
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "503":
+          description: Streaming unavailable. Client should fallback to non-stream endpoint.
+
   /api/v1/memory:
     post:
       tags: [Memory]

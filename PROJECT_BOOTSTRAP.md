@@ -117,6 +117,7 @@ Required endpoints:
 POST /api/v1/voice/memory
 POST /api/v1/voice/question
 POST /api/v1/question
+POST /api/v1/question/stream
 POST /api/v1/memory
 GET /api/v1/memories
 DELETE /api/v1/memory/{id}
