@@ -280,7 +280,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [x] `POST /api/v1/billing/subscription/cancel-preview` (churn prevention preview)
 - [x] `POST /api/v1/billing/subscription/cancel` (cancel with mandatory reason)
-- [ ] `GET /api/v1/me/retention/status` (churn risk + recommended retention actions)
+- [x] `GET /api/v1/me/retention/status` (churn risk + recommended retention actions)
 - [ ] `POST /api/v1/billing/coupons/apply` (coupon apply for eligible users)
 - [ ] `POST /api/v1/me/data-export` (start export job: `json/csv/pdf`)
 - [ ] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)

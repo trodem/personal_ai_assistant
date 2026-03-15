@@ -18,6 +18,7 @@ from app.api.v1.routes.memories import router as memories_router
 from app.api.v1.routes.metrics import router as metrics_router
 from app.api.v1.routes.notifications import router as notifications_router
 from app.api.v1.routes.question import router as question_router
+from app.api.v1.routes.retention import router as retention_router
 from app.api.v1.routes.settings import router as settings_router
 from app.core.errors import http_error_to_response, validation_error_to_response
 from app.core.logging_config import configure_logging
@@ -58,6 +59,7 @@ app.include_router(author_router)
 app.include_router(settings_router)
 app.include_router(notifications_router)
 app.include_router(billing_router)
+app.include_router(retention_router)
 
 
 @app.get("/", summary="Service metadata", tags=["Health"])

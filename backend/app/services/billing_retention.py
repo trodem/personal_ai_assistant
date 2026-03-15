@@ -1,4 +1,4 @@
-from app.api.schemas import CancelPreviewResponse
+from app.api.schemas import CancelPreviewResponse, RetentionStatusResponse
 
 
 def build_cancel_preview(*, reason: str) -> CancelPreviewResponse:
@@ -21,4 +21,22 @@ def build_cancel_preview(*, reason: str) -> CancelPreviewResponse:
         can_downgrade=True,
         suggested_offer="Try free plan first",
         impact_summary="Cancellation removes premium benefits while preserving account data.",
+    )
+
+
+def build_retention_status(*, subscription_plan: str) -> RetentionStatusResponse:
+    if subscription_plan == "premium":
+        return RetentionStatusResponse(
+            churn_risk="medium",
+            recommended_actions=[
+                "show_cancel_preview",
+                "offer_temporary_discount",
+            ],
+        )
+    return RetentionStatusResponse(
+        churn_risk="low",
+        recommended_actions=[
+            "promote_premium_value",
+            "encourage_feature_adoption",
+        ],
     )

@@ -165,6 +165,29 @@ class BillingChangePlanEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["error"]["code"], "memory.missing_required_fields")
 
+    def test_retention_status_requires_authentication(self) -> None:
+        response = self.client.get("/api/v1/me/retention/status")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["error"]["code"], "auth.missing_token")
+
+    def test_retention_status_for_free_and_premium_user(self) -> None:
+        # free plan baseline
+        free_response = self.client.get("/api/v1/me/retention/status", headers=self.user_headers)
+        self.assertEqual(free_response.status_code, 200)
+        self.assertEqual(free_response.json()["churn_risk"], "low")
+        self.assertTrue(len(free_response.json()["recommended_actions"]) >= 1)
+
+        # upgrade to premium and verify retention output changes
+        self.client.post(
+            "/api/v1/billing/subscription/change-plan",
+            headers=self.user_headers,
+            json={"plan": "premium"},
+        )
+        premium_response = self.client.get("/api/v1/me/retention/status", headers=self.user_headers)
+        self.assertEqual(premium_response.status_code, 200)
+        self.assertEqual(premium_response.json()["churn_risk"], "medium")
+        self.assertTrue(len(premium_response.json()["recommended_actions"]) >= 1)
+
 
 if __name__ == "__main__":
     unittest.main()

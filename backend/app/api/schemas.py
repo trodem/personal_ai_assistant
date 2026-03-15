@@ -267,6 +267,13 @@ class CancelSubscriptionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class RetentionStatusResponse(BaseModel):
+    churn_risk: Literal["low", "medium", "high"]
+    recommended_actions: list[str]
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str
