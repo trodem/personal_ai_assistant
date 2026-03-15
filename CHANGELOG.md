@@ -7,6 +7,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added AI chat surface state machine for memory capture (`idle`, `processing`, `needs_clarification`, `ready_to_confirm`, `saved`, `failed`) with visible status banner and inline actions (`Retry`, `Confirm`, `Modify`, `Cancel`) aligned with AI UX contract.
 - Added a new chat-style memory capture screen with bottom composer controls (`attachment`, `mic`, `text input`, `send`) as the authenticated default app surface after onboarding.
 - Added onboarding permission-denied fallback UX with clear CTAs (`Retry microphone`, `Open settings`) plus controller/device-gateway support for opening OS settings and returning deterministic guidance messages.
 - Added onboarding skip/resume behavior with deterministic resume points: users can skip the wizard (`Skip for now`), resume later from the exact pending step, and continue from a persisted user-scoped resume state.

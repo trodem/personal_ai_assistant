@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../core/state/app_state.dart';
 import '../core/state/app_state_controller.dart';
 import '../features/auth/application/auth_controller.dart';
+import '../features/memory_capture/application/memory_capture_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/first_value_onboarding_screen.dart';
@@ -20,11 +21,13 @@ class AppRoot extends StatelessWidget {
     required this.controller,
     required this.authController,
     required this.onboardingController,
+    required this.memoryCaptureController,
   });
 
   final AppStateController controller;
   final AuthController authController;
   final OnboardingController onboardingController;
+  final MemoryCaptureController memoryCaptureController;
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +163,7 @@ class AppRoot extends StatelessWidget {
     switch (screen) {
       case AppScreen.themePreview:
         return MemoryCaptureChatScreen(
+          controller: memoryCaptureController,
           userEmail: authController.user?.email,
           onResumeOnboarding: onboardingController.hasPendingOnboardingResume
               ? onboardingController.resumeDeferredOnboarding

@@ -4,6 +4,7 @@ import 'app/core/state/app_state_controller.dart';
 import 'app/core/state/app_state_scope.dart';
 import 'app/features/auth/application/auth_controller.dart';
 import 'app/features/auth/data/auth_repository_factory.dart';
+import 'app/features/memory_capture/application/memory_capture_controller.dart';
 import 'app/features/onboarding/application/onboarding_controller.dart';
 import 'app/features/onboarding/data/device_permissions_gateway_factory.dart';
 import 'app/features/onboarding/data/language_preferences_repository_factory.dart';
@@ -16,6 +17,8 @@ Future<void> main() async {
   final AuthController authController = AuthController(
     repository: await AuthRepositoryFactory.create(),
   );
+  final MemoryCaptureController memoryCaptureController =
+      MemoryCaptureController();
   await authController.loadSession();
   final OnboardingController onboardingController = OnboardingController(
     languagePreferencesRepository: LanguagePreferencesRepositoryFactory.create(),
@@ -29,6 +32,7 @@ Future<void> main() async {
     PersonalAIAssistantApp(
       controller: AppStateController(),
       authController: authController,
+      memoryCaptureController: memoryCaptureController,
       onboardingController: onboardingController,
     ),
   );
@@ -39,11 +43,13 @@ class PersonalAIAssistantApp extends StatelessWidget {
     super.key,
     required this.controller,
     required this.authController,
+    required this.memoryCaptureController,
     required this.onboardingController,
   });
 
   final AppStateController controller;
   final AuthController authController;
+  final MemoryCaptureController memoryCaptureController;
   final OnboardingController onboardingController;
 
   @override
@@ -53,6 +59,7 @@ class PersonalAIAssistantApp extends StatelessWidget {
       child: AppRoot(
         controller: controller,
         authController: authController,
+        memoryCaptureController: memoryCaptureController,
         onboardingController: onboardingController,
       ),
     );
