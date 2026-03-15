@@ -263,7 +263,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `DELETE /api/v1/memory/{id}`
 - [x] `POST /api/v1/attachments`
 - [x] `GET /api/v1/dashboard`
-- [ ] `GET /api/v1/admin/users` (admin/author)
+- [x] `GET /api/v1/admin/users` (admin/author)
 - [ ] `PATCH /api/v1/admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
 - [ ] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
 - [ ] `GET /api/v1/author/dashboard` (author only global supervision)

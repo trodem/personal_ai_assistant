@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Marked P4 endpoint task `GET /api/v1/admin/users` as completed in `TODO.md` after validating existing role/MFA enforcement and OpenAPI exposure with green targeted regression tests.
 - Implemented and wired `GET /api/v1/dashboard` with authenticated user/tenant-scoped metrics (`total_memories`, `memories_by_type`, `latest_memory_events`) via dedicated route/service modules, added endpoint/OpenAPI regression tests, and marked the P4 dashboard endpoint task completed in `TODO.md`.
 - Marked P4 endpoint task `POST /api/v1/attachments` as completed in `TODO.md` after validating receipt-photo upload contract, OCR proposal response, and OpenAPI exposure with green attachment E2E tests.
 - Implemented and wired `DELETE /api/v1/memory/{id}` with user+tenant-scoped soft-delete behavior, `404 memory.not_found` for missing/foreign records, and contract response `{ \"deleted\": true }`.
