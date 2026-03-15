@@ -300,7 +300,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Integrate Supabase Auth JWT validation in backend.
 - [x] Enable email/password auth in Supabase Auth for MVP.
 <!-- - [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`). -->
-- [ ] Add mandatory auth middleware for protected endpoints.
+- [x] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.
 - [ ] Implement 2FA/TOTP enrollment and verification flow in security settings.

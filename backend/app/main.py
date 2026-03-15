@@ -25,7 +25,7 @@ from app.api.v1.routes.retention import router as retention_router
 from app.api.v1.routes.settings import router as settings_router
 from app.core.errors import http_error_to_response, validation_error_to_response
 from app.core.logging_config import configure_logging
-from app.core.middleware import ErrorHandlingMiddleware, RequestContextMiddleware
+from app.core.middleware import ErrorHandlingMiddleware, MandatoryAuthMiddleware, RequestContextMiddleware
 from app.core.settings import get_settings
 
 
@@ -51,6 +51,7 @@ app.add_middleware(
     expose_headers=["x-request-id", "x-trace-id"],
 )
 app.add_middleware(ErrorHandlingMiddleware)
+app.add_middleware(MandatoryAuthMiddleware)
 app.add_middleware(RequestContextMiddleware)
 app.include_router(health_router)
 app.include_router(metrics_router)

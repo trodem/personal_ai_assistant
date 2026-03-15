@@ -11,6 +11,7 @@ from app.core.analytics import emit_operational_event
 from app.core.errors import (
     AppError,
     app_error_to_response,
+    build_error_response,
     http_error_to_response,
     unexpected_error_to_response,
     validation_error_to_response,
@@ -20,6 +21,30 @@ from app.core.request_context import request_id_ctx_var, tenant_id_ctx_var, trac
 
 
 logger = logging.getLogger(__name__)
+
+
+class MandatoryAuthMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next) -> Response:
+        # Enforce bearer auth on every API v1 route by default.
+        if request.method.upper() == "OPTIONS":
+            return await call_next(request)
+        if not request.url.path.startswith("/api/v1"):
+            return await call_next(request)
+
+        authorization = request.headers.get("Authorization", "").strip()
+        if not authorization:
+            return build_error_response(
+                status_code=401,
+                code="auth.missing_token",
+                message="Missing bearer token.",
+            )
+        if not authorization.lower().startswith("bearer "):
+            return build_error_response(
+                status_code=401,
+                code="auth.invalid_token",
+                message="Authorization header must use Bearer scheme.",
+            )
+        return await call_next(request)
 
 
 class ErrorHandlingMiddleware(BaseHTTPMiddleware):
