@@ -20,7 +20,7 @@ class MemoryIngestionE2ETests(unittest.TestCase):
         proposal_response = self.client.post(
             "/api/v1/voice/memory",
             headers=self.headers,
-            files={"audio": ("memory.txt", b"I bought bread", "text/plain")},
+            files={"audio": ("memory.wav", b"I bought bread", "audio/wav")},
         )
         self.assertEqual(proposal_response.status_code, 200)
         proposal = proposal_response.json()
@@ -74,7 +74,7 @@ class MemoryIngestionE2ETests(unittest.TestCase):
         proposal_response = self.client.post(
             "/api/v1/voice/memory",
             headers=self.headers,
-            files={"audio": ("memory.txt", b"I bought bread for 3 chf", "text/plain")},
+            files={"audio": ("memory.wav", b"I bought bread for 3 chf", "audio/wav")},
         )
         self.assertEqual(proposal_response.status_code, 200)
         proposal = proposal_response.json()

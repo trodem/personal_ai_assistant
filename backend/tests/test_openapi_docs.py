@@ -48,6 +48,10 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("401", memories_get["responses"])
         self.assertIn("403", memories_get["responses"])
 
+        voice_memory_post = schema["paths"]["/api/v1/voice/memory"]["post"]
+        self.assertEqual(voice_memory_post["summary"], "Upload voice memory")
+        self.assertIn("422", voice_memory_post["responses"])
+
 
 if __name__ == "__main__":
     unittest.main()

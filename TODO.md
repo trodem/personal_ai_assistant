@@ -228,9 +228,9 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P3 - AI Memory Ingestion Pipeline
 
-- [ ] Endpoint `POST /api/v1/voice/memory` with robust audio upload handling.
-- [ ] Whisper integration with timeout and controlled retry.
-- [ ] Versioned extraction prompt (`specs/memory-extraction.md`).
+- [x] Endpoint `POST /api/v1/voice/memory` with robust audio upload handling.
+- [x] Whisper integration with timeout and controlled retry.
+- [x] Versioned extraction prompt (`specs/memory-extraction.md`).
 - [ ] Register extraction/clarification model + prompt versions in `docs/model-registry.md`.
 - [ ] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
 - [ ] Enforce required fields per `memory_type` before persistence (`required_by_type` contract).
@@ -251,6 +251,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P4 - API Endpoints and Contracts
 
+- [x] API folder versioning refactor: move route modules to `backend/app/api/v1/routes` with backward-compatible legacy import layer.
 - [ ] Implement and wire endpoint handlers:
 - [ ] `POST /api/v1/voice/memory`
 - [ ] `POST /api/v1/voice/question`

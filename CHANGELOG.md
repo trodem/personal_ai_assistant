@@ -142,14 +142,31 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added Alembic revision `20260315_0009_add_structured_data_schema_version.py` to introduce `structured_data_schema_version` on `memories` and `memory_versions` with default `1` and positive-version check constraints for forward-compatible payload evolution.
 - Added deterministic local seed dataset SQL `scripts/sql/local-test-seed.sql` covering realistic tenant-scoped users, memories (including soft-delete case), memory versions, attachments, QA interactions, and memory-audit entries for development and integration checks.
 - Added `scripts/seed-local-test-dataset.ps1` to apply/verify the local seed dataset against Docker Postgres with strict failure handling and row-count summary output.
+- Added `backend/app/services/audio_upload.py` with robust voice-upload validation for `/api/v1/voice/memory` (allowed audio MIME types, 5 MB max payload size, and explicit empty-payload rejection).
+- Added `backend/tests/test_voice_memory_upload_validation.py` covering unsupported content type, empty audio payload, and over-limit upload rejection for voice-memory ingestion.
+- Added `backend/app/services/whisper_transcription.py` with Whisper transcription integration, controlled timeout/retry behavior, and deterministic local fallback when OpenAI key is not configured.
+- Added `backend/tests/test_whisper_transcription.py` covering Whisper fallback, timeout retry-success path, retry exhaustion (`503 ai.provider_unavailable`), and non-retryable provider error mapping.
+- Added API versioning folder structure `backend/app/api/v1/routes` and migrated route modules into the versioned package.
+- Added compatibility layer modules under `backend/app/api/routes/*` forwarding to `app.api.v1.routes.*` to preserve legacy import paths during transition.
+- Added versioned extraction prompt module `backend/app/services/prompts/memory_extraction_prompt.py` with stable prompt identifier `memory_extraction_v1` and reusable prompt builder.
+- Added `backend/tests/test_memory_extraction_prompt_versioning.py` to enforce prompt version format and canonical memory-type coverage in the extraction prompt contract.
 - Marked P2 task `Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries` as completed in `TODO.md`.
 - Marked P2 task `Add soft-delete + audit trail strategy for sensitive memory operations (update/delete)` as completed in `TODO.md`.
 - Updated memory API contracts and runtime payload handling to include `structured_data_schema_version` (default `1`) in save/list flows and OpenAPI schema definitions (`SaveMemoryRequest`, `MemoryRecord`).
 - Marked P2 task `Add structured_data_schema_version support for forward-compatible payload evolution` as completed in `TODO.md`.
 - Updated `README.md` local startup sequence to include deterministic local test dataset seeding.
 - Updated CI workflow (`.github/workflows/ci.yml`) to execute `scripts/migration-smoke-check.ps1` after quality gates, enforcing migration upgrade/downgrade/restore verification in automation.
+- Updated `/api/v1/voice/memory` upload handling to enforce robust audio validation before extraction and aligned OpenAPI/spec coverage for 422 upload-validation failures.
+- Updated `/api/v1/voice/memory` transcription path to use Whisper service integration with controlled retries and `503` response contract for provider unavailability.
+- Updated `.env.example` with Whisper runtime controls (`WHISPER_TIMEOUT_SECONDS`, `WHISPER_MAX_RETRIES`).
+- Updated backend router wiring in `backend/app/main.py` to import from `app.api.v1.routes.*`.
+- Updated memory-ingestion telemetry wiring to use centralized extraction prompt version constant instead of route-local hardcoded value.
 - Marked P2 task `Create realistic local seed dataset for tests` as completed in `TODO.md`.
 - Marked P2 task `Test migration up/down in CI` as completed in `TODO.md`.
+- Marked P3 task `Endpoint POST /api/v1/voice/memory with robust audio upload handling` as completed in `TODO.md`.
+- Marked P3 task `Whisper integration with timeout and controlled retry` as completed in `TODO.md`.
+- Marked dedicated API folder versioning refactor task as completed in `TODO.md`.
+- Marked P3 task `Versioned extraction prompt (specs/memory-extraction.md)` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

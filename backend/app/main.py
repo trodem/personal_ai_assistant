@@ -6,14 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.api.routes.admin import router as admin_router
-from app.api.routes.attachments import router as attachments_router
-from app.api.routes.health import router as health_router
-from app.api.routes.memory_ingestion import router as memory_ingestion_router
-from app.api.routes.memories import router as memories_router
-from app.api.routes.metrics import router as metrics_router
-from app.api.routes.question import router as question_router
-from app.api.routes.settings import router as settings_router
+from app.api.v1.routes.admin import router as admin_router
+from app.api.v1.routes.attachments import router as attachments_router
+from app.api.v1.routes.health import router as health_router
+from app.api.v1.routes.memory_ingestion import router as memory_ingestion_router
+from app.api.v1.routes.memories import router as memories_router
+from app.api.v1.routes.metrics import router as metrics_router
+from app.api.v1.routes.question import router as question_router
+from app.api.v1.routes.settings import router as settings_router
 from app.core.errors import http_error_to_response, validation_error_to_response
 from app.core.logging_config import configure_logging
 from app.core.middleware import ErrorHandlingMiddleware, RequestContextMiddleware

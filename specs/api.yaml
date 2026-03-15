@@ -67,7 +67,7 @@ paths:
     post:
       tags: [Voice]
       summary: Upload voice memory
-      description: Upload audio for transcription, extraction, and confirmation proposal.
+      description: Upload audio for transcription, extraction, and confirmation proposal. Supported content types are `audio/mpeg`, `audio/mp3`, `audio/wav`, `audio/x-wav`, `audio/mp4`, `audio/x-m4a`, `audio/webm`, and `audio/ogg`; max payload size is 5 MB.
       security:
         - bearerAuth: []
       parameters:
@@ -92,6 +92,10 @@ paths:
                 $ref: "#/components/schemas/MemoryProposalResponse"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+        "503":
+          description: Transcription provider unavailable. Client can retry later.
 
   /api/v1/voice/question:
     post:
