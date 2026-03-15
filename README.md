@@ -194,6 +194,14 @@ pre-commit run --all-files
 
 Authoritative execution sequence is defined in [TODO.md](/d:/Personal_AI_Assistant/TODO.md) and [PROJECT_BOOTSTRAP.md](/d:/Personal_AI_Assistant/PROJECT_BOOTSTRAP.md).
 
+### Mobile Run Helper (root `.env`)
+
+Use the helper script to start the Flutter app with `SUPABASE_URL` and `SUPABASE_ANON_KEY` from the root `.env`:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/run-mobile.ps1
+```
+
 ---
 
 # Document Routing
