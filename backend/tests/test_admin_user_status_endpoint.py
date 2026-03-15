@@ -26,6 +26,8 @@ class AdminUserStatusEndpointTests(unittest.TestCase):
         self.user_headers = {"Authorization": f"Bearer {user_token}", "x-tenant-id": "tenant-a"}
         self.admin_no_mfa_headers = {"Authorization": f"Bearer {admin_no_mfa_token}", "x-tenant-id": "tenant-a"}
         self.target_user_id = f"target-user-{uuid4()}"
+        target_user_token = build_dev_token(self.target_user_id, tenant_id="tenant-a", role="user")
+        self.target_user_headers = {"Authorization": f"Bearer {target_user_token}", "x-tenant-id": "tenant-a"}
 
     def test_admin_can_suspend_reactivate_and_cancel_user(self) -> None:
         suspended = self.client.patch(
@@ -81,6 +83,30 @@ class AdminUserStatusEndpointTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()["error"]["code"], "auth.mfa_required")
+
+    def test_suspended_user_is_blocked_on_protected_endpoint(self) -> None:
+        update = self.client.patch(
+            f"/api/v1/admin/users/{self.target_user_id}/status",
+            headers=self.admin_headers,
+            json={"status": "suspended"},
+        )
+        self.assertEqual(update.status_code, 200)
+
+        blocked = self.client.get("/api/v1/memories", headers=self.target_user_headers)
+        self.assertEqual(blocked.status_code, 403)
+        self.assertEqual(blocked.json()["error"]["code"], "auth.forbidden")
+
+    def test_canceled_user_is_blocked_on_protected_endpoint(self) -> None:
+        update = self.client.patch(
+            f"/api/v1/admin/users/{self.target_user_id}/status",
+            headers=self.admin_headers,
+            json={"status": "canceled"},
+        )
+        self.assertEqual(update.status_code, 200)
+
+        blocked = self.client.get("/api/v1/memories", headers=self.target_user_headers)
+        self.assertEqual(blocked.status_code, 403)
+        self.assertEqual(blocked.json()["error"]["code"], "auth.forbidden")
 
 
 if __name__ == "__main__":

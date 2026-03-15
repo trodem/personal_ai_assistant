@@ -8,6 +8,8 @@ from app.core.auth import AuthenticatedUser, enforce_mfa_policy_for_role, get_cu
 from app.core.errors import AppError
 from app.repositories.admin_user_repository import (
     AdminUserRecord,
+    count_active_authors_for_tenant,
+    get_admin_user_for_tenant,
     list_admin_users_for_tenant,
     update_admin_user_status,
     upsert_admin_user,
@@ -88,6 +90,42 @@ async def update_user_status(
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> AdminUserResponse:
     _ensure_admin_or_author(current_user)
+    upsert_admin_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        role=current_user.role,
+        status=current_user.status,
+    )
+
+    target_before = get_admin_user_for_tenant(
+        tenant_id=current_user.tenant_id,
+        user_id=id,
+    )
+
+    if (
+        current_user.role == "author"
+        and id == current_user.user_id
+        and payload.status in {"suspended", "canceled"}
+    ):
+        raise AppError(
+            status_code=status.HTTP_403_FORBIDDEN,
+            code="auth.forbidden",
+            message="Author cannot suspend or cancel own account.",
+        )
+
+    if (
+        target_before is not None
+        and target_before["role"] == "author"
+        and target_before["status"] == "active"
+        and payload.status in {"suspended", "canceled"}
+        and count_active_authors_for_tenant(tenant_id=current_user.tenant_id) <= 1
+    ):
+        raise AppError(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            code="auth.last_active_author_required",
+            message="Operation would remove the last active author.",
+        )
+
     record = update_admin_user_status(
         tenant_id=current_user.tenant_id,
         user_id=id,

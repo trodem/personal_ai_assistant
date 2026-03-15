@@ -309,11 +309,11 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `user` can opt in/out unless tightened later by policy change
 - [x] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
 - [x] Add tenant-aware authorization guardrails for future B2B mode (`tenant_id` context propagation + checks).
-- [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
-- [ ] Enforce author safety invariants:
-- [ ] author cannot change own role
-- [ ] author cannot suspend/cancel own account
-- [ ] system must always keep at least one active author
+- [x] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
+- [x] Enforce author safety invariants:
+- [x] author cannot change own role
+- [x] author cannot suspend/cancel own account
+- [x] system must always keep at least one active author
 - [ ] Negative auth tests:
 - [ ] missing token
 - [ ] expired token

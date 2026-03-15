@@ -69,6 +69,40 @@ class PrivilegedPolicyContractTests(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()["error"]["code"], "billing.plan_locked_by_role")
 
+    def test_author_cannot_suspend_or_cancel_own_account(self) -> None:
+        suspended = self.client.patch(
+            f"/api/v1/admin/users/{self.author_user_id}/status",
+            headers=self.author_headers,
+            json={"status": "suspended"},
+        )
+        self.assertEqual(suspended.status_code, 403)
+        self.assertEqual(suspended.json()["error"]["code"], "auth.forbidden")
+
+        canceled = self.client.patch(
+            f"/api/v1/admin/users/{self.author_user_id}/status",
+            headers=self.author_headers,
+            json={"status": "canceled"},
+        )
+        self.assertEqual(canceled.status_code, 403)
+        self.assertEqual(canceled.json()["error"]["code"], "auth.forbidden")
+
+    def test_last_active_author_protection_blocks_status_demotion(self) -> None:
+        # Seed a single active author in tenant and attempt to suspend it.
+        upsert_admin_user(
+            tenant_id=self.tenant_id,
+            user_id=self.target_user_id,
+            role="author",
+            status="active",
+        )
+
+        response = self.client.patch(
+            f"/api/v1/admin/users/{self.target_user_id}/status",
+            headers=self.admin_headers,
+            json={"status": "suspended"},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json()["error"]["code"], "auth.last_active_author_required")
+
 
 if __name__ == "__main__":
     unittest.main()
