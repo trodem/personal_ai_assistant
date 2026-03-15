@@ -113,6 +113,16 @@ class DashboardResponse(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
+class AuthorDashboardResponse(BaseModel):
+    total_users: int
+    users_by_role: dict[str, int]
+    users_by_status: dict[str, int]
+    users_by_plan: dict[str, int]
+    active_authors: int
+
+    model_config = ConfigDict(extra="allow")
+
+
 class AdminUserResponse(BaseModel):
     id: str
     email: str

@@ -26,6 +26,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/admin/users", schema["paths"])
         self.assertIn("/api/v1/admin/users/{id}/status", schema["paths"])
         self.assertIn("/api/v1/author/users/{id}/role", schema["paths"])
+        self.assertIn("/api/v1/author/dashboard", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -84,6 +85,10 @@ class OpenApiDocsTests(unittest.TestCase):
         author_update_role = schema["paths"]["/api/v1/author/users/{id}/role"]["patch"]
         self.assertEqual(author_update_role["summary"], "Update user role (author only)")
         self.assertIn("422", author_update_role["responses"])
+
+        author_dashboard_get = schema["paths"]["/api/v1/author/dashboard"]["get"]
+        self.assertEqual(author_dashboard_get["summary"], "Global supervision dashboard (author only)")
+        self.assertIn("403", author_dashboard_get["responses"])
 
 
 if __name__ == "__main__":
