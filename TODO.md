@@ -90,7 +90,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Object storage ready:
 - [x] Supabase local Storage (via Supabase CLI/Docker) for development
 - [x] Supabase Storage buckets configured for staging/prod
-<!-- - [ ] Stripe account with test mode enabled (for billing phase). -->
+- [x] Stripe account with test mode enabled (for billing phase).
 
 ### Recommended accounts (to reduce risk)
 <!-- - [ ] Error monitoring account (e.g., Sentry or equivalent). -->
@@ -116,7 +116,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] OpenAI key validated with a minimal API test call.
 - [x] Postgres connection, migration run, and rollback test completed.
 - [x] Object storage upload/download test completed.
-<!-- - [ ] Stripe test webhook delivery validated locally. -->
+- [x] Stripe test webhook delivery validated locally.
 
 ### Budget and limits safeguards
 <!-- - [ ] Set monthly spending cap for OpenAI usage.
@@ -130,12 +130,12 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Define support contact and incident response owner.
 
 ### Day 0 (owner checklist, 2-4 hours)
-<!-- - [ ] Create/verify accounts: OpenAI, Supabase, Stripe (test mode). -->
-<!-- - [ ] Enable MFA everywhere and store recovery codes securely. -->
-<!-- - [ ] Generate dev-only keys/secrets and place them in local secret storage. -->
-<!-- - [ ] Set OpenAI budget cap and spend alerts. -->
+- [x] Create/verify accounts: OpenAI, Supabase, Stripe (test mode).
+- [ ] Enable MFA everywhere and store recovery codes securely. (`blocked`: provider-console manual step; track in `MFA_ENABLEMENT_CHECKLIST.md`)
+- [ ] Generate dev-only keys/secrets and place them in local secret storage.
+- [ ] Set OpenAI budget cap and spend alerts.
 - [x] Run minimal connectivity checks (OpenAI test call, DB connect, storage upload).
-<!-- - [ ] Mark this section done only when no external dependency remains blocked. -->
+- [ ] Mark this section done only when no external dependency remains blocked.
 
 ### Day 1 (project readiness, 2-4 hours)
 - [x] Confirm local toolchain: Docker, Python, package manager, Flutter SDK.
@@ -145,7 +145,7 @@ Complete this checklist before implementation to avoid setup blockers.
 - [x] Execute one full smoke path: backend boot -> health endpoints -> DB readiness.
 - [x] Record all setup commands in `README.md` so setup is reproducible.
 
-<!-- ### Day 0 Operational Registry (fill this once, then maintain)
+### Day 0 Operational Registry (fill this once, then maintain)
 
 Use this as your single source of truth for external dependencies and ownership.
 
@@ -157,7 +157,7 @@ Use this as your single source of truth for external dependencies and ownership.
 | Stripe | Billing + subscriptions | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Test mode and webhooks verified |
 | Email Provider (TBD) | Transactional notifications | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Domain authentication + delivery monitoring |
 | CI Platform | Build/test automation | dev/staging/prod | TODO | TODO | TODO | TODO | planned | TODO | Required checks enabled |
-| Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set | -->
+| Monitoring/Alerts | Uptime + errors + cost alerts | staging/prod | TODO | TODO | TODO | TODO | planned | TODO | On-call notification path set |
 
 ### Day 0 Credentials and Policy Checklist
 - [x] Key naming convention defined (example: `APP_<SERVICE>_<ENV>_<PURPOSE>`).

@@ -7,6 +7,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added `MFA_ENABLEMENT_CHECKLIST.md` with per-provider MFA/recovery-code evidence tracking and explicit completion criteria for the Day 0 MFA prerequisite task.
+- Completed environment readiness check `Stripe test webhook delivery validated locally` via Stripe CLI local forwarding test (`payment_intent.succeeded`) with confirmed HTTP `200` delivery to a local webhook receiver.
 - Added Alembic migration baseline (`backend/alembic`) and `scripts/migration-smoke-check.ps1` to verify PostgreSQL migration upgrade/downgrade/restore flow in local Docker.
 - Added `scripts/storage-upload-download-smoke.ps1` to validate Supabase Storage object lifecycle (`upload -> download -> content check -> delete`) against the configured receipts bucket.
 - Added `PRIVACY_POLICY_BASELINE.md` with MVP privacy baseline scope, data categories, retention/deletion process, security posture, and user rights/export-deletion commitments.
@@ -74,6 +76,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added question-path AI telemetry persistence for per-user/per-feature cost visibility with dedicated Prometheus series (`llmops_question_path_requests_total`, `llmops_question_path_token_total`, `llmops_question_path_estimated_cost_total`) and question-flow integration across `structured_sql`, `semantic_fallback`, and `cache_hit`.
 - Locked question-answer confidence/provenance contract with explicit OpenAPI regression coverage requiring `QuestionResponse` fields `answer`, `confidence`, and `source_memory_ids`.
 - Added dedicated regression suite for key README question examples (`How much did I spend on the motorcycle last year?`, `What did I buy in Rome?`, `Who owes me money?`, `What did I store in the cellar?`) to prevent behavior drift across structured and semantic question paths.
+- Completed environment prerequisite `Stripe account with test mode enabled (for billing phase)` based on local test-key configuration validation (`STRIPE_SECRET_KEY` test-prefix).
+- Completed Day 0 account-readiness checklist item `Create/verify accounts: OpenAI, Supabase, Stripe (test mode)` based on configured local integration credentials.
 - Aligned AI UX backend contract for memory flow: one clarification question per turn, explicit AI states (`needs_clarification`, `ready_to_confirm`, `saved`), confirmation actions (`Confirm/Modify/Cancel`), source context (`voice`), and editable absolute datetime in proposal response, with regression tests.
 - Added attachments E2E baseline: protected `POST /api/v1/attachments` for receipt-photo upload (image-only validation), deterministic OCR-to-memory-proposal response, explicit confirm-only persistence gate, and authorized signed-URL validation on memory save with attachment lifecycle transition to `persisted`.
 - Added attachment lifecycle state-machine verification coverage end-to-end with deterministic status history (`uploaded -> ocr_processing -> proposal_ready -> confirmed -> persisted`) plus OCR failure branch (`failed`, `ocr.processing_failed`) and persistence blocking for non-ready attachments.
