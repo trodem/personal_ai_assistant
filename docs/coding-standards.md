@@ -31,6 +31,17 @@ These rules are non-negotiable for this project.
 
 ---
 
+## Frontend-Impact Definition of Done
+
+For every task that changes Flutter UI behavior, authentication flow, onboarding flow, or any mobile-to-backend integration path, completion requires all checks below:
+
+- Unit/integration tests for touched logic are green.
+- Backend/API smoke check is executed with a real Supabase access token (not only dev-signed local tokens).
+- Emulator/manual verification is executed for the exact affected user path (at minimum: login + changed screen/flow outcome).
+- A task cannot be marked done if only backend tests pass while frontend flow remains unverified.
+
+---
+
 ## FastAPI Standards
 
 - Keep OpenAPI/Swagger docs accurate for every endpoint change.

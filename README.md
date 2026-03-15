@@ -202,6 +202,27 @@ Use the helper script to start the Flutter app with `SUPABASE_URL` and `SUPABASE
 powershell -ExecutionPolicy Bypass -File scripts/run-mobile.ps1
 ```
 
+### Frontend Verification Workflow (mandatory for frontend-impact tasks)
+
+Before closing a task that touches mobile UX or mobile-backend integration:
+
+1. Run focused tests for touched code.
+2. Run one backend smoke call with a real Supabase access token.
+3. Verify the affected user flow on emulator.
+
+Example backend smoke call for language persistence:
+
+```powershell
+# requires root .env configured and backend running on localhost:8000
+powershell -ExecutionPolicy Bypass -File scripts/supabase-auth-smoke.ps1
+```
+
+Minimum emulator checklist:
+
+- login succeeds with configured Supabase credentials
+- changed screen flow completes without runtime error
+- backend state update is visible in app behavior
+
 ---
 
 # Document Routing

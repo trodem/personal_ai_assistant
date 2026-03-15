@@ -135,6 +135,15 @@ Mini-audit checklist (mandatory):
 - verify `CHANGELOG.md` was updated when relevant
 - document any gaps/blockers before starting the next milestone
 
+Frontend-impact closure gate (mandatory):
+
+- If a change affects Flutter screens, onboarding/login, or mobile-backend integration, do not close the task with backend-only green tests.
+- Require three confirmations before marking done:
+- focused unit/integration tests
+- backend smoke with real Supabase token
+- emulator/manual verification of the changed user flow
+- If one of these checks is missing, keep task open and report what is pending.
+
 ---
 
 # Code Style Rules
