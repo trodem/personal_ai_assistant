@@ -134,6 +134,12 @@ class UpdateUserStatusRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class UpdateUserRoleRequest(BaseModel):
+    role: Literal["user", "admin"]
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UpdateProfileRequest(BaseModel):
     preferred_language: Literal["en", "it", "de"]
 

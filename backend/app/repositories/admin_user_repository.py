@@ -80,3 +80,34 @@ def update_admin_user_status(
         user_id=user_id,
         status=status,
     )
+
+
+def update_admin_user_role(
+    *,
+    tenant_id: str,
+    user_id: str,
+    role: str,
+) -> AdminUserRecord:
+    _require_tenant_id(tenant_id)
+    for item in _ADMIN_USER_RECORDS:
+        if item["tenant_id"] == tenant_id and item["id"] == user_id:
+            item["role"] = role
+            plan, billing_exempt = _default_plan_for_role(role)
+            item["subscription_plan"] = plan
+            item["billing_exempt"] = billing_exempt
+            return item
+
+    return upsert_admin_user(
+        tenant_id=tenant_id,
+        user_id=user_id,
+        role=role,
+    )
+
+
+def count_active_authors_for_tenant(*, tenant_id: str) -> int:
+    _require_tenant_id(tenant_id)
+    return sum(
+        1
+        for item in _ADMIN_USER_RECORDS
+        if item["tenant_id"] == tenant_id and item["role"] == "author" and item["status"] == "active"
+    )

@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.v1.routes.admin import router as admin_router
+from app.api.v1.routes.author import router as author_router
 from app.api.v1.routes.attachments import router as attachments_router
 from app.api.v1.routes.dashboard import router as dashboard_router
 from app.api.v1.routes.feedback import router as feedback_router
@@ -51,6 +52,7 @@ app.include_router(question_router)
 app.include_router(feedback_router)
 app.include_router(dashboard_router)
 app.include_router(admin_router)
+app.include_router(author_router)
 app.include_router(settings_router)
 
 

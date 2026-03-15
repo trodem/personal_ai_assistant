@@ -265,7 +265,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `GET /api/v1/dashboard`
 - [x] `GET /api/v1/admin/users` (admin/author)
 - [x] `PATCH /api/v1/admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
-- [ ] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
+- [x] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
 - [ ] `GET /api/v1/author/dashboard` (author only global supervision)
 - [ ] `GET /api/v1/me/settings`
 - [ ] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)

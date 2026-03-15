@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Implemented `PATCH /api/v1/author/users/{id}/role` as author-only endpoint with MFA enforcement, self-role-change protection, role transition support (`user` <-> `admin`) with plan/billing updates, and modular repository support for role updates; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `PATCH /api/v1/admin/users/{id}/status` with admin/author + MFA enforcement and status transitions (`active`, `suspended`, `canceled`), added modular admin-user repository support, expanded admin user response schema, added endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.
 - Marked P4 endpoint task `GET /api/v1/admin/users` as completed in `TODO.md` after validating existing role/MFA enforcement and OpenAPI exposure with green targeted regression tests.
 - Implemented and wired `GET /api/v1/dashboard` with authenticated user/tenant-scoped metrics (`total_memories`, `memories_by_type`, `latest_memory_events`) via dedicated route/service modules, added endpoint/OpenAPI regression tests, and marked the P4 dashboard endpoint task completed in `TODO.md`.
