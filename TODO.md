@@ -298,7 +298,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P5 - Auth and Access Control
 
 - [x] Integrate Supabase Auth JWT validation in backend.
-- [ ] Enable email/password auth in Supabase Auth for MVP.
+- [x] Enable email/password auth in Supabase Auth for MVP.
 <!-- - [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`). -->
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.

@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Completed P5 task `Enable email/password auth in Supabase Auth for MVP`: verified end-to-end runtime flow with `scripts/supabase-auth-smoke.ps1` (`grant_type=password` token login + authenticated call to `/api/v1/memories`) and confirmed operational readiness for email/password authentication.
 - Completed P5 task `Integrate Supabase Auth JWT validation in backend`: hardened Supabase JWKS (`RS256/ES256`) path so decoded tokens still enforce required claims (`sub`, `exp`) before authentication succeeds, and added dedicated regression tests for JWKS decoding, missing Supabase URL handling, and `get_current_user` acceptance with valid tenant-scoped RS256 payload.
 - Completed P4 error-contract consistency task: centralized HTTP status-to-error-code mapping (`400/401/403/404/409/422/429/502/503` + fallback `500`), injected a single OpenAPI error envelope schema (`ErrorEnvelope`) across `4xx/5xx` responses, aligned `specs/api.yaml` reusable error responses/components, and added regression coverage for both runtime schema and OpenAPI error-response references.
 - Added privileged-policy contract tests in `backend/tests/test_privileged_policy_contract.py` covering `auth.last_active_author_required` protection, self-role-change rejection, and `billing.plan_locked_by_role` enforcement; marked the related P4 TODO task as completed.
