@@ -5,18 +5,21 @@ from fastapi import APIRouter, Depends
 from app.api.schemas import (
     AcceptedResponse,
     NotificationPreferences,
+    PaymentMethodsListResponse,
     UpdateNotificationPreferencesRequest,
     UpdateProfileRequest,
     UpdateSecurityRequest,
     UserSettingsResponse,
 )
 from app.core.auth import AuthenticatedUser, get_current_user
+from app.core.errors import AppError
 from app.services.user_preferences import (
     get_notification_preferences,
     get_preferred_language,
     set_notification_preferences,
     set_preferred_language,
 )
+from app.services.payment_methods import list_payment_methods_for_user
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
@@ -117,3 +120,30 @@ async def update_notification_settings(
         },
     )
     return _build_settings_response(current_user)
+
+
+@router.get(
+    "/payment-methods",
+    summary="List user payment methods",
+    description="Returns masked payment methods for authenticated user role.",
+    response_model=PaymentMethodsListResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        403: {"description": "Forbidden. Billing plan is locked by role policy."},
+    },
+)
+async def list_payment_methods(
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> PaymentMethodsListResponse:
+    if current_user.role in {"admin", "author"}:
+        raise AppError(
+            status_code=403,
+            code="billing.plan_locked_by_role",
+            message="Payment methods are unavailable for billing-exempt roles.",
+        )
+
+    items = list_payment_methods_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+    )
+    return PaymentMethodsListResponse(items=items)

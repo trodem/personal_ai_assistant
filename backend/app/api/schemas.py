@@ -179,6 +179,23 @@ class UpdateNotificationPreferencesRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class PaymentMethodRecord(BaseModel):
+    id: str
+    brand: str
+    last4: str
+    exp_month: int
+    exp_year: int
+    is_default: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class PaymentMethodsListResponse(BaseModel):
+    items: list[PaymentMethodRecord]
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str

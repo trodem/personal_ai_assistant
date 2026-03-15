@@ -271,7 +271,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)
 - [x] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
 - [x] `PATCH /api/v1/me/settings/notifications` (notification channels preferences)
-- [ ] `GET /api/v1/me/settings/payment-methods` (masked cards list)
+- [x] `GET /api/v1/me/settings/payment-methods` (masked cards list)
 - [ ] `POST /api/v1/me/settings/payment-methods/setup-intent` (provider setup intent for add/update)
 - [ ] `POST /api/v1/me/settings/payment-methods/{id}/default` (set default payment method)
 - [ ] `DELETE /api/v1/me/settings/payment-methods/{id}` (remove payment method)

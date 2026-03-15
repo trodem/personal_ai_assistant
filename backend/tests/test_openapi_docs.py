@@ -29,6 +29,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/author/dashboard", schema["paths"])
         self.assertIn("/api/v1/me/settings/security", schema["paths"])
         self.assertIn("/api/v1/me/settings/notifications", schema["paths"])
+        self.assertIn("/api/v1/me/settings/payment-methods", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -99,6 +100,10 @@ class OpenApiDocsTests(unittest.TestCase):
         settings_notifications_patch = schema["paths"]["/api/v1/me/settings/notifications"]["patch"]
         self.assertEqual(settings_notifications_patch["summary"], "Update notification preferences")
         self.assertIn("422", settings_notifications_patch["responses"])
+
+        settings_payment_methods_get = schema["paths"]["/api/v1/me/settings/payment-methods"]["get"]
+        self.assertEqual(settings_payment_methods_get["summary"], "List user payment methods")
+        self.assertIn("403", settings_payment_methods_get["responses"])
 
 
 if __name__ == "__main__":

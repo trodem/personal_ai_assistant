@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Implemented `GET /api/v1/me/settings/payment-methods` with typed masked-card response model, role-based billing lock (`admin`/`author` -> `403 billing.plan_locked_by_role`), and user-scoped listing service; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `PATCH /api/v1/me/settings/notifications` with typed notification preferences contract (`in_app`, `push`, `email`) and user-scoped persistence, added endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.
 - Implemented `PATCH /api/v1/me/settings/security` with typed request contract (`UpdateSecurityRequest`) and accepted-response payload (`{\"accepted\": true}`), added endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.
 - Marked P4 endpoint task `PATCH /api/v1/me/settings/profile` as completed in `TODO.md` after validating existing preferred-language update behavior (`en/it/de`), persistence, and OpenAPI coverage with green targeted regression tests.
