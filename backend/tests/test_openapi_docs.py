@@ -169,6 +169,30 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertEqual(data_export_status["summary"], "Get export job status")
         self.assertIn("404", data_export_status["responses"])
 
+    def test_data_export_schemas_align_with_spec_contract(self) -> None:
+        schema = self.client.get("/openapi.json").json()
+        components = schema["components"]["schemas"]
+
+        request_schema = components["DataExportRequest"]
+        self.assertEqual(request_schema["required"], ["format"])
+        self.assertEqual(request_schema["properties"]["format"]["enum"], ["json", "csv", "pdf"])
+
+        job_schema = components["DataExportJobResponse"]
+        self.assertIn("job_id", job_schema["required"])
+        self.assertEqual(job_schema["properties"]["job_id"]["format"], "uuid")
+        self.assertEqual(
+            job_schema["properties"]["status"]["enum"],
+            ["queued", "processing", "completed", "failed"],
+        )
+
+        status_schema = components["DataExportJobStatusResponse"]
+        self.assertIn("job_id", status_schema["required"])
+        self.assertIn("status", status_schema["required"])
+        self.assertEqual(status_schema["properties"]["job_id"]["format"], "uuid")
+        expires_anyof = status_schema["properties"]["expires_at"]["anyOf"]
+        expires_schema = next(item for item in expires_anyof if item.get("type") == "string")
+        self.assertEqual(expires_schema["format"], "date-time")
+
 
 if __name__ == "__main__":
     unittest.main()

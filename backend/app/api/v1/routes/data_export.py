@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from uuid import UUID
 
 from app.api.schemas import DataExportJobResponse, DataExportJobStatusResponse, DataExportRequest
 from app.core.auth import AuthenticatedUser, get_current_user
@@ -40,7 +41,7 @@ async def request_data_export(
     },
 )
 async def get_data_export_status(
-    job_id: str,
+    job_id: UUID,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> DataExportJobStatusResponse:
     job = get_data_export_job_for_user(

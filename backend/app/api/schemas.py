@@ -1,4 +1,6 @@
+from datetime import datetime
 from typing import Any, Literal
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -287,17 +289,17 @@ class DataExportRequest(BaseModel):
 
 
 class DataExportJobResponse(BaseModel):
-    job_id: str
+    job_id: UUID
     status: Literal["queued", "processing", "completed", "failed"]
 
     model_config = ConfigDict(extra="forbid")
 
 
 class DataExportJobStatusResponse(BaseModel):
-    job_id: str
+    job_id: UUID
     status: Literal["queued", "processing", "completed", "failed"]
     download_url: str | None = None
-    expires_at: str | None = None
+    expires_at: datetime | None = None
 
     model_config = ConfigDict(extra="forbid")
 
