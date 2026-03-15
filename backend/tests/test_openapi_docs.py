@@ -21,6 +21,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/health/live", schema["paths"])
         self.assertIn("/health/ready", schema["paths"])
         self.assertIn("/metrics", schema["paths"])
+        self.assertIn("/api/v1/attachments", schema["paths"])
         self.assertIn("/api/v1/memories", schema["paths"])
         self.assertIn("/api/v1/dashboard", schema["paths"])
         self.assertIn("/api/v1/admin/users", schema["paths"])
@@ -92,6 +93,10 @@ class OpenApiDocsTests(unittest.TestCase):
         delete_memory = schema["paths"]["/api/v1/memory/{id}"]["delete"]
         self.assertEqual(delete_memory["summary"], "Delete memory")
         self.assertIn("404", delete_memory["responses"])
+
+        attachments_post = schema["paths"]["/api/v1/attachments"]["post"]
+        self.assertEqual(attachments_post["summary"], "Upload receipt photo attachment")
+        self.assertIn("422", attachments_post["responses"])
 
         admin_update_status = schema["paths"]["/api/v1/admin/users/{id}/status"]["patch"]
         self.assertEqual(admin_update_status["summary"], "Update user status (admin/author)")
@@ -192,6 +197,19 @@ class OpenApiDocsTests(unittest.TestCase):
         expires_anyof = status_schema["properties"]["expires_at"]["anyOf"]
         expires_schema = next(item for item in expires_anyof if item.get("type") == "string")
         self.assertEqual(expires_schema["format"], "date-time")
+
+    def test_attachment_contract_explicitly_maps_ocr_output_to_memory_proposal(self) -> None:
+        schema = self.client.get("/openapi.json").json()
+        attachments_post = schema["paths"]["/api/v1/attachments"]["post"]
+        self.assertIn("memory_proposal", attachments_post["description"])
+        self.assertIn("ocr_text_preview", attachments_post["description"])
+
+        attachment_schema = schema["components"]["schemas"]["AttachmentResponse"]
+        memory_proposal_ref = attachment_schema["properties"]["memory_proposal"]["anyOf"][0]["$ref"]
+        self.assertEqual(memory_proposal_ref, "#/components/schemas/AttachmentMemoryProposal")
+
+        proposal_schema = schema["components"]["schemas"]["AttachmentMemoryProposal"]
+        self.assertEqual(proposal_schema["properties"]["source_context"]["default"], "receipt_ocr")
 
 
 if __name__ == "__main__":

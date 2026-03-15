@@ -85,6 +85,18 @@ class AcceptedResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class AttachmentMemoryProposal(BaseModel):
+    transcript: str
+    memory_type: Literal["expense_event", "inventory_event", "loan_event", "note", "document"]
+    structured_data: dict[str, Any]
+    clarification_questions: list[str] = []
+    missing_required_fields: list[str] = []
+    needs_confirmation: bool
+    source_context: Literal["receipt_ocr"] = "receipt_ocr"
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class AttachmentResponse(BaseModel):
     id: str
     file_url: str
@@ -93,7 +105,7 @@ class AttachmentResponse(BaseModel):
     ocr_status: Literal["pending", "processing", "completed", "failed"]
     ocr_text_preview: str | None = None
     error_code: str | None = None
-    memory_proposal: dict[str, Any] | None = None
+    memory_proposal: AttachmentMemoryProposal | None = None
 
     model_config = ConfigDict(extra="forbid")
 

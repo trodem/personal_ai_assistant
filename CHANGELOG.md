@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Defined explicit OCR-to-memory-proposal API contract for receipt attachments: `memory_proposal` is now typed (`AttachmentMemoryProposal`), includes `source_context=receipt_ocr`, and is present only for `status=proposal_ready` while OCR failures return `memory_proposal=null` with `error_code`; aligned route description, `specs/api.yaml`, and added OpenAPI + E2E tests for the explicit transition rule.
 - Aligned data-export request/response schemas with `specs/api.yaml`: `job_id` now OpenAPI `uuid`, `expires_at` now `date-time`, and added explicit OpenAPI contract assertions for `DataExportRequest`, `DataExportJobResponse`, and `DataExportJobStatusResponse`; marked the related P4 schema-alignment TODO task as completed.
 - Implemented `GET /api/v1/me/data-export/{job_id}` with authenticated user-scoped export-status retrieval (`queued|processing|completed|failed`), `404 memory.not_found` for missing/foreign jobs, plus endpoint/OpenAPI regression tests; marked the related P4 TODO task as completed.
 - Implemented `POST /api/v1/me/data-export` to start asynchronous user export jobs (`json/csv/pdf`) with typed response (`job_id`, `status=queued`), added modular data-export route/service, endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.

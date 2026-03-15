@@ -311,7 +311,7 @@ paths:
     post:
       tags: [Attachments]
       summary: Upload receipt photo attachment
-      description: Accepts only receipt photos. PDF and non-image files are rejected. Upload does not persist a memory by itself; memory persistence still requires explicit user confirmation in the memory flow.
+      description: Accepts only receipt photos. PDF and non-image files are rejected. Upload does not persist a memory by itself; memory persistence still requires explicit user confirmation in the memory flow. Explicit transition contract: when OCR succeeds (`ocr_status=completed`, `status=proposal_ready`) the response includes `memory_proposal` generated from `ocr_text_preview`; on OCR failure (`status=failed`) `memory_proposal` is null and `error_code` is present.
       security:
         - bearerAuth: []
       parameters:
@@ -1053,6 +1053,42 @@ components:
         error_code:
           type: string
           description: Present when status is `failed` (for example `ocr.processing_failed`).
+        memory_proposal:
+          $ref: "#/components/schemas/AttachmentMemoryProposal"
+          nullable: true
+          description: Present only when OCR output has been transformed into an explicit memory proposal (`status=proposal_ready`).
+
+    AttachmentMemoryProposal:
+      type: object
+      required:
+        - transcript
+        - memory_type
+        - structured_data
+        - needs_confirmation
+        - source_context
+      properties:
+        transcript:
+          type: string
+          description: OCR text used as extraction input for this proposal.
+        memory_type:
+          $ref: "#/components/schemas/MemoryType"
+        structured_data:
+          type: object
+          additionalProperties: true
+        clarification_questions:
+          type: array
+          items:
+            type: string
+        missing_required_fields:
+          type: array
+          items:
+            type: string
+        needs_confirmation:
+          type: boolean
+        source_context:
+          type: string
+          enum: [receipt_ocr]
+          default: receipt_ocr
 
     DashboardResponse:
       type: object

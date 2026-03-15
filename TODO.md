@@ -285,7 +285,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `POST /api/v1/me/data-export` (start export job: `json/csv/pdf`)
 - [x] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
 - [x] Ensure request/response schemas align with `specs/api.yaml`.
-- [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
+- [x] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
 - [ ] Add API contract tests for core success/error responses.
 - [ ] Add streaming API tests (`chunk` ordering, terminal `done` event, fallback on stream failure).

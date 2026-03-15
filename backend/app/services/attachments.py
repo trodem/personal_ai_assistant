@@ -33,7 +33,7 @@ class AttachmentRecord:
     signed_url: str
     error_code: str | None
     lifecycle_states: list[str]
-    memory_proposal: dict[str, Any]
+    memory_proposal: dict[str, Any] | None
 
 
 _ATTACHMENTS_BY_ID: dict[str, AttachmentRecord] = {}
@@ -125,7 +125,7 @@ def create_attachment(
             signed_url=signed_url,
             error_code="ocr.processing_failed",
             lifecycle_states=lifecycle_states,
-            memory_proposal={},
+            memory_proposal=None,
         )
         _ATTACHMENTS_BY_ID[attachment_id] = record
         return record
@@ -186,6 +186,7 @@ def create_attachment(
             "clarification_questions": proposal.clarification_questions,
             "missing_required_fields": proposal.missing_required_fields,
             "needs_confirmation": proposal.needs_confirmation,
+            "source_context": "receipt_ocr",
         },
     )
     _ATTACHMENTS_BY_ID[attachment_id] = record

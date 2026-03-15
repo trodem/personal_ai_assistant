@@ -30,6 +30,8 @@ class AttachmentFlowE2ETests(unittest.TestCase):
         self.assertEqual(attachment_payload["status"], "proposal_ready")
         self.assertEqual(attachment_payload["ocr_status"], "completed")
         self.assertIn("memory_proposal", attachment_payload)
+        self.assertEqual(attachment_payload["memory_proposal"]["transcript"], attachment_payload["ocr_text_preview"])
+        self.assertEqual(attachment_payload["memory_proposal"]["source_context"], "receipt_ocr")
         self.assertEqual(attachment_payload["memory_proposal"]["memory_type"], "expense_event")
         signed_url = attachment_payload["file_url"]
 
@@ -90,6 +92,7 @@ class AttachmentFlowE2ETests(unittest.TestCase):
         self.assertEqual(attachment_payload["status"], "failed")
         self.assertEqual(attachment_payload["ocr_status"], "failed")
         self.assertEqual(attachment_payload["error_code"], "ocr.processing_failed")
+        self.assertIsNone(attachment_payload["memory_proposal"])
         signed_url = attachment_payload["file_url"]
 
         blocked = self.client.post(

@@ -15,7 +15,12 @@ router = APIRouter(prefix="/api/v1", tags=["Attachments"])
 @router.post(
     "/attachments",
     summary="Upload receipt photo attachment",
-    description="Uploads receipt image, runs OCR extraction, and returns memory proposal plus signed URL.",
+    description=(
+        "Uploads receipt image, runs OCR extraction, and returns signed URL. "
+        "Contract: when `ocr_status=completed` and `status=proposal_ready`, `memory_proposal` is present and "
+        "is explicitly generated from `ocr_text_preview`; when OCR fails (`status=failed`), "
+        "`memory_proposal` is null and `error_code` is set."
+    ),
     response_model=AttachmentResponse,
     responses={
         401: {"description": "Unauthorized. Missing or invalid bearer token."},
