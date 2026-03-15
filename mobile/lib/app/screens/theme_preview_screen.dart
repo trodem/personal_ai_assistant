@@ -5,14 +5,32 @@ import '../widgets/app_primary_button.dart';
 import '../widgets/app_surface_card.dart';
 
 class ThemePreviewScreen extends StatelessWidget {
-  const ThemePreviewScreen({super.key});
+  const ThemePreviewScreen({
+    super.key,
+    this.userEmail,
+    this.onLogout,
+  });
+
+  final String? userEmail;
+  final VoidCallback? onLogout;
 
   @override
   Widget build(BuildContext context) {
     final TextTheme text = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal AI Assistant")),
+      appBar: AppBar(
+        title: const Text("Personal AI Assistant"),
+        actions: <Widget>[
+          if (onLogout != null)
+            IconButton(
+              key: const Key("logout-button"),
+              tooltip: "Logout",
+              onPressed: onLogout,
+              icon: const Icon(Icons.logout),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: <Widget>[
@@ -22,6 +40,13 @@ class ThemePreviewScreen extends StatelessWidget {
             "Reusable widgets and centralized tokens are active for MVP UI.",
             style: text.bodyMedium,
           ),
+          if (userEmail != null) ...<Widget>[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              "Signed in as $userEmail",
+              style: text.bodyMedium,
+            ),
+          ],
           const SizedBox(height: AppSpacing.lg),
           AppSurfaceCard(
             child: Column(
