@@ -314,18 +314,18 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] author cannot change own role
 - [x] author cannot suspend/cancel own account
 - [x] system must always keep at least one active author
-- [ ] Negative auth tests:
-- [ ] missing token
-- [ ] expired token
-- [ ] missing/invalid 2FA code on sensitive security action
-- [ ] admin/author with 2FA disabled blocked from privileged access until remediation
-- [ ] valid token but cross-user resource access
-- [ ] suspended user access blocked
-- [ ] canceled user access blocked
-- [ ] non-admin access blocked on admin routes
-- [ ] non-author access blocked on author routes
-- [ ] admin cannot change roles (author-only role transition endpoint)
-- [ ] role change to `admin`/`author` auto-enforces `premium` + billing exemption
+- [x] Negative auth tests:
+- [x] missing token
+- [x] expired token
+- [x] missing/invalid 2FA code on sensitive security action
+- [x] admin/author with 2FA disabled blocked from privileged access until remediation
+- [x] valid token but cross-user resource access
+- [x] suspended user access blocked
+- [x] canceled user access blocked
+- [x] non-admin access blocked on admin routes
+- [x] non-author access blocked on author routes
+- [x] admin cannot change roles (author-only role transition endpoint)
+- [x] role change to `admin`/`author` auto-enforces `premium` + billing exemption
 
 ---
 
