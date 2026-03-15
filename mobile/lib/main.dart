@@ -5,6 +5,7 @@ import 'app/core/state/app_state_scope.dart';
 import 'app/features/auth/application/auth_controller.dart';
 import 'app/features/auth/data/auth_repository_factory.dart';
 import 'app/features/onboarding/application/onboarding_controller.dart';
+import 'app/features/onboarding/data/device_permissions_gateway_factory.dart';
 import 'app/features/onboarding/data/language_preferences_repository_factory.dart';
 import 'app/presentation/app_root.dart';
 
@@ -21,6 +22,7 @@ Future<void> main() async {
       onboardingController: OnboardingController(
         languagePreferencesRepository:
             LanguagePreferencesRepositoryFactory.create(),
+        devicePermissionsGateway: DevicePermissionsGatewayFactory.create(),
       ),
     ),
   );

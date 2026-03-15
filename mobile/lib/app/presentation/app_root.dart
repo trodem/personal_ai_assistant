@@ -7,6 +7,7 @@ import '../features/auth/presentation/login_screen.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/first_value_onboarding_screen.dart';
 import '../features/onboarding/presentation/onboarding_language_screen.dart';
+import '../features/onboarding/presentation/onboarding_permissions_screen.dart';
 import '../features/onboarding/presentation/onboarding_welcome_screen.dart';
 import '../screens/theme_preview_screen.dart';
 import '../theme/app_theme.dart';
@@ -73,6 +74,20 @@ class AppRoot extends StatelessWidget {
               },
               isSaving: onboardingController.isSavingLanguage,
               errorMessage: onboardingController.languageError,
+            );
+          }
+          if (!onboardingController.permissionsStepDone) {
+            return OnboardingPermissionsScreen(
+              microphoneGranted: onboardingController.microphoneGranted,
+              cameraGranted: onboardingController.cameraGranted,
+              onRequestMicrophone: () {
+                onboardingController.requestMicrophonePermission();
+              },
+              onRequestCamera: () {
+                onboardingController.requestCameraPermission();
+              },
+              onContinue: onboardingController.completePermissionsStep,
+              errorMessage: onboardingController.permissionsError,
             );
           }
           return FirstValueOnboardingScreen(

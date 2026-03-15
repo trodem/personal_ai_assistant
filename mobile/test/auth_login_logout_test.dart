@@ -7,6 +7,7 @@ import 'package:personal_ai_assistant_mobile/app/features/onboarding/domain/pref
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 import 'fakes/fake_auth_repository.dart';
+import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 
 void main() {
@@ -18,8 +19,11 @@ void main() {
     );
     final FakeLanguagePreferencesRepository languageRepository =
         FakeLanguagePreferencesRepository();
+    final FakeDevicePermissionsGateway permissionsGateway =
+        FakeDevicePermissionsGateway();
     final OnboardingController onboardingController = OnboardingController(
       languagePreferencesRepository: languageRepository,
+      devicePermissionsGateway: permissionsGateway,
     );
     await authController.loadSession();
 
@@ -55,6 +59,14 @@ void main() {
     await tester.tap(find.byKey(const Key("onboarding-language-continue-button")));
     await tester.pumpAndSettle();
     expect(languageRepository.lastSaved, PreferredLanguage.it);
+
+    expect(find.text("Permissions"), findsOneWidget);
+    await tester.tap(find.byKey(const Key("permissions-request-microphone-button")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("permissions-request-camera-button")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("permissions-continue-button")));
+    await tester.pumpAndSettle();
 
     expect(find.text("Get your first value"), findsOneWidget);
     onboardingController.completeFirstMemory();

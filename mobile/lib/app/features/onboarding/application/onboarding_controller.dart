@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../domain/device_permissions_gateway.dart';
 import '../domain/language_preferences_repository.dart';
 import '../domain/preferred_language.dart';
 
@@ -7,13 +8,16 @@ class OnboardingController extends ChangeNotifier {
   OnboardingController({
     bool completed = false,
     required LanguagePreferencesRepository languagePreferencesRepository,
+    required DevicePermissionsGateway devicePermissionsGateway,
   }) : _completed = completed,
-       _languagePreferencesRepository = languagePreferencesRepository;
+       _languagePreferencesRepository = languagePreferencesRepository,
+       _devicePermissionsGateway = devicePermissionsGateway;
 
   bool _completed;
   bool get completed => _completed;
 
   final LanguagePreferencesRepository _languagePreferencesRepository;
+  final DevicePermissionsGateway _devicePermissionsGateway;
 
   bool _welcomeStepDone = false;
   bool get welcomeStepDone => _welcomeStepDone;
@@ -29,6 +33,18 @@ class OnboardingController extends ChangeNotifier {
 
   String? _languageError;
   String? get languageError => _languageError;
+
+  bool _permissionsStepDone = false;
+  bool get permissionsStepDone => _permissionsStepDone;
+
+  bool _microphoneGranted = false;
+  bool get microphoneGranted => _microphoneGranted;
+
+  bool _cameraGranted = false;
+  bool get cameraGranted => _cameraGranted;
+
+  String? _permissionsError;
+  String? get permissionsError => _permissionsError;
 
   bool _firstMemoryDone = false;
   bool get firstMemoryDone => _firstMemoryDone;
@@ -72,6 +88,39 @@ class OnboardingController extends ChangeNotifier {
     }
   }
 
+  Future<void> requestMicrophonePermission() async {
+    _permissionsError = null;
+    final bool granted = await _devicePermissionsGateway.request(
+      AppPermission.microphone,
+    );
+    _microphoneGranted = granted;
+    if (!granted) {
+      _permissionsError =
+          "Microphone permission is required to continue onboarding.";
+    }
+    notifyListeners();
+  }
+
+  Future<void> requestCameraPermission() async {
+    _permissionsError = null;
+    _cameraGranted = await _devicePermissionsGateway.request(
+      AppPermission.camera,
+    );
+    notifyListeners();
+  }
+
+  void completePermissionsStep() {
+    _permissionsError = null;
+    if (!_microphoneGranted) {
+      _permissionsError =
+          "Microphone permission is required to continue onboarding.";
+      notifyListeners();
+      return;
+    }
+    _permissionsStepDone = true;
+    notifyListeners();
+  }
+
   void completeFirstMemory() {
     if (_firstMemoryDone) {
       return;
@@ -103,6 +152,10 @@ class OnboardingController extends ChangeNotifier {
     _selectedLanguage = PreferredLanguage.en;
     _isSavingLanguage = false;
     _languageError = null;
+    _permissionsStepDone = false;
+    _microphoneGranted = false;
+    _cameraGranted = false;
+    _permissionsError = null;
     _firstMemoryDone = false;
     _firstQuestionDone = false;
     notifyListeners();

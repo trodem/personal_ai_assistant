@@ -7,6 +7,7 @@ import 'package:personal_ai_assistant_mobile/app/features/onboarding/application
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 import 'fakes/fake_auth_repository.dart';
+import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 
 void main() {
@@ -25,6 +26,7 @@ void main() {
         onboardingController: OnboardingController(
           completed: true,
           languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+          devicePermissionsGateway: FakeDevicePermissionsGateway(),
         ),
       ),
     );

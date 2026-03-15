@@ -16,6 +16,7 @@ State management is fixed to:
 - `ChangeNotifier` controller (`AppStateController`)
 - `InheritedNotifier` scope (`AppStateScope`) for dependency access in the widget tree
 - Auth state controller (`AuthController`) backed by Supabase Auth repository
+- Onboarding state controller (`OnboardingController`) handling welcome/language/permissions gating
 
 ## Supabase Auth setup
 
