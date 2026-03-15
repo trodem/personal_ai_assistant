@@ -105,24 +105,22 @@ def _decode_token(token: str) -> dict[str, object]:
                 code="auth.invalid_token",
                 message="Invalid token signature.",
             )
+        try:
+            payload = json.loads(_urlsafe_b64decode(payload_b64).decode("utf-8"))
+        except (ValueError, json.JSONDecodeError) as exc:
+            raise AppError(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                code="auth.invalid_token",
+                message="Token payload is invalid.",
+            ) from exc
     elif alg in {"ES256", "RS256"}:
         payload = _decode_with_jwks(token, alg)
-        return payload
     else:
         raise AppError(
             status_code=status.HTTP_401_UNAUTHORIZED,
             code="auth.invalid_token",
             message="Unsupported token algorithm.",
         )
-
-    try:
-        payload = json.loads(_urlsafe_b64decode(payload_b64).decode("utf-8"))
-    except (ValueError, json.JSONDecodeError) as exc:
-        raise AppError(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            code="auth.invalid_token",
-            message="Token payload is invalid.",
-        ) from exc
 
     exp = int(payload.get("exp", 0))
     if exp <= int(time.time()):
