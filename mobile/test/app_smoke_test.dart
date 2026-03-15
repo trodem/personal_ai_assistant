@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:personal_ai_assistant_mobile/app/core/state/app_state_controller.dart';
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 void main() {
   testWidgets("app boots with themed preview screen", (WidgetTester tester) async {
-    await tester.pumpWidget(const PersonalAIAssistantApp());
+    await tester.pumpWidget(
+      PersonalAIAssistantApp(
+        controller: AppStateController(),
+      ),
+    );
 
     expect(find.text("Personal AI Assistant"), findsOneWidget);
     expect(find.text("Design System Baseline"), findsOneWidget);

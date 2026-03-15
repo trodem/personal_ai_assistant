@@ -1,17 +1,24 @@
-# personal_ai_assistant_mobile
+# Personal AI Assistant - Mobile
 
-A new Flutter project.
+## Architecture bootstrap
 
-## Getting Started
+The mobile app uses a clean, layered baseline:
 
-This project is a starting point for a Flutter application.
+- `app/core/state`: application state model and controller
+- `app/presentation`: app root composition and screen routing
+- `app/screens`: UI screens
+- `app/widgets`: reusable UI components
+- `app/theme`: centralized design tokens and theme
 
-A few resources to get you started if this is your first Flutter project:
+State management is fixed to:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- `ChangeNotifier` controller (`AppStateController`)
+- `InheritedNotifier` scope (`AppStateScope`) for dependency access in the widget tree
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Local checks
+
+```bash
+flutter pub get
+flutter analyze
+flutter test
+```

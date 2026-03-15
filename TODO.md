@@ -358,7 +358,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P7 - Flutter Mobile App
 
-- [ ] Bootstrap Flutter app with clean architecture (state management decided and fixed).
+- [x] Bootstrap Flutter app with clean architecture (state management decided and fixed).
 - [ ] Login/logout with Supabase Auth.
 - [ ] First-run onboarding focused on fast first value (first memory + first question).
 - [ ] Onboarding step 1: welcome + value proposition + privacy short notice.

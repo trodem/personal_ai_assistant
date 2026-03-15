@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 
-import 'app/screens/theme_preview_screen.dart';
-import 'app/theme/app_theme.dart';
+import 'app/core/state/app_state_controller.dart';
+import 'app/core/state/app_state_scope.dart';
+import 'app/presentation/app_root.dart';
 
 void main() {
-  runApp(const PersonalAIAssistantApp());
+  runApp(
+    PersonalAIAssistantApp(
+      controller: AppStateController(),
+    ),
+  );
 }
 
 class PersonalAIAssistantApp extends StatelessWidget {
-  const PersonalAIAssistantApp({super.key});
+  const PersonalAIAssistantApp({
+    super.key,
+    required this.controller,
+  });
+
+  final AppStateController controller;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Personal AI Assistant",
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      home: const ThemePreviewScreen(),
+    return AppStateScope(
+      controller: controller,
+      child: AppRoot(controller: controller),
     );
   }
 }
