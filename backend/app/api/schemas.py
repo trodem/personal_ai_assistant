@@ -115,13 +115,23 @@ class DashboardResponse(BaseModel):
 
 class AdminUserResponse(BaseModel):
     id: str
-    role: str
+    email: str
+    role: Literal["user", "admin", "author"]
+    status: Literal["active", "suspended", "canceled"]
+    subscription_plan: Literal["free", "premium"]
+    billing_exempt: bool
 
     model_config = ConfigDict(extra="forbid")
 
 
 class AdminUsersListResponse(BaseModel):
     items: list[AdminUserResponse]
+
+
+class UpdateUserStatusRequest(BaseModel):
+    status: Literal["active", "suspended", "canceled"]
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class UpdateProfileRequest(BaseModel):

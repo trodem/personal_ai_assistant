@@ -24,6 +24,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/memories", schema["paths"])
         self.assertIn("/api/v1/dashboard", schema["paths"])
         self.assertIn("/api/v1/admin/users", schema["paths"])
+        self.assertIn("/api/v1/admin/users/{id}/status", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -74,6 +75,10 @@ class OpenApiDocsTests(unittest.TestCase):
         delete_memory = schema["paths"]["/api/v1/memory/{id}"]["delete"]
         self.assertEqual(delete_memory["summary"], "Delete memory")
         self.assertIn("404", delete_memory["responses"])
+
+        admin_update_status = schema["paths"]["/api/v1/admin/users/{id}/status"]["patch"]
+        self.assertEqual(admin_update_status["summary"], "Update user status (admin/author)")
+        self.assertIn("422", admin_update_status["responses"])
 
 
 if __name__ == "__main__":
