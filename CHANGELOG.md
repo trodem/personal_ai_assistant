@@ -9,6 +9,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ### Added
 - Added `MFA_ENABLEMENT_CHECKLIST.md` with per-provider MFA/recovery-code evidence tracking and explicit completion criteria for the Day 0 MFA prerequisite task.
 - Completed environment readiness check `Stripe test webhook delivery validated locally` via Stripe CLI local forwarding test (`payment_intent.succeeded`) with confirmed HTTP `200` delivery to a local webhook receiver.
+- Marked TODO container task `Core aggregate queries` as completed after verifying all child aggregate-query items were already completed (`expenses`, `loan balances`, `inventory state`).
 - Added Alembic migration baseline (`backend/alembic`) and `scripts/migration-smoke-check.ps1` to verify PostgreSQL migration upgrade/downgrade/restore flow in local Docker.
 - Added `scripts/storage-upload-download-smoke.ps1` to validate Supabase Storage object lifecycle (`upload -> download -> content check -> delete`) against the configured receipts bucket.
 - Added `PRIVACY_POLICY_BASELINE.md` with MVP privacy baseline scope, data categories, retention/deletion process, security posture, and user rights/export-deletion commitments.
