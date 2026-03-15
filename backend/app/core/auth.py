@@ -13,6 +13,7 @@ from starlette import status
 
 from app.core.errors import AppError
 from app.core.request_context import tenant_id_ctx_var, user_id_ctx_var
+from app.repositories.admin_user_repository import upsert_admin_user
 from app.core.settings import get_settings
 
 
@@ -232,6 +233,14 @@ def get_current_user(
             code="auth.forbidden",
             message="Tenant context is required.",
         )
+
+    upsert_admin_user(
+        tenant_id=effective_tenant,
+        user_id=user_id,
+        role=role,
+        status=account_status,
+        email=str(payload.get("email", "") or ""),
+    )
 
     user_id_ctx_var.set(user_id)
     tenant_id_ctx_var.set(effective_tenant)
