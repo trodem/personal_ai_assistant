@@ -34,6 +34,10 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/me/settings/payment-methods/{id}/default", schema["paths"])
         self.assertIn("/api/v1/me/settings/payment-methods/{id}", schema["paths"])
         self.assertIn("/api/v1/notifications", schema["paths"])
+        self.assertIn("/api/v1/notifications/{id}/read", schema["paths"])
+        self.assertIn("/api/v1/billing/subscription/change-plan", schema["paths"])
+        self.assertIn("/api/v1/billing/subscription/cancel-preview", schema["paths"])
+        self.assertIn("/api/v1/billing/subscription/cancel", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -124,6 +128,25 @@ class OpenApiDocsTests(unittest.TestCase):
         notifications_get = schema["paths"]["/api/v1/notifications"]["get"]
         self.assertEqual(notifications_get["summary"], "List in-app notifications")
         self.assertIn("401", notifications_get["responses"])
+
+        notifications_mark_read = schema["paths"]["/api/v1/notifications/{id}/read"]["post"]
+        self.assertEqual(notifications_mark_read["summary"], "Mark in-app notification as read")
+        self.assertIn("404", notifications_mark_read["responses"])
+
+        billing_change_plan = schema["paths"]["/api/v1/billing/subscription/change-plan"]["post"]
+        self.assertEqual(billing_change_plan["summary"], "Change user subscription plan")
+        self.assertIn("403", billing_change_plan["responses"])
+        self.assertIn("422", billing_change_plan["responses"])
+
+        billing_cancel_preview = schema["paths"]["/api/v1/billing/subscription/cancel-preview"]["post"]
+        self.assertEqual(billing_cancel_preview["summary"], "Preview cancellation outcomes and retention options")
+        self.assertIn("403", billing_cancel_preview["responses"])
+        self.assertIn("422", billing_cancel_preview["responses"])
+
+        billing_cancel = schema["paths"]["/api/v1/billing/subscription/cancel"]["post"]
+        self.assertEqual(billing_cancel["summary"], "Cancel subscription")
+        self.assertIn("403", billing_cancel["responses"])
+        self.assertIn("422", billing_cancel["responses"])
 
 
 if __name__ == "__main__":

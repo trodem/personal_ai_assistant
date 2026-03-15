@@ -1,11 +1,8 @@
-from typing import Literal, cast
-
 from fastapi import APIRouter, Depends
 
 from app.api.schemas import (
     AcceptedResponse,
     DeleteMemoryResponse,
-    NotificationPreferences,
     PaymentMethodSetupIntentResponse,
     PaymentMethodsListResponse,
     UpdatedResponse,
@@ -16,9 +13,8 @@ from app.api.schemas import (
 )
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
+from app.services.user_settings_view import build_user_settings_response
 from app.services.user_preferences import (
-    get_notification_preferences,
-    get_preferred_language,
     set_notification_preferences,
     set_preferred_language,
 )
@@ -31,30 +27,6 @@ from app.services.payment_methods import (
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
-def _build_settings_response(user: AuthenticatedUser) -> UserSettingsResponse:
-    effective_language = get_preferred_language(user.tenant_id, user.user_id)
-    billing_exempt = user.role in {"admin", "author"}
-    role: Literal["user", "admin", "author"] = cast(Literal["user", "admin", "author"], user.role)
-    status: Literal["active", "suspended", "canceled"] = cast(
-        Literal["active", "suspended", "canceled"], user.status
-    )
-    return UserSettingsResponse(
-        user_id=user.user_id,
-        email="",
-        preferred_language=effective_language,
-        auth_provider="password",
-        role=role,
-        status=status,
-        mfa_enabled=user.mfa_enabled,
-        subscription_plan="premium" if billing_exempt else "free",
-        billing_exempt=billing_exempt,
-        payment_methods_enabled=not billing_exempt,
-        default_payment_method=None,
-        notification_preferences=NotificationPreferences(
-            **get_notification_preferences(user.tenant_id, user.user_id)
-        ),
-    )
-
 
 @router.get(
     "",
@@ -64,7 +36,7 @@ def _build_settings_response(user: AuthenticatedUser) -> UserSettingsResponse:
     responses={401: {"description": "Unauthorized. Missing or invalid bearer token."}},
 )
 async def get_my_settings(current_user: AuthenticatedUser = Depends(get_current_user)) -> UserSettingsResponse:
-    return _build_settings_response(current_user)
+    return build_user_settings_response(current_user)
 
 
 @router.patch(
@@ -82,7 +54,7 @@ async def update_profile_settings(
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> UserSettingsResponse:
     set_preferred_language(current_user.tenant_id, current_user.user_id, payload.preferred_language)
-    return _build_settings_response(current_user)
+    return build_user_settings_response(current_user)
 
 
 @router.patch(
@@ -127,7 +99,7 @@ async def update_notification_settings(
             "email": payload.preferences.email,
         },
     )
-    return _build_settings_response(current_user)
+    return build_user_settings_response(current_user)
 
 
 @router.get(

@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Depends, Query
 
-from app.api.schemas import InAppNotificationsListResponse
+from app.api.schemas import InAppNotificationsListResponse, UpdatedResponse
 from app.core.auth import AuthenticatedUser, get_current_user
-from app.services.notifications import list_notifications_for_user
+from app.core.errors import AppError
+from app.services.notifications import (
+    list_notifications_for_user,
+    mark_notification_as_read_for_user,
+)
 
 router = APIRouter(prefix="/api/v1/notifications", tags=["Notifications"])
 
@@ -26,3 +30,31 @@ async def list_notifications(
         limit=limit,
     )
     return InAppNotificationsListResponse(items=items)
+
+
+@router.post(
+    "/{id}/read",
+    summary="Mark in-app notification as read",
+    description="Marks a notification as read for the authenticated user.",
+    response_model=UpdatedResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        404: {"description": "Notification not found."},
+    },
+)
+async def mark_notification_as_read(
+    id: str,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> UpdatedResponse:
+    updated = mark_notification_as_read_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        notification_id=id,
+    )
+    if not updated:
+        raise AppError(
+            status_code=404,
+            code="memory.not_found",
+            message="Notification not found.",
+        )
+    return UpdatedResponse(updated=True)

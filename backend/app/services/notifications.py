@@ -37,6 +37,27 @@ def add_notification_for_user(
     _NOTIFICATIONS[key] = existing
 
 
+def mark_notification_as_read_for_user(
+    *,
+    tenant_id: str,
+    user_id: str,
+    notification_id: str,
+) -> bool:
+    key = _settings_key(tenant_id, user_id)
+    existing = list(_NOTIFICATIONS.get(key, []))
+    if not any(item.id == notification_id for item in existing):
+        return False
+
+    updated: list[InAppNotificationRecord] = []
+    for item in existing:
+        if item.id == notification_id:
+            updated.append(item.model_copy(update={"read": True}))
+        else:
+            updated.append(item)
+    _NOTIFICATIONS[key] = updated
+    return True
+
+
 def build_notification(
     *,
     notification_id: str,

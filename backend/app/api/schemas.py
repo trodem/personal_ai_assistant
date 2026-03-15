@@ -225,6 +225,48 @@ class UpdatedResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class ChangePlanRequest(BaseModel):
+    plan: Literal["free", "premium"]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class CancelPreviewRequest(BaseModel):
+    reason: Literal[
+        "too_expensive",
+        "low_value",
+        "too_many_errors",
+        "not_using_enough",
+        "switched_alternative",
+        "other",
+    ]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class CancelPreviewResponse(BaseModel):
+    can_pause: bool
+    can_downgrade: bool
+    suggested_offer: str
+    impact_summary: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class CancelSubscriptionRequest(BaseModel):
+    reason: Literal[
+        "too_expensive",
+        "low_value",
+        "too_many_errors",
+        "not_using_enough",
+        "switched_alternative",
+        "other",
+    ]
+    comment: str | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str

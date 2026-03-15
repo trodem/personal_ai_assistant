@@ -9,6 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.api.v1.routes.admin import router as admin_router
 from app.api.v1.routes.author import router as author_router
 from app.api.v1.routes.attachments import router as attachments_router
+from app.api.v1.routes.billing import router as billing_router
 from app.api.v1.routes.dashboard import router as dashboard_router
 from app.api.v1.routes.feedback import router as feedback_router
 from app.api.v1.routes.health import router as health_router
@@ -56,6 +57,7 @@ app.include_router(admin_router)
 app.include_router(author_router)
 app.include_router(settings_router)
 app.include_router(notifications_router)
+app.include_router(billing_router)
 
 
 @app.get("/", summary="Service metadata", tags=["Health"])
