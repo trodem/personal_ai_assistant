@@ -78,6 +78,33 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Marked P3 task `End-to-end test: voice -> extraction -> confirmation -> storage` as completed in `TODO.md` after validating `backend/tests/test_memory_ingestion_e2e.py` green (`voice proposal -> confirmation gate -> persisted memory retrieval`).
+- Completed P3 safety gate for memory extraction flow by enforcing input moderation and sensitive-data sanitization before extraction proposal generation in `POST /api/v1/voice/memory` and attachment OCR proposal path.
+- Extended AI safety regression coverage with voice-memory tests that verify moderation blocking (`moderation.blocked_content`) and transcript redaction (`[REDACTED_EMAIL_1]`) before extraction.
+- Marked P3 task `Apply input moderation and sensitive-data sanitization before LLM extraction call` as completed in `TODO.md`.
+- Added strict extraction-schema anti-hallucination guardrails in memory ingestion: only allowed fields per `memory_type` are accepted, unsupported keys are dropped, and critical values are normalized/validated (numeric amounts/quantities, action enums, allowed currencies, bounded strings).
+- Applied guardrails before confirmation proposal generation to keep extraction payload deterministic and schema-safe.
+- Added guardrail-focused regression tests for unknown-field dropping, invalid value rejection, and proposal-level guardrail application.
+- Marked P3 task `Add strict anti-hallucination guardrails for extraction output schema` as completed in `TODO.md`.
+- Extended per-request AI telemetry to include latency (`latency_ms`) in usage logs and Prometheus metrics (`llmops_ai_latency_ms_total`, `llmops_ai_latency_ms_last`) while preserving existing model/token/cost dimensions.
+- Wired latency capture into memory extraction (`POST /api/v1/voice/memory`), answer generation (`POST /api/v1/question`), and receipt OCR extraction (`POST /api/v1/attachments`) telemetry paths.
+- Marked P3 task `Capture per-request AI telemetry (model, token usage, estimated cost, latency)` as completed in `TODO.md`.
+- Added embedding generation on confirmed memory persistence (`POST /api/v1/memory`) and ensured embeddings are not generated when confirmation is missing or when save is replayed via idempotency key.
+- Added in-memory embedding repository/service baseline and contract tests for confirmed-save generation, unconfirmed-save blocking, and idempotency no-duplication behavior.
+- Marked P3 task `Generate embeddings only for confirmed create/update events` as completed in `TODO.md`.
+- Added latency-aware transcription execution boundary for `POST /api/v1/voice/memory`: Whisper now supports `request_path` vs `background_worker` mode with configurable payload threshold (`VOICE_MEMORY_BACKGROUND_MIN_BYTES`) and optional override header (`x-ai-execution-mode`), while preserving the existing response contract.
+- Added regression coverage for AI execution-mode resolution and Whisper background-worker dispatch behavior.
+- Marked P3 task `Move expensive AI tasks (transcription/embeddings when applicable) to background jobs where latency requires it` as completed in `TODO.md`.
+- Marked P3 task `Persist memory only after explicit confirmation` as completed in `TODO.md` after validating save-path guardrails (`confirmed=true` required) with confirmation-contract and ingestion E2E regression suites.
+- Added explicit memory-confirmation contract regression coverage for ingestion flow: proposal actions (`Confirm/Modify/Cancel`), persistence rejection without confirmation (`memory.confirmation_required`), and successful persistence after confirmation.
+- Marked P3 task `Confirmation contract: confirm/modify/cancel before persistence` as completed in `TODO.md`.
+- Added configurable clarification turn limit for memory-ingestion follow-up questions (`MEMORY_CLARIFICATION_MAX_TURNS`, default `3`) and wired `POST /api/v1/voice/memory` to respect optional `x-clarification-turn` context.
+- Updated clarification behavior to stop generating new clarification questions after max turns while preserving missing-field validation and confirmation gate.
+- Extended regression coverage with dedicated clarification-engine tests and E2E route validation for turn-limit behavior.
+- Marked P3 task `Clarification engine for missing fields (configurable max turns)` as completed in `TODO.md`.
+- Normalized relative time expressions in memory ingestion (`today`, `yesterday`, `tomorrow`, `last week`, `next week`) to absolute UTC datetimes before confirmation proposal and before `/api/v1/memory` persistence when `structured_data.when` contains relative values.
+- Extended ingestion regression coverage to verify relative-time normalization both in extraction proposal output and in save-memory persisted payload.
+- Marked P3 task `Normalize relative time expressions (today/yesterday/tomorrow/etc.) to absolute date/time before confirmation and save` as completed in `TODO.md`.
 - Marked legal minimum checklist item `Draft privacy policy baseline (data stored, retention, deletion process)` as completed in `TODO.md`.
 - Marked legal minimum checklist item `Draft terms baseline for MVP users` as completed in `TODO.md`.
 - Marked legal minimum checklist item `Define support contact and incident response owner` as completed in `TODO.md`.
@@ -150,6 +177,10 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Added compatibility layer modules under `backend/app/api/routes/*` forwarding to `app.api.v1.routes.*` to preserve legacy import paths during transition.
 - Added versioned extraction prompt module `backend/app/services/prompts/memory_extraction_prompt.py` with stable prompt identifier `memory_extraction_v1` and reusable prompt builder.
 - Added `backend/tests/test_memory_extraction_prompt_versioning.py` to enforce prompt version format and canonical memory-type coverage in the extraction prompt contract.
+- Added clarification model/prompt registry baseline in `docs/model-registry.md` (`clarification_generation`, `gpt-4o-mini`, `mvp-v1`, `clarification_v1`) with explicit fallback entry and validation timestamp.
+- Added `backend/tests/test_memory_type_classification.py` to lock canonical memory-type classification behavior across all MVP types (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
+- Added `backend/tests/test_required_fields_by_type_contract.py` to enforce required-by-type persistence contract coverage, including alias fields (`item/what`, `person/counterparty`, `what/content`) and document attachment requirement.
+- Added `backend/tests/test_semantic_field_extraction.py` to validate typed semantic extraction for `who/what/where/when/why/how` across memory ingestion proposals.
 - Marked P2 task `Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries` as completed in `TODO.md`.
 - Marked P2 task `Add soft-delete + audit trail strategy for sensitive memory operations (update/delete)` as completed in `TODO.md`.
 - Updated memory API contracts and runtime payload handling to include `structured_data_schema_version` (default `1`) in save/list flows and OpenAPI schema definitions (`SaveMemoryRequest`, `MemoryRecord`).
@@ -161,12 +192,25 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Updated `.env.example` with Whisper runtime controls (`WHISPER_TIMEOUT_SECONDS`, `WHISPER_MAX_RETRIES`).
 - Updated backend router wiring in `backend/app/main.py` to import from `app.api.v1.routes.*`.
 - Updated memory-ingestion telemetry wiring to use centralized extraction prompt version constant instead of route-local hardcoded value.
+- Updated `docs/model-registry.md` active mapping date to `2026-03-15` and aligned rollback entries to include clarification generation fallback.
+- Validated memory-type classifier contract against canonical taxonomy with dedicated regression tests and marked the P3 classification task as completed.
+- Updated `backend/app/services/memory_ingestion.py` required-field enforcement to align with canonical `required_by_type` contract: expense (`item|what`, `amount`, `currency`), inventory (`item`, `quantity`, `action`), loan (`person|counterparty`, `amount`, `currency`, `action`), note (`what|content`), document (`what|content` + attachment link).
+- Updated extraction heuristics to infer `currency` and loan `action` (`lend`/`borrow`) where present in transcript, reducing unnecessary clarification loops.
+- Updated memory-ingestion extraction heuristics to populate semantic fields (`who`, `what`, `where`, `when`, `why`, `how`) from transcript context while preserving deterministic, typed field extraction.
+- Updated memory-ingestion proposal flow to apply default `when` as current UTC timestamp when transcript does not include explicit date/time, while preserving explicit extracted `when` values.
+- Extended semantic extraction regression coverage to validate default-`when` behavior and explicit-date preservation.
+- Updated impacted tests to satisfy strengthened expense required-field contract (`currency` required) in end-to-end, attachment, and AI-cost metric flows.
 - Marked P2 task `Create realistic local seed dataset for tests` as completed in `TODO.md`.
 - Marked P2 task `Test migration up/down in CI` as completed in `TODO.md`.
 - Marked P3 task `Endpoint POST /api/v1/voice/memory with robust audio upload handling` as completed in `TODO.md`.
 - Marked P3 task `Whisper integration with timeout and controlled retry` as completed in `TODO.md`.
 - Marked dedicated API folder versioning refactor task as completed in `TODO.md`.
 - Marked P3 task `Versioned extraction prompt (specs/memory-extraction.md)` as completed in `TODO.md`.
+- Marked P3 task `Register extraction/clarification model + prompt versions in docs/model-registry.md` as completed in `TODO.md`.
+- Marked P3 task `memory_type classification (expense_event, inventory_event, loan_event, note, document)` as completed in `TODO.md`.
+- Marked P3 task `Enforce required fields per memory_type before persistence (required_by_type contract)` as completed in `TODO.md`.
+- Marked P3 task `Typed + semantic field extraction (who/what/where/when/why/how)` as completed in `TODO.md`.
+- Marked P3 task `Apply default when = current timestamp when user does not provide explicit date/time` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

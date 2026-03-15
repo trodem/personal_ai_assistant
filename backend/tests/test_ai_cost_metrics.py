@@ -51,7 +51,7 @@ class AICostMetricsTests(unittest.TestCase):
             json={
                 "memory_type": "expense_event",
                 "raw_text": "I bought bread for 3 chf",
-                "structured_data": {"item": "bread", "amount": 3.0},
+                "structured_data": {"item": "bread", "amount": 3.0, "currency": "CHF"},
                 "confirmed": True,
             },
         )
@@ -76,11 +76,19 @@ class AICostMetricsTests(unittest.TestCase):
         answer_cost = self._extract_metric_value(
             metrics_text, "llmops_estimated_cost_total", "answer_generation"
         )
+        extraction_latency = self._extract_metric_value(
+            metrics_text, "llmops_ai_latency_ms_total", "memory_extraction"
+        )
+        answer_latency = self._extract_metric_value(
+            metrics_text, "llmops_ai_latency_ms_total", "answer_generation"
+        )
 
         self.assertGreater(extraction_tokens, 0)
         self.assertGreater(answer_tokens, 0)
         self.assertGreater(extraction_cost, 0.0)
         self.assertGreater(answer_cost, 0.0)
+        self.assertGreater(extraction_latency, 0.0)
+        self.assertGreater(answer_latency, 0.0)
         self.assertIn("llmops_user_estimated_cost_total", metrics_text)
         self.assertIn('user_plan="free"', metrics_text)
         self.assertIn("llmops_token_budget_utilization_percent", metrics_text)

@@ -1,6 +1,7 @@
 import unittest
 from pathlib import Path
 import sys
+from datetime import datetime, timedelta, timezone
 
 from fastapi.testclient import TestClient
 
@@ -52,7 +53,7 @@ class MemoryIngestionE2ETests(unittest.TestCase):
             json={
                 "memory_type": "expense_event",
                 "raw_text": "I bought bread for 3 chf at coop",
-                "structured_data": {"item": "bread", "amount": 3.0, "location": "coop"},
+                "structured_data": {"item": "bread", "amount": 3.0, "currency": "CHF", "location": "coop"},
                 "confirmed": True,
             },
         )
@@ -82,6 +83,45 @@ class MemoryIngestionE2ETests(unittest.TestCase):
         self.assertEqual(proposal["clarification_questions"], [])
         self.assertTrue(proposal["needs_confirmation"])
         self.assertEqual(proposal["ai_state"], "ready_to_confirm")
+
+    def test_voice_proposal_stops_asking_questions_after_max_clarification_turns(self) -> None:
+        headers = dict(self.headers)
+        headers["x-clarification-turn"] = "5"
+        proposal_response = self.client.post(
+            "/api/v1/voice/memory",
+            headers=headers,
+            files={"audio": ("memory.wav", b"I bought bread", "audio/wav")},
+        )
+        self.assertEqual(proposal_response.status_code, 200)
+        proposal = proposal_response.json()
+        self.assertIn("amount", proposal["missing_required_fields"])
+        self.assertEqual(proposal["clarification_questions"], [])
+        self.assertFalse(proposal["needs_confirmation"])
+        self.assertEqual(proposal["ai_state"], "needs_clarification")
+
+    def test_save_memory_normalizes_relative_when_value(self) -> None:
+        before = datetime.now(timezone.utc) - timedelta(seconds=2)
+        accepted_save = self.client.post(
+            "/api/v1/memory",
+            headers=self.headers,
+            json={
+                "memory_type": "expense_event",
+                "raw_text": "I bought bread for 3 chf today",
+                "structured_data": {
+                    "item": "bread",
+                    "amount": 3.0,
+                    "currency": "CHF",
+                    "when": "today",
+                },
+                "confirmed": True,
+            },
+        )
+        after = datetime.now(timezone.utc) + timedelta(seconds=2)
+        self.assertEqual(accepted_save.status_code, 200)
+        saved = accepted_save.json()
+        parsed = datetime.fromisoformat(saved["structured_data"]["when"])
+        self.assertGreaterEqual(parsed, before)
+        self.assertLessEqual(parsed, after)
 
 
 if __name__ == "__main__":

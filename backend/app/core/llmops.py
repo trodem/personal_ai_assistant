@@ -54,6 +54,8 @@ _ERRORS_TOTAL: DefaultDict[tuple[_MetricKey, str], int] = defaultdict(int)
 _TOKEN_IN_TOTAL: DefaultDict[_MetricKey, int] = defaultdict(int)
 _TOKEN_OUT_TOTAL: DefaultDict[_MetricKey, int] = defaultdict(int)
 _ESTIMATED_COST_TOTAL: DefaultDict[_MetricKey, float] = defaultdict(float)
+_LATENCY_MS_TOTAL: DefaultDict[_MetricKey, float] = defaultdict(float)
+_LATENCY_MS_LAST: DefaultDict[_MetricKey, float] = defaultdict(float)
 _USER_TOKEN_TOTAL: DefaultDict[_UserMetricKey, int] = defaultdict(int)
 _USER_COST_TOTAL: DefaultDict[_UserMetricKey, float] = defaultdict(float)
 _PLAN_TOKEN_TOTAL: DefaultDict[str, int] = defaultdict(int)
@@ -145,6 +147,7 @@ def record_ai_usage(
     token_in: int,
     token_out: int,
     estimated_cost: float,
+    latency_ms: float | None = None,
     user_id: str | None = None,
     occurred_at: datetime | None = None,
     error_class: str | None = None,
@@ -162,6 +165,9 @@ def record_ai_usage(
     _TOKEN_IN_TOTAL[key] += max(0, token_in)
     _TOKEN_OUT_TOTAL[key] += max(0, token_out)
     _ESTIMATED_COST_TOTAL[key] += max(0.0, estimated_cost)
+    normalized_latency_ms = max(0.0, float(latency_ms or 0.0))
+    _LATENCY_MS_TOTAL[key] += normalized_latency_ms
+    _LATENCY_MS_LAST[key] = normalized_latency_ms
     total_tokens = max(0, token_in) + max(0, token_out)
     _PLAN_TOKEN_TOTAL[user_plan] += total_tokens
     if user_id:
@@ -200,6 +206,7 @@ def record_ai_usage(
                 "token_in": token_in,
                 "token_out": token_out,
                 "estimated_cost": round(estimated_cost, 8),
+                "latency_ms": round(normalized_latency_ms, 4),
                 "error_class": error_class,
             }
         },
@@ -212,6 +219,8 @@ def reset_llmops_usage_metrics() -> None:
     _TOKEN_IN_TOTAL.clear()
     _TOKEN_OUT_TOTAL.clear()
     _ESTIMATED_COST_TOTAL.clear()
+    _LATENCY_MS_TOTAL.clear()
+    _LATENCY_MS_LAST.clear()
     _USER_TOKEN_TOTAL.clear()
     _USER_COST_TOTAL.clear()
     _PLAN_TOKEN_TOTAL.clear()
@@ -258,6 +267,10 @@ def render_llmops_prometheus() -> str:
         "# TYPE llmops_token_out_total counter",
         "# HELP llmops_estimated_cost_total Estimated cost tracked for LLMOps cost dashboard.",
         "# TYPE llmops_estimated_cost_total counter",
+        "# HELP llmops_ai_latency_ms_total AI latency total tracked for LLMOps latency dashboard.",
+        "# TYPE llmops_ai_latency_ms_total counter",
+        "# HELP llmops_ai_latency_ms_last Last observed AI latency per use case/model series.",
+        "# TYPE llmops_ai_latency_ms_last gauge",
         "# HELP llmops_user_token_total User-scoped token totals for cost visibility.",
         "# TYPE llmops_user_token_total counter",
         "# HELP llmops_user_estimated_cost_total User-scoped estimated cost totals for cost visibility.",
@@ -303,6 +316,14 @@ def render_llmops_prometheus() -> str:
         lines.append(
             f"llmops_estimated_cost_total{{{labels}}} "
             f'{format(_ESTIMATED_COST_TOTAL.get(key, 0.0), ".8f")}'
+        )
+        lines.append(
+            f"llmops_ai_latency_ms_total{{{labels}}} "
+            f'{format(_LATENCY_MS_TOTAL.get(key, 0.0), ".4f")}'
+        )
+        lines.append(
+            f"llmops_ai_latency_ms_last{{{labels}}} "
+            f'{format(_LATENCY_MS_LAST.get(key, 0.0), ".4f")}'
         )
 
     for user_key, token_total in sorted(_USER_TOKEN_TOTAL.items()):

@@ -51,7 +51,7 @@ Each entry must define:
 
 ## Active Registry Entries (MVP Runtime Mapping)
 
-Date of this active mapping: `2026-03-14`
+Date of this active mapping: `2026-03-15`
 
 1. `memory_extraction`
 - provider: `openai`
@@ -66,7 +66,20 @@ Date of this active mapping: `2026-03-14`
 - owner: `backend-team`
 - last_validated_at: `2026-03-14`
 
-2. `receipt_ocr_extraction`
+2. `clarification_generation` (registered baseline for memory clarification turns)
+- provider: `openai`
+- model_id: `gpt-4o-mini`
+- model_version: `mvp-v1`
+- prompt_spec: `specs/memory-extraction.md`
+- prompt_version: `clarification_v1`
+- temperature: `0.0`
+- max_tokens: `300`
+- fallback_entry: `clarification_generation@openai:gpt-4o-mini:mvp-v0:clarification_v0`
+- rollout_stage: `dev`
+- owner: `backend-team`
+- last_validated_at: `2026-03-15`
+
+3. `receipt_ocr_extraction`
 - provider: `openai`
 - model_id: `gpt-4o-mini`
 - model_version: `mvp-v1`
@@ -79,7 +92,7 @@ Date of this active mapping: `2026-03-14`
 - owner: `backend-team`
 - last_validated_at: `2026-03-14`
 
-3. `answer_generation`
+4. `answer_generation`
 - provider: `openai`
 - model_id: `gpt-4o-mini`
 - model_version: `mvp-v1`
@@ -92,7 +105,7 @@ Date of this active mapping: `2026-03-14`
 - owner: `backend-team`
 - last_validated_at: `2026-03-14`
 
-4. `voice_transcription` (planned baseline, not yet active in runtime telemetry)
+5. `voice_transcription` (planned baseline, not yet active in runtime telemetry)
 - provider: `openai`
 - model_id: `whisper-1` (or approved successor)
 - model_version: `mvp-v1`
@@ -105,7 +118,7 @@ Date of this active mapping: `2026-03-14`
 - owner: `backend-team`
 - last_validated_at: `pending`
 
-5. `embedding_generation` (planned baseline, not yet active in runtime telemetry)
+6. `embedding_generation` (planned baseline, not yet active in runtime telemetry)
 - provider: `openai`
 - model_id: `text-embedding-*`
 - model_version: `mvp-v1`
@@ -121,6 +134,7 @@ Date of this active mapping: `2026-03-14`
 ## Rollback Entries (Immediate Use)
 
 - `memory_extraction@openai:gpt-4o-mini:mvp-v0:memory_extraction_v0`
+- `clarification_generation@openai:gpt-4o-mini:mvp-v0:clarification_v0`
 - `receipt_ocr_extraction@openai:gpt-4o-mini:mvp-v0:receipt_extraction_v0`
 - `answer_generation@openai:gpt-4o-mini:mvp-v0:answer_generation_v0`
 

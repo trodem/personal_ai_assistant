@@ -40,7 +40,7 @@ class AttachmentFlowE2ETests(unittest.TestCase):
             json={
                 "memory_type": "expense_event",
                 "raw_text": "Receipt memory",
-                "structured_data": {"item": "bread", "amount": 3.0, "attachment_url": tampered_url},
+                "structured_data": {"item": "bread", "amount": 3.0, "currency": "CHF", "attachment_url": tampered_url},
                 "confirmed": True,
             },
         )
@@ -53,7 +53,7 @@ class AttachmentFlowE2ETests(unittest.TestCase):
             json={
                 "memory_type": "expense_event",
                 "raw_text": "Receipt memory",
-                "structured_data": {"item": "bread", "amount": 3.0, "attachment_url": signed_url},
+                "structured_data": {"item": "bread", "amount": 3.0, "currency": "CHF", "attachment_url": signed_url},
                 "confirmed": True,
             },
         )
@@ -98,7 +98,7 @@ class AttachmentFlowE2ETests(unittest.TestCase):
             json={
                 "memory_type": "expense_event",
                 "raw_text": "Failed OCR receipt",
-                "structured_data": {"item": "bread", "amount": 3.0, "attachment_url": signed_url},
+                "structured_data": {"item": "bread", "amount": 3.0, "currency": "CHF", "attachment_url": signed_url},
                 "confirmed": True,
             },
         )

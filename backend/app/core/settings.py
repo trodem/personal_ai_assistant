@@ -55,6 +55,8 @@ class AppSettings:
     supabase_url: str
     ai_token_budget_free: int
     ai_token_budget_premium: int
+    memory_clarification_max_turns: int
+    voice_memory_background_min_bytes: int
 
 
 @lru_cache(maxsize=1)
@@ -77,4 +79,6 @@ def get_settings() -> AppSettings:
         supabase_url=os.getenv("SUPABASE_URL", "").rstrip("/"),
         ai_token_budget_free=_read_int("AI_TOKEN_BUDGET_FREE", 200000),
         ai_token_budget_premium=_read_int("AI_TOKEN_BUDGET_PREMIUM", 2000000),
+        memory_clarification_max_turns=_read_int("MEMORY_CLARIFICATION_MAX_TURNS", 3),
+        voice_memory_background_min_bytes=_read_int("VOICE_MEMORY_BACKGROUND_MIN_BYTES", 1048576),
     )

@@ -2,7 +2,7 @@ import os
 import unittest
 from unittest.mock import patch
 
-from backend.app.core.settings import get_settings
+from app.core.settings import get_settings
 
 
 class SettingsValidationTests(unittest.TestCase):
@@ -24,6 +24,8 @@ class SettingsValidationTests(unittest.TestCase):
                 "APP_DEV_JWT_SECRET": "secret_value",
                 "AI_TOKEN_BUDGET_FREE": "100",
                 "AI_TOKEN_BUDGET_PREMIUM": "200",
+                "MEMORY_CLARIFICATION_MAX_TURNS": "4",
+                "VOICE_MEMORY_BACKGROUND_MIN_BYTES": "2048",
             },
             clear=False,
         ):
@@ -35,6 +37,8 @@ class SettingsValidationTests(unittest.TestCase):
             self.assertEqual(settings.app_cors_allow_origins, ("http://localhost:3000", "http://localhost:5173"))
             self.assertEqual(settings.ai_token_budget_free, 100)
             self.assertEqual(settings.ai_token_budget_premium, 200)
+            self.assertEqual(settings.memory_clarification_max_turns, 4)
+            self.assertEqual(settings.voice_memory_background_min_bytes, 2048)
 
     def test_invalid_app_env_raises(self) -> None:
         with patch.dict(os.environ, {"APP_ENV": "qa"}, clear=False):
@@ -49,6 +53,16 @@ class SettingsValidationTests(unittest.TestCase):
     def test_invalid_budget_raises(self) -> None:
         with patch.dict(os.environ, {"AI_TOKEN_BUDGET_FREE": "zero"}, clear=False):
             with self.assertRaisesRegex(ValueError, "AI_TOKEN_BUDGET_FREE must be an integer"):
+                get_settings()
+
+    def test_invalid_memory_clarification_max_turns_raises(self) -> None:
+        with patch.dict(os.environ, {"MEMORY_CLARIFICATION_MAX_TURNS": "0"}, clear=False):
+            with self.assertRaisesRegex(ValueError, "MEMORY_CLARIFICATION_MAX_TURNS must be > 0"):
+                get_settings()
+
+    def test_invalid_voice_memory_background_min_bytes_raises(self) -> None:
+        with patch.dict(os.environ, {"VOICE_MEMORY_BACKGROUND_MIN_BYTES": "-1"}, clear=False):
+            with self.assertRaisesRegex(ValueError, "VOICE_MEMORY_BACKGROUND_MIN_BYTES must be > 0"):
                 get_settings()
 
     def test_empty_cors_origins_raises(self) -> None:

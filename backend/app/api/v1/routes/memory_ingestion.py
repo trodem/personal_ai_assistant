@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from time import perf_counter
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, File, Request, UploadFile
@@ -7,6 +8,7 @@ from starlette import status
 from app.api.schemas import MemoryProposalResponse, MemoryRecordResponse, SaveMemoryRequest
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
+from app.core.settings import get_settings
 from app.repositories.memory_repository import insert_memory_record
 from app.services.memory_ingestion import (
     extract_memory_proposal,
@@ -14,6 +16,7 @@ from app.services.memory_ingestion import (
 )
 from app.services.semantic_cache import invalidate_user_cache
 from app.services.attachments import mark_attachment_persisted, validate_signed_attachment_url
+from app.services.time_normalization import normalize_relative_when_value
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
 from app.core.idempotency import (
     build_payload_hash,
@@ -22,10 +25,24 @@ from app.core.idempotency import (
 )
 from app.services.ai_safety import enforce_input_safety
 from app.services.audio_upload import read_and_validate_audio_upload
+from app.services.embedding_generation import generate_and_store_embedding_for_memory
+from app.services.ai_execution_mode import resolve_transcription_execution_mode
 from app.services.prompts.memory_extraction_prompt import MEMORY_EXTRACTION_PROMPT_VERSION
-from app.services.whisper_transcription import transcribe_audio_with_whisper
+from app.services.whisper_transcription import transcribe_audio_with_whisper_by_mode
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
+
+
+def _read_clarification_turn(raw_value: str | None) -> int:
+    if raw_value is None:
+        return 1
+    try:
+        parsed = int(raw_value.strip())
+    except ValueError:
+        return 1
+    if parsed <= 0:
+        return 1
+    return parsed
 
 
 @router.post(
@@ -45,11 +62,19 @@ async def upload_voice_memory(
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> MemoryProposalResponse:
     _ = current_user
+    settings = get_settings()
     payload = await read_and_validate_audio_upload(audio)
-    transcript = transcribe_audio_with_whisper(
+    extraction_start = perf_counter()
+    execution_mode = resolve_transcription_execution_mode(
+        payload_size_bytes=len(payload),
+        forced_mode=request.headers.get("x-ai-execution-mode"),
+        background_min_bytes=settings.voice_memory_background_min_bytes,
+    )
+    transcript = await transcribe_audio_with_whisper_by_mode(
         payload=payload,
         file_name=audio.filename,
         content_type=audio.content_type,
+        execution_mode=execution_mode,
     )
     session_id = request.headers.get("x-session-id", "voice-memory")
     transcript = enforce_input_safety(
@@ -57,8 +82,13 @@ async def upload_voice_memory(
         path="/api/v1/voice/memory",
         session_id=session_id,
     )
+    clarification_turn = _read_clarification_turn(request.headers.get("x-clarification-turn"))
 
-    proposal = extract_memory_proposal(transcript)
+    proposal = extract_memory_proposal(
+        transcript,
+        clarification_turn=clarification_turn,
+        max_clarification_turns=settings.memory_clarification_max_turns,
+    )
     output_text = (
         proposal.memory_type
         + "|"
@@ -81,6 +111,7 @@ async def upload_voice_memory(
         token_in=token_in,
         token_out=token_out,
         estimated_cost=estimated_cost,
+        latency_ms=max((perf_counter() - extraction_start) * 1000, 0.001),
     )
 
     ai_state = "ready_to_confirm" if proposal.needs_confirmation else "needs_clarification"
@@ -125,6 +156,11 @@ async def save_memory(
         path="/api/v1/memory",
         session_id=session_id,
     )
+    when_value = payload.structured_data.get("when")
+    if isinstance(when_value, str):
+        normalized_when = normalize_relative_when_value(when_value)
+        if normalized_when is not None:
+            payload.structured_data["when"] = normalized_when
     payload_hash = build_payload_hash(payload.model_dump())
     if idempotency_key:
         existing = get_idempotency_record(
@@ -194,6 +230,13 @@ async def save_memory(
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     insert_memory_record(record)
+    generate_and_store_embedding_for_memory(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        memory_id=record["id"],
+        raw_text=record["raw_text"],
+        structured_data=record["structured_data"],
+    )
     invalidate_user_cache(current_user.tenant_id, current_user.user_id)
     response_payload = {
         "id": record["id"],

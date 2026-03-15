@@ -131,6 +131,7 @@ def create_attachment(
         return record
 
     ocr_text_preview = _fake_ocr_preview(file_name, content)
+    extraction_start = time.perf_counter()
     sanitized_preview = enforce_input_safety(
         text=ocr_text_preview,
         path="/api/v1/attachments",
@@ -159,6 +160,7 @@ def create_attachment(
         token_in=token_in,
         token_out=token_out,
         estimated_cost=estimated_cost,
+        latency_ms=max((time.perf_counter() - extraction_start) * 1000, 0.001),
     )
     status = "proposal_ready"
     ocr_status = "completed"

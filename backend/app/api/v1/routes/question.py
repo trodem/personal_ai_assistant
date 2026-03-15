@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from time import perf_counter
 from starlette import status
 
 from app.api.schemas import QuestionResponse, TextQuestionRequest
@@ -71,6 +72,7 @@ async def ask_text_question(
             source_memory_ids=cached.source_memory_ids,
         )
 
+    answer_generation_start = perf_counter()
     answer = format_answer_from_structured_result(structured, preferred_language)
     enforce_output_safety(
         text=answer,
@@ -92,6 +94,7 @@ async def ask_text_question(
         token_in=token_in,
         token_out=token_out,
         estimated_cost=estimated_cost,
+        latency_ms=max((perf_counter() - answer_generation_start) * 1000, 0.001),
     )
     if structured.confidence in {"high", "medium"}:
         put_cached_answer(

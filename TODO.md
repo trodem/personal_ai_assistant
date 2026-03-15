@@ -231,21 +231,21 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Endpoint `POST /api/v1/voice/memory` with robust audio upload handling.
 - [x] Whisper integration with timeout and controlled retry.
 - [x] Versioned extraction prompt (`specs/memory-extraction.md`).
-- [ ] Register extraction/clarification model + prompt versions in `docs/model-registry.md`.
-- [ ] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
-- [ ] Enforce required fields per `memory_type` before persistence (`required_by_type` contract).
-- [ ] Typed + semantic field extraction (`who/what/where/when/why/how`).
-- [ ] Apply default `when = current timestamp` when user does not provide explicit date/time.
-- [ ] Normalize relative time expressions (`today`, `yesterday`, etc.) to absolute date/time before confirmation and save.
-- [ ] Clarification engine for missing fields (configurable max turns).
-- [ ] Confirmation contract: `confirm/modify/cancel` before persistence.
-- [ ] Persist memory only after explicit confirmation.
-- [ ] Move expensive AI tasks (transcription/embeddings when applicable) to background jobs where latency requires it.
-- [ ] Generate embeddings only for confirmed create/update events.
-- [ ] Capture per-request AI telemetry (model, token usage, estimated cost, latency).
-- [ ] Add strict anti-hallucination guardrails for extraction output schema.
-- [ ] Apply input moderation and sensitive-data sanitization before LLM extraction call.
-- [ ] End-to-end test: voice -> extraction -> confirmation -> storage.
+- [x] Register extraction/clarification model + prompt versions in `docs/model-registry.md`.
+- [x] `memory_type` classification (`expense_event`, `inventory_event`, `loan_event`, `note`, `document`).
+- [x] Enforce required fields per `memory_type` before persistence (`required_by_type` contract).
+- [x] Typed + semantic field extraction (`who/what/where/when/why/how`).
+- [x] Apply default `when = current timestamp` when user does not provide explicit date/time.
+- [x] Normalize relative time expressions (`today`, `yesterday`, `tomorrow`, etc.) to absolute date/time before confirmation and save.
+- [x] Clarification engine for missing fields (configurable max turns).
+- [x] Confirmation contract: `confirm/modify/cancel` before persistence.
+- [x] Persist memory only after explicit confirmation.
+- [x] Move expensive AI tasks (transcription/embeddings when applicable) to background jobs where latency requires it.
+- [x] Generate embeddings only for confirmed create/update events.
+- [x] Capture per-request AI telemetry (model, token usage, estimated cost, latency).
+- [x] Add strict anti-hallucination guardrails for extraction output schema.
+- [x] Apply input moderation and sensitive-data sanitization before LLM extraction call.
+- [x] End-to-end test: voice -> extraction -> confirmation -> storage.
 
 ---
 
@@ -299,7 +299,7 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [ ] Integrate Supabase Auth JWT validation in backend.
 - [ ] Enable email/password auth in Supabase Auth for MVP.
-- [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`).
+<!-- - [ ] Enable SSO providers in Supabase Auth for MVP (`Google`, `Apple`). -->
 - [ ] Add mandatory auth middleware for protected endpoints.
 - [ ] Auto-provision user on first access.
 - [ ] Map token claims -> internal `user_id`.

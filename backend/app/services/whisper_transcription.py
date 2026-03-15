@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 import uuid
@@ -10,6 +11,7 @@ from urllib import error, request
 from starlette import status
 
 from app.core.errors import AppError
+from app.domain.async_job_boundary import ExecutionMode
 
 
 _OPENAI_TRANSCRIPTIONS_URL = "https://api.openai.com/v1/audio/transcriptions"
@@ -187,4 +189,25 @@ def transcribe_audio_with_whisper(
         message="Whisper transcription service unavailable after retries.",
         details={"reason": last_error or "unknown"},
         retryable=True,
+    )
+
+
+async def transcribe_audio_with_whisper_by_mode(
+    *,
+    payload: bytes,
+    file_name: str | None,
+    content_type: str | None,
+    execution_mode: ExecutionMode,
+) -> str:
+    if execution_mode == "background_worker":
+        return await asyncio.to_thread(
+            transcribe_audio_with_whisper,
+            payload=payload,
+            file_name=file_name,
+            content_type=content_type,
+        )
+    return transcribe_audio_with_whisper(
+        payload=payload,
+        file_name=file_name,
+        content_type=content_type,
     )
