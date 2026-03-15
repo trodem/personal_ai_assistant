@@ -196,6 +196,12 @@ class PaymentMethodsListResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class PaymentMethodSetupIntentResponse(BaseModel):
+    client_secret: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str

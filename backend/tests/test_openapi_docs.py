@@ -30,6 +30,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/me/settings/security", schema["paths"])
         self.assertIn("/api/v1/me/settings/notifications", schema["paths"])
         self.assertIn("/api/v1/me/settings/payment-methods", schema["paths"])
+        self.assertIn("/api/v1/me/settings/payment-methods/setup-intent", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -104,6 +105,10 @@ class OpenApiDocsTests(unittest.TestCase):
         settings_payment_methods_get = schema["paths"]["/api/v1/me/settings/payment-methods"]["get"]
         self.assertEqual(settings_payment_methods_get["summary"], "List user payment methods")
         self.assertIn("403", settings_payment_methods_get["responses"])
+
+        settings_payment_methods_setup = schema["paths"]["/api/v1/me/settings/payment-methods/setup-intent"]["post"]
+        self.assertEqual(settings_payment_methods_setup["summary"], "Create setup intent for payment method")
+        self.assertIn("403", settings_payment_methods_setup["responses"])
 
 
 if __name__ == "__main__":

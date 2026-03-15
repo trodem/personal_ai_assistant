@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends
 from app.api.schemas import (
     AcceptedResponse,
     NotificationPreferences,
+    PaymentMethodSetupIntentResponse,
     PaymentMethodsListResponse,
     UpdateNotificationPreferencesRequest,
     UpdateProfileRequest,
@@ -19,7 +20,7 @@ from app.services.user_preferences import (
     set_notification_preferences,
     set_preferred_language,
 )
-from app.services.payment_methods import list_payment_methods_for_user
+from app.services.payment_methods import create_setup_intent_client_secret, list_payment_methods_for_user
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
@@ -147,3 +148,29 @@ async def list_payment_methods(
         user_id=current_user.user_id,
     )
     return PaymentMethodsListResponse(items=items)
+
+
+@router.post(
+    "/payment-methods/setup-intent",
+    summary="Create setup intent for payment method",
+    description="Creates provider setup intent client secret to add or update payment method.",
+    response_model=PaymentMethodSetupIntentResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        403: {"description": "Forbidden. Billing plan is locked by role policy."},
+    },
+)
+async def create_payment_method_setup_intent(
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> PaymentMethodSetupIntentResponse:
+    if current_user.role in {"admin", "author"}:
+        raise AppError(
+            status_code=403,
+            code="billing.plan_locked_by_role",
+            message="Payment methods are unavailable for billing-exempt roles.",
+        )
+    client_secret = create_setup_intent_client_secret(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+    )
+    return PaymentMethodSetupIntentResponse(client_secret=client_secret)

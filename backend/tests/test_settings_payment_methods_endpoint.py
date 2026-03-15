@@ -35,8 +35,25 @@ class SettingsPaymentMethodsEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.json()["error"]["code"], "billing.plan_locked_by_role")
 
+    def test_user_can_create_payment_method_setup_intent(self) -> None:
+        response = self.client.post("/api/v1/me/settings/payment-methods/setup-intent", headers=self.user_headers)
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("client_secret", payload)
+        self.assertTrue(payload["client_secret"].startswith("seti_"))
+
+    def test_setup_intent_is_blocked_for_admin_role(self) -> None:
+        response = self.client.post("/api/v1/me/settings/payment-methods/setup-intent", headers=self.admin_headers)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "billing.plan_locked_by_role")
+
     def test_payment_methods_requires_authentication(self) -> None:
         response = self.client.get("/api/v1/me/settings/payment-methods")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["error"]["code"], "auth.missing_token")
+
+    def test_setup_intent_requires_authentication(self) -> None:
+        response = self.client.post("/api/v1/me/settings/payment-methods/setup-intent")
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.json()["error"]["code"], "auth.missing_token")
 
