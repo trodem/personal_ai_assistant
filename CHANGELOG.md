@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Completed P5 task `Map token claims -> internal user_id`: introduced explicit claim-resolution strategy (`sub` -> `user_id` -> `uid`) used by auth token validation and current-user resolution, preserving compatibility with Supabase JWT while supporting provider-variant claim names; added regression tests for `user_id` and `uid` claim mapping.
 - Completed P5 task `Auto-provision user on first access`: authenticated requests now auto-create/update a tenant-scoped user record during token resolution (`get_current_user`) with role/status defaults derived from token claims, plus regression tests for both tenant-aware and single-tenant fallback tokens.
 - Completed P5 task `Add mandatory auth middleware for protected endpoints`: added centralized `MandatoryAuthMiddleware` enforcing bearer authentication for all `/api/v1/**` routes (while allowing `OPTIONS` preflight), wired middleware in app startup, and added regression tests for missing-token, invalid-scheme, and non-protected path behavior.
 - Completed P5 task `Enable email/password auth in Supabase Auth for MVP`: verified end-to-end runtime flow with `scripts/supabase-auth-smoke.ps1` (`grant_type=password` token login + authenticated call to `/api/v1/memories`) and confirmed operational readiness for email/password authentication.

@@ -48,6 +48,15 @@ class SupabaseJwtValidationTests(unittest.TestCase):
         self.assertEqual(exc.exception.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(exc.exception.code, "auth.invalid_token")
 
+    def test_rs256_token_accepts_user_id_claim_as_internal_identifier(self) -> None:
+        token = _fake_jwt("RS256")
+        with patch(
+            "app.core.auth._decode_with_jwks",
+            return_value={"user_id": "internal-user-123", "exp": 4_102_444_800, "role": "user"},
+        ):
+            payload = _decode_token(token)
+        self.assertEqual(payload["user_id"], "internal-user-123")
+
     def test_rs256_token_expired_is_rejected(self) -> None:
         token = _fake_jwt("RS256")
         with patch(
@@ -85,7 +94,24 @@ class SupabaseJwtValidationTests(unittest.TestCase):
         self.assertEqual(user.user_id, "user-rs256")
         self.assertEqual(user.tenant_id, "tenant-rs")
 
+    def test_get_current_user_maps_uid_claim_to_internal_user_id(self) -> None:
+        token = _fake_jwt("RS256")
+        credentials = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+        with patch(
+            "app.core.auth._decode_with_jwks",
+            return_value={
+                "uid": "uid-claim-user-1",
+                "role": "user",
+                "mfa_enabled": False,
+                "status": "active",
+                "tenant_id": "tenant-uid",
+                "exp": 4_102_444_800,
+            },
+        ):
+            user = get_current_user(credentials=credentials, x_tenant_id="tenant-uid")
+        self.assertEqual(user.user_id, "uid-claim-user-1")
+        self.assertEqual(user.tenant_id, "tenant-uid")
+
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -27,6 +27,7 @@ class AuthenticatedUser:
 
 
 bearer_scheme = HTTPBearer(auto_error=False)
+USER_ID_CLAIM_CANDIDATES = ("sub", "user_id", "uid")
 
 
 def _dev_hs256_secret() -> str:
@@ -131,13 +132,23 @@ def _decode_token(token: str) -> dict[str, object]:
             message="Token is expired.",
         )
 
-    if not payload.get("sub"):
-        raise AppError(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            code="auth.invalid_token",
-            message="Token subject is missing.",
-        )
+    _ = resolve_internal_user_id(payload)
     return payload
+
+
+def resolve_internal_user_id(payload: dict[str, object]) -> str:
+    for claim_name in USER_ID_CLAIM_CANDIDATES:
+        claim_value = payload.get(claim_name)
+        if claim_value is None:
+            continue
+        user_id = str(claim_value).strip()
+        if user_id:
+            return user_id
+    raise AppError(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        code="auth.invalid_token",
+        message="Token user identifier claim is missing.",
+    )
 
 
 @lru_cache(maxsize=1)
@@ -192,7 +203,7 @@ def get_current_user(
 
     token = credentials.credentials.strip()
     payload = _decode_token(token)
-    user_id = str(payload["sub"])
+    user_id = resolve_internal_user_id(payload)
     role = str(payload.get("role", "user"))
     mfa_enabled = bool(payload.get("mfa_enabled", False))
     account_status = str(payload.get("status", "active")).lower()
