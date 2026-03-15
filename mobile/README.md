@@ -6,6 +6,7 @@ The mobile app uses a clean, layered baseline:
 
 - `app/core/state`: application state model and controller
 - `app/presentation`: app root composition and screen routing
+- `app/features/onboarding`: first-run first-value onboarding flow
 - `app/screens`: UI screens
 - `app/widgets`: reusable UI components
 - `app/theme`: centralized design tokens and theme

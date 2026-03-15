@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_ai_assistant_mobile/app/core/state/app_state_controller.dart';
 import 'package:personal_ai_assistant_mobile/app/features/auth/application/auth_controller.dart';
+import 'package:personal_ai_assistant_mobile/app/features/onboarding/application/onboarding_controller.dart';
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 import 'fakes/fake_auth_repository.dart';
@@ -13,12 +14,14 @@ void main() {
     final AuthController authController = AuthController(
       repository: FakeAuthRepository(),
     );
+    final OnboardingController onboardingController = OnboardingController();
     await authController.loadSession();
 
     await tester.pumpWidget(
       PersonalAIAssistantApp(
         controller: AppStateController(),
         authController: authController,
+        onboardingController: onboardingController,
       ),
     );
     await tester.pumpAndSettle();
@@ -33,6 +36,12 @@ void main() {
       "pass123",
     );
     await tester.tap(find.byKey(const Key("login-submit-button")));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Get your first value"), findsOneWidget);
+    onboardingController.completeFirstMemory();
+    onboardingController.completeFirstQuestion();
+    onboardingController.finish();
     await tester.pumpAndSettle();
 
     expect(find.text("Design System Baseline"), findsOneWidget);

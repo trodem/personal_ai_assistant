@@ -4,6 +4,7 @@ import 'app/core/state/app_state_controller.dart';
 import 'app/core/state/app_state_scope.dart';
 import 'app/features/auth/application/auth_controller.dart';
 import 'app/features/auth/data/auth_repository_factory.dart';
+import 'app/features/onboarding/application/onboarding_controller.dart';
 import 'app/presentation/app_root.dart';
 
 Future<void> main() async {
@@ -16,6 +17,7 @@ Future<void> main() async {
     PersonalAIAssistantApp(
       controller: AppStateController(),
       authController: authController,
+      onboardingController: OnboardingController(),
     ),
   );
 }
@@ -25,10 +27,12 @@ class PersonalAIAssistantApp extends StatelessWidget {
     super.key,
     required this.controller,
     required this.authController,
+    required this.onboardingController,
   });
 
   final AppStateController controller;
   final AuthController authController;
+  final OnboardingController onboardingController;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,7 @@ class PersonalAIAssistantApp extends StatelessWidget {
       child: AppRoot(
         controller: controller,
         authController: authController,
+        onboardingController: onboardingController,
       ),
     );
   }
