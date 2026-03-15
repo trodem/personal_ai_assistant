@@ -156,6 +156,15 @@ class UpdateProfileRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class UpdateSecurityRequest(BaseModel):
+    action: Literal["change_email", "change_password", "enable_2fa", "disable_2fa", "verify_2fa"]
+    email: str | None = None
+    password: str | None = None
+    totp_code: str | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str

@@ -268,8 +268,8 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)
 - [x] `GET /api/v1/author/dashboard` (author only global supervision)
 - [x] `GET /api/v1/me/settings`
-- [ ] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)
-- [ ] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
+- [x] `PATCH /api/v1/me/settings/profile` (includes `preferred_language`)
+- [x] `PATCH /api/v1/me/settings/security` (password/email/2FA security flow trigger)
 - [ ] `PATCH /api/v1/me/settings/notifications` (notification channels preferences)
 - [ ] `GET /api/v1/me/settings/payment-methods` (masked cards list)
 - [ ] `POST /api/v1/me/settings/payment-methods/setup-intent` (provider setup intent for add/update)

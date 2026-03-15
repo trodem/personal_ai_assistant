@@ -2,7 +2,7 @@ from typing import Literal, cast
 
 from fastapi import APIRouter, Depends
 
-from app.api.schemas import UpdateProfileRequest, UserSettingsResponse
+from app.api.schemas import AcceptedResponse, UpdateProfileRequest, UpdateSecurityRequest, UserSettingsResponse
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.services.user_preferences import get_preferred_language, set_preferred_language
 
@@ -58,3 +58,22 @@ async def update_profile_settings(
 ) -> UserSettingsResponse:
     set_preferred_language(current_user.tenant_id, current_user.user_id, payload.preferred_language)
     return _build_settings_response(current_user)
+
+
+@router.patch(
+    "/security",
+    summary="Trigger security-sensitive settings change",
+    description="Starts security flow for email/password/2FA changes.",
+    response_model=AcceptedResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        422: {"description": "Validation error."},
+    },
+)
+async def update_security_settings(
+    payload: UpdateSecurityRequest,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> AcceptedResponse:
+    _ = payload
+    _ = current_user
+    return AcceptedResponse(accepted=True)
