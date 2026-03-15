@@ -9,6 +9,7 @@ import 'package:personal_ai_assistant_mobile/main.dart';
 import 'fakes/fake_auth_repository.dart';
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
+import 'fakes/fake_onboarding_completion_repository.dart';
 
 void main() {
   testWidgets("app boots with themed preview screen", (WidgetTester tester) async {
@@ -19,6 +20,10 @@ void main() {
     );
     await authController.loadSession();
 
+    final FakeOnboardingCompletionRepository completionRepository =
+        FakeOnboardingCompletionRepository();
+    completionRepository.setCompletedAtForUser("1", DateTime.utc(2026, 3, 15));
+
     await tester.pumpWidget(
       PersonalAIAssistantApp(
         controller: AppStateController(),
@@ -27,9 +32,11 @@ void main() {
           completed: true,
           languagePreferencesRepository: FakeLanguagePreferencesRepository(),
           devicePermissionsGateway: FakeDevicePermissionsGateway(),
+          onboardingCompletionRepository: completionRepository,
         ),
       ),
     );
+    await tester.pumpAndSettle();
 
     expect(find.text("Personal AI Assistant"), findsOneWidget);
     expect(find.text("Design System Baseline"), findsOneWidget);

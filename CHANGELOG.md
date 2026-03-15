@@ -7,6 +7,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added persisted onboarding completion state (`onboarding_completed_at`) in Flutter via user-scoped local storage, with hydration on authenticated session to prevent repeating the full onboarding wizard on subsequent app launches/logins.
 - Added onboarding step 5 guided first-question flow in Flutter onboarding: question input, guided answer preview, expandable "Why this answer" disclosure (confidence + source IDs), and explicit completion action before finishing onboarding.
 - Added `MFA_ENABLEMENT_CHECKLIST.md` with per-provider MFA/recovery-code evidence tracking and explicit completion criteria for the Day 0 MFA prerequisite task.
 - Completed environment readiness check `Stripe test webhook delivery validated locally` via Stripe CLI local forwarding test (`payment_intent.succeeded`) with confirmed HTTP `200` delivery to a local webhook receiver.

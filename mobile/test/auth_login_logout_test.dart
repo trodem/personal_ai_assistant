@@ -9,6 +9,7 @@ import 'package:personal_ai_assistant_mobile/main.dart';
 import 'fakes/fake_auth_repository.dart';
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
+import 'fakes/fake_onboarding_completion_repository.dart';
 
 void main() {
   testWidgets("login and logout flow works with auth controller", (
@@ -24,6 +25,7 @@ void main() {
     final OnboardingController onboardingController = OnboardingController(
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: permissionsGateway,
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
     await authController.loadSession();
 

@@ -52,7 +52,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
   final VoidCallback onPrepareFirstQuestionAnswer;
   final VoidCallback onToggleFirstQuestionWhyDisclosure;
   final VoidCallback onCompleteFirstQuestion;
-  final VoidCallback onFinish;
+  final Future<void> Function() onFinish;
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +249,11 @@ class FirstValueOnboardingScreen extends StatelessWidget {
           AppPrimaryButton(
             key: const Key("onboarding-finish-button"),
             label: "Finish onboarding",
-            onPressed: canFinish ? onFinish : null,
+            onPressed: canFinish
+                ? () async {
+                    await onFinish();
+                  }
+                : null,
           ),
         ],
       ),

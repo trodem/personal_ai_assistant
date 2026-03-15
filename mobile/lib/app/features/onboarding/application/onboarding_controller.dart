@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../domain/device_permissions_gateway.dart';
 import '../domain/language_preferences_repository.dart';
+import '../domain/onboarding_completion_repository.dart';
 import '../domain/preferred_language.dart';
 
 class OnboardingController extends ChangeNotifier {
@@ -9,15 +10,23 @@ class OnboardingController extends ChangeNotifier {
     bool completed = false,
     required LanguagePreferencesRepository languagePreferencesRepository,
     required DevicePermissionsGateway devicePermissionsGateway,
+    required OnboardingCompletionRepository onboardingCompletionRepository,
   }) : _completed = completed,
        _languagePreferencesRepository = languagePreferencesRepository,
-       _devicePermissionsGateway = devicePermissionsGateway;
+       _devicePermissionsGateway = devicePermissionsGateway,
+       _onboardingCompletionRepository = onboardingCompletionRepository;
 
   bool _completed;
   bool get completed => _completed;
 
   final LanguagePreferencesRepository _languagePreferencesRepository;
   final DevicePermissionsGateway _devicePermissionsGateway;
+  final OnboardingCompletionRepository _onboardingCompletionRepository;
+
+  String? _hydratedUserId;
+  String? _hydratingUserId;
+  bool _isHydratingCompletion = false;
+  bool get isHydratingCompletion => _isHydratingCompletion;
 
   bool _welcomeStepDone = false;
   bool get welcomeStepDone => _welcomeStepDone;
@@ -83,6 +92,45 @@ class OnboardingController extends ChangeNotifier {
   String? get firstQuestionError => _firstQuestionError;
 
   bool get canFinish => _firstMemoryDone && _firstQuestionDone;
+
+  Future<void> hydrateCompletionForUser(String? userId) async {
+    if (userId == null || userId.isEmpty) {
+      _clearHydrationState();
+      return;
+    }
+    if (_hydratedUserId == userId || _hydratingUserId == userId) {
+      return;
+    }
+
+    _isHydratingCompletion = true;
+    _hydratingUserId = userId;
+    _completed = false;
+    notifyListeners();
+
+    final DateTime? completedAt = await _onboardingCompletionRepository
+        .getOnboardingCompletedAt(userId);
+
+    if (_hydratingUserId != userId) {
+      return;
+    }
+
+    _hydratedUserId = userId;
+    _hydratingUserId = null;
+    _isHydratingCompletion = false;
+    _completed = completedAt != null;
+    notifyListeners();
+  }
+
+  void _clearHydrationState() {
+    final bool shouldNotify = _hydratedUserId != null || _completed || _isHydratingCompletion;
+    _hydratedUserId = null;
+    _hydratingUserId = null;
+    _isHydratingCompletion = false;
+    _completed = false;
+    if (shouldNotify) {
+      notifyListeners();
+    }
+  }
 
   void completeWelcomeStep() {
     if (_welcomeStepDone) {
@@ -248,12 +296,20 @@ class OnboardingController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void finish() {
+  Future<void> finish() async {
     if (!canFinish || _completed) {
       return;
     }
     _completed = true;
     notifyListeners();
+
+    if (_hydratedUserId == null || _hydratedUserId!.isEmpty) {
+      return;
+    }
+    await _onboardingCompletionRepository.persistOnboardingCompletedAt(
+      userId: _hydratedUserId!,
+      completedAt: DateTime.now().toUtc(),
+    );
   }
 
   void reset() {

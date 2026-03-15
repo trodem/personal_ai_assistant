@@ -366,7 +366,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Onboarding step 3: permission guidance and request flow (microphone required; camera optional for receipt flow).
 - [x] Onboarding step 4: guided first memory capture with explicit confirmation (`Confirm/Modify/Cancel`).
 - [x] Onboarding step 5: guided first question flow with "Why this answer" disclosure.
-- [ ] Onboarding completion state persisted (`onboarding_completed_at`) to avoid repeating full wizard.
+- [x] Onboarding completion state persisted (`onboarding_completed_at`) to avoid repeating full wizard.
 - [ ] Add skip/resume onboarding behavior with deterministic resume point.
 - [ ] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
 - [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).

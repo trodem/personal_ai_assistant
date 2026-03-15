@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../core/state/app_state.dart';
@@ -52,6 +54,7 @@ class AppRoot extends StatelessWidget {
           ),
         );
       case AuthStatus.unauthenticated:
+        unawaited(onboardingController.hydrateCompletionForUser(null));
         return LoginScreen(
           errorMessage: authController.errorMessage,
           onSubmit: (String email, String password) {
@@ -59,6 +62,16 @@ class AppRoot extends StatelessWidget {
           },
         );
       case AuthStatus.authenticated:
+        unawaited(
+          onboardingController.hydrateCompletionForUser(authController.user?.id),
+        );
+        if (onboardingController.isHydratingCompletion) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
         if (!onboardingController.completed) {
           if (!onboardingController.welcomeStepDone) {
             return OnboardingWelcomeScreen(

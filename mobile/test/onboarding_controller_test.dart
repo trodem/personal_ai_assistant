@@ -4,6 +4,7 @@ import 'package:personal_ai_assistant_mobile/app/features/onboarding/domain/pref
 
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
+import 'fakes/fake_onboarding_completion_repository.dart';
 
 void main() {
   test("onboarding completes only after first memory and first question", () {
@@ -12,6 +13,7 @@ void main() {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
 
     expect(controller.completed, isFalse);
@@ -39,6 +41,7 @@ void main() {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
 
     controller.selectLanguage(PreferredLanguage.de);
@@ -57,6 +60,7 @@ void main() {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: permissionsGateway,
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
 
     await controller.requestCameraPermission();
@@ -73,6 +77,7 @@ void main() {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
 
     controller.prepareFirstMemoryProposal();
@@ -96,6 +101,7 @@ void main() {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
     );
 
     controller.completeFirstQuestion();
@@ -113,5 +119,35 @@ void main() {
 
     controller.completeFirstQuestion();
     expect(controller.firstQuestionDone, isTrue);
+  });
+
+  test("finish persists onboarding_completed_at and hydrates completion state", () async {
+    final FakeOnboardingCompletionRepository completionRepository =
+        FakeOnboardingCompletionRepository();
+    final OnboardingController controller = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: completionRepository,
+    );
+
+    await controller.hydrateCompletionForUser("user-1");
+    expect(controller.completed, isFalse);
+
+    controller.completeFirstMemory();
+    controller.updateFirstQuestionDraft("What did I buy today?");
+    controller.prepareFirstQuestionAnswer();
+    controller.completeFirstQuestion();
+    await controller.finish();
+
+    expect(controller.completed, isTrue);
+    expect(completionRepository.completedAtForUser("user-1"), isNotNull);
+
+    final OnboardingController hydratedController = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: completionRepository,
+    );
+    await hydratedController.hydrateCompletionForUser("user-1");
+    expect(hydratedController.completed, isTrue);
   });
 }
