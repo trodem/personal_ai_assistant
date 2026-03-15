@@ -5,6 +5,7 @@ import 'app/core/state/app_state_scope.dart';
 import 'app/features/auth/application/auth_controller.dart';
 import 'app/features/auth/data/auth_repository_factory.dart';
 import 'app/features/onboarding/application/onboarding_controller.dart';
+import 'app/features/onboarding/data/language_preferences_repository_factory.dart';
 import 'app/presentation/app_root.dart';
 
 Future<void> main() async {
@@ -17,7 +18,10 @@ Future<void> main() async {
     PersonalAIAssistantApp(
       controller: AppStateController(),
       authController: authController,
-      onboardingController: OnboardingController(),
+      onboardingController: OnboardingController(
+        languagePreferencesRepository:
+            LanguagePreferencesRepositoryFactory.create(),
+      ),
     ),
   );
 }

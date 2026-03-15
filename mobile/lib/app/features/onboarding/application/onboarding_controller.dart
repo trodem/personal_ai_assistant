@@ -1,15 +1,34 @@
 import 'package:flutter/foundation.dart';
 
+import '../domain/language_preferences_repository.dart';
+import '../domain/preferred_language.dart';
+
 class OnboardingController extends ChangeNotifier {
   OnboardingController({
     bool completed = false,
-  }) : _completed = completed;
+    required LanguagePreferencesRepository languagePreferencesRepository,
+  }) : _completed = completed,
+       _languagePreferencesRepository = languagePreferencesRepository;
 
   bool _completed;
   bool get completed => _completed;
 
+  final LanguagePreferencesRepository _languagePreferencesRepository;
+
   bool _welcomeStepDone = false;
   bool get welcomeStepDone => _welcomeStepDone;
+
+  bool _languageStepDone = false;
+  bool get languageStepDone => _languageStepDone;
+
+  PreferredLanguage _selectedLanguage = PreferredLanguage.en;
+  PreferredLanguage get selectedLanguage => _selectedLanguage;
+
+  bool _isSavingLanguage = false;
+  bool get isSavingLanguage => _isSavingLanguage;
+
+  String? _languageError;
+  String? get languageError => _languageError;
 
   bool _firstMemoryDone = false;
   bool get firstMemoryDone => _firstMemoryDone;
@@ -25,6 +44,32 @@ class OnboardingController extends ChangeNotifier {
     }
     _welcomeStepDone = true;
     notifyListeners();
+  }
+
+  void selectLanguage(PreferredLanguage language) {
+    if (_selectedLanguage == language) {
+      return;
+    }
+    _selectedLanguage = language;
+    notifyListeners();
+  }
+
+  Future<void> persistLanguageStep() async {
+    _isSavingLanguage = true;
+    _languageError = null;
+    notifyListeners();
+
+    try {
+      await _languagePreferencesRepository.persistPreferredLanguage(
+        _selectedLanguage,
+      );
+      _languageStepDone = true;
+    } catch (error) {
+      _languageError = error.toString();
+    } finally {
+      _isSavingLanguage = false;
+      notifyListeners();
+    }
   }
 
   void completeFirstMemory() {
@@ -54,6 +99,10 @@ class OnboardingController extends ChangeNotifier {
   void reset() {
     _completed = false;
     _welcomeStepDone = false;
+    _languageStepDone = false;
+    _selectedLanguage = PreferredLanguage.en;
+    _isSavingLanguage = false;
+    _languageError = null;
     _firstMemoryDone = false;
     _firstQuestionDone = false;
     notifyListeners();

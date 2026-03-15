@@ -6,6 +6,7 @@ import '../features/auth/application/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/first_value_onboarding_screen.dart';
+import '../features/onboarding/presentation/onboarding_language_screen.dart';
 import '../features/onboarding/presentation/onboarding_welcome_screen.dart';
 import '../screens/theme_preview_screen.dart';
 import '../theme/app_theme.dart';
@@ -61,6 +62,17 @@ class AppRoot extends StatelessWidget {
           if (!onboardingController.welcomeStepDone) {
             return OnboardingWelcomeScreen(
               onContinue: onboardingController.completeWelcomeStep,
+            );
+          }
+          if (!onboardingController.languageStepDone) {
+            return OnboardingLanguageScreen(
+              selectedLanguage: onboardingController.selectedLanguage,
+              onLanguageChanged: onboardingController.selectLanguage,
+              onContinue: () {
+                onboardingController.persistLanguageStep();
+              },
+              isSaving: onboardingController.isSavingLanguage,
+              errorMessage: onboardingController.languageError,
             );
           }
           return FirstValueOnboardingScreen(

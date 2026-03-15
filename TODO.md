@@ -362,7 +362,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Login/logout with Supabase Auth.
 - [x] First-run onboarding focused on fast first value (first memory + first question).
 - [x] Onboarding step 1: welcome + value proposition + privacy short notice.
-- [ ] Onboarding step 2: language selection (`en`/`it`/`de`) and persistence to `preferred_language`.
+- [x] Onboarding step 2: language selection (`en`/`it`/`de`) and persistence to `preferred_language`.
 - [ ] Onboarding step 3: permission guidance and request flow (microphone required; camera optional for receipt flow).
 - [ ] Onboarding step 4: guided first memory capture with explicit confirmation (`Confirm/Modify/Cancel`).
 - [ ] Onboarding step 5: guided first question flow with "Why this answer" disclosure.

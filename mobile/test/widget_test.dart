@@ -7,6 +7,7 @@ import 'package:personal_ai_assistant_mobile/app/features/onboarding/application
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 import 'fakes/fake_auth_repository.dart';
+import 'fakes/fake_language_preferences_repository.dart';
 
 void main() {
   testWidgets('App renders baseline title', (WidgetTester tester) async {
@@ -21,7 +22,10 @@ void main() {
       PersonalAIAssistantApp(
         controller: AppStateController(),
         authController: authController,
-        onboardingController: OnboardingController(completed: true),
+        onboardingController: OnboardingController(
+          completed: true,
+          languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+        ),
       ),
     );
 

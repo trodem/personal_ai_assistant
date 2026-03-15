@@ -3,9 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_ai_assistant_mobile/app/core/state/app_state_controller.dart';
 import 'package:personal_ai_assistant_mobile/app/features/auth/application/auth_controller.dart';
 import 'package:personal_ai_assistant_mobile/app/features/onboarding/application/onboarding_controller.dart';
+import 'package:personal_ai_assistant_mobile/app/features/onboarding/domain/preferred_language.dart';
 import 'package:personal_ai_assistant_mobile/main.dart';
 
 import 'fakes/fake_auth_repository.dart';
+import 'fakes/fake_language_preferences_repository.dart';
 
 void main() {
   testWidgets("login and logout flow works with auth controller", (
@@ -14,7 +16,11 @@ void main() {
     final AuthController authController = AuthController(
       repository: FakeAuthRepository(),
     );
-    final OnboardingController onboardingController = OnboardingController();
+    final FakeLanguagePreferencesRepository languageRepository =
+        FakeLanguagePreferencesRepository();
+    final OnboardingController onboardingController = OnboardingController(
+      languagePreferencesRepository: languageRepository,
+    );
     await authController.loadSession();
 
     await tester.pumpWidget(
@@ -42,6 +48,13 @@ void main() {
     expect(find.text("Privacy short notice"), findsOneWidget);
     await tester.tap(find.byKey(const Key("onboarding-welcome-continue-button")));
     await tester.pumpAndSettle();
+
+    expect(find.text("Choose your language"), findsOneWidget);
+    await tester.tap(find.byKey(const Key("language-it")));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("onboarding-language-continue-button")));
+    await tester.pumpAndSettle();
+    expect(languageRepository.lastSaved, PreferredLanguage.it);
 
     expect(find.text("Get your first value"), findsOneWidget);
     onboardingController.completeFirstMemory();
