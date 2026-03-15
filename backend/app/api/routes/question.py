@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Request
 from starlette import status
 
-from app.api.routes.memories import _MEMORY_FIXTURES
 from app.api.schemas import QuestionResponse, TextQuestionRequest
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
+from app.repositories.memory_repository import list_memories_for_user
 from app.services.question_engine import (
     compute_structured_result,
     format_answer_from_structured_result,
@@ -39,11 +39,10 @@ async def ask_text_question(
         path="/api/v1/question",
         session_id=session_id,
     )
-    scoped_memories = [
-        item
-        for item in _MEMORY_FIXTURES
-        if item["user_id"] == current_user.user_id and item["tenant_id"] == current_user.tenant_id
-    ]
+    scoped_memories = list_memories_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+    )
     structured = compute_structured_result(payload.question, scoped_memories)
     if structured.kind == "ambiguous_intent":
         raise AppError(

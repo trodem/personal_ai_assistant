@@ -60,6 +60,7 @@ class MemoryIngestionE2ETests(unittest.TestCase):
         saved = accepted_save.json()
         self.assertEqual(saved["memory_type"], "expense_event")
         self.assertEqual(saved["ai_state"], "saved")
+        self.assertEqual(saved["structured_data_schema_version"], 1)
 
         memories_response = self.client.get("/api/v1/memories", headers=self.headers)
         self.assertEqual(memories_response.status_code, 200)
@@ -67,6 +68,7 @@ class MemoryIngestionE2ETests(unittest.TestCase):
         matching = [item for item in items if item["id"] == saved["id"]]
         self.assertEqual(len(matching), 1)
         self.assertEqual(matching[0]["structured_data"]["amount"], 3.0)
+        self.assertEqual(matching[0]["structured_data_schema_version"], 1)
 
     def test_voice_proposal_enters_ready_to_confirm_when_required_fields_are_complete(self) -> None:
         proposal_response = self.client.post(

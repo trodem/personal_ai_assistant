@@ -32,6 +32,10 @@ jobs:
         shell: pwsh
         run: ./scripts/quality-check.ps1
 
+      - name: Run migration up/down smoke check
+        shell: pwsh
+        run: ./scripts/migration-smoke-check.ps1
+
       - name: Cleanup containers
         if: always()
         shell: pwsh

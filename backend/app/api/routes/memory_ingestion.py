@@ -7,7 +7,7 @@ from starlette import status
 from app.api.schemas import MemoryProposalResponse, MemoryRecordResponse, SaveMemoryRequest
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
-from app.api.routes.memories import _MEMORY_FIXTURES
+from app.repositories.memory_repository import insert_memory_record
 from app.services.memory_ingestion import (
     extract_memory_proposal,
     missing_required_fields,
@@ -15,6 +15,11 @@ from app.services.memory_ingestion import (
 from app.services.semantic_cache import invalidate_user_cache
 from app.services.attachments import mark_attachment_persisted, validate_signed_attachment_url
 from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.core.idempotency import (
+    build_payload_hash,
+    get_idempotency_record,
+    save_idempotency_record,
+)
 from app.services.ai_safety import enforce_input_safety
 
 router = APIRouter(prefix="/api/v1", tags=["Voice", "Memory"])
@@ -100,6 +105,7 @@ async def save_memory(
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> MemoryRecordResponse:
     session_id = request.headers.get("x-session-id", "save-memory")
+    idempotency_key = request.headers.get("Idempotency-Key", "").strip()
     payload.raw_text = enforce_input_safety(
         text=payload.raw_text,
         path="/api/v1/memory",
@@ -110,6 +116,23 @@ async def save_memory(
         path="/api/v1/memory",
         session_id=session_id,
     )
+    payload_hash = build_payload_hash(payload.model_dump())
+    if idempotency_key:
+        existing = get_idempotency_record(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            path="/api/v1/memory",
+            idempotency_key=idempotency_key,
+        )
+        if existing is not None:
+            if existing.payload_hash != payload_hash:
+                raise AppError(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    code="memory.validation_failed",
+                    message="Idempotency-Key reused with different payload.",
+                )
+            return MemoryRecordResponse(**existing.response_payload)
+
     if not payload.confirmed:
         raise AppError(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -158,14 +181,33 @@ async def save_memory(
         "memory_type": payload.memory_type,
         "raw_text": payload.raw_text,
         "structured_data": payload.structured_data,
+        "structured_data_schema_version": payload.structured_data_schema_version,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
-    _MEMORY_FIXTURES.append(record)
+    insert_memory_record(record)
     invalidate_user_cache(current_user.tenant_id, current_user.user_id)
+    response_payload = {
+        "id": record["id"],
+        "memory_type": record["memory_type"],
+        "raw_text": record["raw_text"],
+        "structured_data": record["structured_data"],
+        "structured_data_schema_version": record["structured_data_schema_version"],
+        "created_at": record["created_at"],
+    }
+    if idempotency_key:
+        save_idempotency_record(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            path="/api/v1/memory",
+            idempotency_key=idempotency_key,
+            payload_hash=payload_hash,
+            response_payload=response_payload,
+        )
     return MemoryRecordResponse(
-        id=record["id"],
-        memory_type=record["memory_type"],
-        raw_text=record["raw_text"],
-        structured_data=record["structured_data"],
-        created_at=record["created_at"],
+        id=response_payload["id"],
+        memory_type=response_payload["memory_type"],
+        raw_text=response_payload["raw_text"],
+        structured_data=response_payload["structured_data"],
+        structured_data_schema_version=response_payload["structured_data_schema_version"],
+        created_at=response_payload["created_at"],
     )

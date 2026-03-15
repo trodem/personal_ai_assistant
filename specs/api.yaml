@@ -947,6 +947,11 @@ components:
         structured_data:
           type: object
           additionalProperties: true
+        structured_data_schema_version:
+          type: integer
+          minimum: 1
+          default: 1
+          description: Version of `structured_data` schema used by the client payload.
         confirmed:
           type: boolean
           description: Must be true. Memory cannot be persisted otherwise.
@@ -956,7 +961,7 @@ components:
 
     MemoryRecord:
       type: object
-      required: [id, memory_type, raw_text, structured_data, created_at]
+      required: [id, memory_type, raw_text, structured_data, structured_data_schema_version, created_at]
       properties:
         id:
           type: string
@@ -968,6 +973,10 @@ components:
         structured_data:
           type: object
           additionalProperties: true
+        structured_data_schema_version:
+          type: integer
+          minimum: 1
+          description: Version of `structured_data` schema stored for forward-compatible evolution.
         created_at:
           type: string
           format: date-time

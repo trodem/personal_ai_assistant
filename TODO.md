@@ -212,17 +212,17 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [x] Set up migrations (Alembic or equivalent).
 - [x] Enable `pgvector` extension.
-- [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, `qa_interactions`.
-- [ ] Add user billing-policy fields (`role`, `subscription_plan`, `billing_exempt`) with constraints.
-- [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
-- [ ] Implement memory versioning strategy (`memory_versions` append-only).
-- [ ] Enforce per-user isolation policy across all repository queries.
-- [ ] Prepare tenant-ready schema strategy (`tenant_id` support) for B2B isolation path.
-- [ ] Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries.
-- [ ] Add soft-delete + audit trail strategy for sensitive memory operations (update/delete).
-- [ ] Add `structured_data_schema_version` support for forward-compatible payload evolution.
-- [ ] Create realistic local seed dataset for tests.
-- [ ] Test migration up/down in CI.
+- [x] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, `qa_interactions`.
+- [x] Add user billing-policy fields (`role`, `subscription_plan`, `billing_exempt`) with constraints.
+- [x] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).
+- [x] Implement memory versioning strategy (`memory_versions` append-only).
+- [x] Enforce per-user isolation policy across all repository queries.
+- [x] Prepare tenant-ready schema strategy (`tenant_id` support) for B2B isolation path.
+- [x] Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries.
+- [x] Add soft-delete + audit trail strategy for sensitive memory operations (update/delete).
+- [x] Add `structured_data_schema_version` support for forward-compatible payload evolution.
+- [x] Create realistic local seed dataset for tests.
+- [x] Test migration up/down in CI.
 
 ---
 

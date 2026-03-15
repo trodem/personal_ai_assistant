@@ -182,6 +182,7 @@ powershell -ExecutionPolicy Bypass -File scripts/startup-smoke-check.ps1
 powershell -ExecutionPolicy Bypass -File scripts/openai-account-check.ps1
 powershell -ExecutionPolicy Bypass -File scripts/supabase-auth-smoke.ps1
 powershell -ExecutionPolicy Bypass -File scripts/migration-smoke-check.ps1
+powershell -ExecutionPolicy Bypass -File scripts/seed-local-test-dataset.ps1
 powershell -ExecutionPolicy Bypass -File scripts/storage-upload-download-smoke.ps1
 
 powershell -ExecutionPolicy Bypass -File scripts/quality-check.ps1

@@ -120,6 +120,36 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked P2 task `Set up migrations (Alembic or equivalent)` as completed in `TODO.md` after successful migration smoke cycle (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Added Alembic revision `20260315_0002_enable_pgvector_extension.py` to enable `pgvector` (`vector` extension) and mark rollback support via downgrade.
 - Marked P2 task `Enable pgvector extension` as completed in `TODO.md` after migration upgrade and DB extension verification.
+- Added Alembic revision `20260315_0003_create_core_tables.py` to create core schema tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, and `qa_interactions`.
+- Marked P2 task `Create tables: users, memories, memory_versions, attachments, embeddings, qa_interactions` as completed in `TODO.md` after migration and DB verification.
+- Added Alembic revision `20260315_0004_add_user_billing_policy_constraints.py` to enforce `users` billing-policy constraints (`role` enum set, `subscription_plan` enum set, and role/billing-exempt/premium consistency policy).
+- Marked P2 task `Add user billing-policy fields (role, subscription_plan, billing_exempt) with constraints` as completed in `TODO.md` after DB constraint verification.
+- Added Alembic revision `20260315_0005_add_fks_constraints_indexes.py` to define foreign keys, memory-type constraint, and critical indexes on `user_id`/`created_at`/`memory_type`.
+- Marked P2 task `Define FKs, constraints, and indexes on critical query fields (user_id, created_at, memory_type)` as completed in `TODO.md` after DB metadata verification and migration smoke checks.
+- Added Alembic revision `20260315_0006_memory_versions_append_only.py` to enforce append-only version history (`memory_versions`) with positive `version_number`, unique `(memory_id, version_number)`, and DB trigger blocking `UPDATE`/`DELETE`.
+- Marked P2 task `Implement memory versioning strategy (memory_versions append-only)` as completed in `TODO.md` after DB enforcement verification.
+- Added repository-scoped memory access module `backend/app/repositories/memory_repository.py` with mandatory `tenant_id` + `user_id` scope validation for read/write queries.
+- Updated memory/query routes to use repository access instead of direct fixture mutation (`memories`, `memory_ingestion`, `question`) to enforce user isolation consistently.
+- Added `backend/tests/test_memory_repository_isolation.py` to verify repository-level scope requirements and tenant/user filtering behavior.
+- Marked P2 task `Enforce per-user isolation policy across all repository queries` as completed in `TODO.md`.
+- Added tenant-ready schema baseline doc `TENANT_READY_SCHEMA_STRATEGY.md` and Alembic revision `20260315_0007_prepare_tenant_ready_schema.py` to add non-null `tenant_id` + tenant indexes/checks on core user-scoped tables.
+- Marked P2 task `Prepare tenant-ready schema strategy (tenant_id support) for B2B isolation path` as completed in `TODO.md` after schema/index verification.
+- Added `backend/app/core/idempotency.py` with tenant/user/path-scoped idempotency store and payload hashing for safe write retries.
+- Updated `POST /api/v1/memory` in `backend/app/api/routes/memory_ingestion.py` to honor `Idempotency-Key`: replay same response on retry and reject key reuse with different payload.
+- Added `backend/tests/test_memory_idempotency.py` to verify duplicate-prevention behavior and mismatch rejection.
+- Added Alembic revision `20260315_0008_soft_delete_and_audit_strategy.py` introducing soft-delete fields on `memories` (`deleted_at`, `deleted_by_user_id`, `delete_reason` + index) and `memory_audit_log` with constrained actions (`update/delete/restore`), relational links, and query indexes for sensitive-operation auditing.
+- Added `SOFT_DELETE_AUDIT_STRATEGY.md` documenting the operational strategy for soft-delete and audit trail handling on sensitive memory updates/deletes.
+- Added Alembic revision `20260315_0009_add_structured_data_schema_version.py` to introduce `structured_data_schema_version` on `memories` and `memory_versions` with default `1` and positive-version check constraints for forward-compatible payload evolution.
+- Added deterministic local seed dataset SQL `scripts/sql/local-test-seed.sql` covering realistic tenant-scoped users, memories (including soft-delete case), memory versions, attachments, QA interactions, and memory-audit entries for development and integration checks.
+- Added `scripts/seed-local-test-dataset.ps1` to apply/verify the local seed dataset against Docker Postgres with strict failure handling and row-count summary output.
+- Marked P2 task `Add idempotency strategy for write endpoints to prevent duplicate memory creation on retries` as completed in `TODO.md`.
+- Marked P2 task `Add soft-delete + audit trail strategy for sensitive memory operations (update/delete)` as completed in `TODO.md`.
+- Updated memory API contracts and runtime payload handling to include `structured_data_schema_version` (default `1`) in save/list flows and OpenAPI schema definitions (`SaveMemoryRequest`, `MemoryRecord`).
+- Marked P2 task `Add structured_data_schema_version support for forward-compatible payload evolution` as completed in `TODO.md`.
+- Updated `README.md` local startup sequence to include deterministic local test dataset seeding.
+- Updated CI workflow (`.github/workflows/ci.yml`) to execute `scripts/migration-smoke-check.ps1` after quality gates, enforcing migration upgrade/downgrade/restore verification in automation.
+- Marked P2 task `Create realistic local seed dataset for tests` as completed in `TODO.md`.
+- Marked P2 task `Test migration up/down in CI` as completed in `TODO.md`.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.

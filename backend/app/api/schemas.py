@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class HealthStatusResponse(BaseModel):
@@ -12,6 +12,7 @@ class MemoryRecordResponse(BaseModel):
     memory_type: str
     raw_text: str
     structured_data: dict[str, Any]
+    structured_data_schema_version: int = Field(default=1, ge=1)
     created_at: str
     ai_state: Literal["saved"] = "saved"
 
@@ -41,6 +42,7 @@ class SaveMemoryRequest(BaseModel):
     memory_type: Literal["expense_event", "inventory_event", "loan_event", "note", "document"]
     raw_text: str
     structured_data: dict[str, Any]
+    structured_data_schema_version: int = Field(default=1, ge=1)
     confirmed: bool
 
     model_config = ConfigDict(extra="forbid")
