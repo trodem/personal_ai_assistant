@@ -8,6 +8,9 @@ class OnboardingController extends ChangeNotifier {
   bool _completed;
   bool get completed => _completed;
 
+  bool _welcomeStepDone = false;
+  bool get welcomeStepDone => _welcomeStepDone;
+
   bool _firstMemoryDone = false;
   bool get firstMemoryDone => _firstMemoryDone;
 
@@ -15,6 +18,14 @@ class OnboardingController extends ChangeNotifier {
   bool get firstQuestionDone => _firstQuestionDone;
 
   bool get canFinish => _firstMemoryDone && _firstQuestionDone;
+
+  void completeWelcomeStep() {
+    if (_welcomeStepDone) {
+      return;
+    }
+    _welcomeStepDone = true;
+    notifyListeners();
+  }
 
   void completeFirstMemory() {
     if (_firstMemoryDone) {
@@ -42,6 +53,7 @@ class OnboardingController extends ChangeNotifier {
 
   void reset() {
     _completed = false;
+    _welcomeStepDone = false;
     _firstMemoryDone = false;
     _firstQuestionDone = false;
     notifyListeners();

@@ -26,7 +26,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text("Sign in"), findsWidgets);
+    expect(find.byKey(const Key("login-submit-button")), findsOneWidget);
     await tester.enterText(
       find.byKey(const Key("login-email-field")),
       "dev@example.com",
@@ -36,6 +36,11 @@ void main() {
       "pass123",
     );
     await tester.tap(find.byKey(const Key("login-submit-button")));
+    await tester.pumpAndSettle();
+
+    expect(find.text("Welcome"), findsOneWidget);
+    expect(find.text("Privacy short notice"), findsOneWidget);
+    await tester.tap(find.byKey(const Key("onboarding-welcome-continue-button")));
     await tester.pumpAndSettle();
 
     expect(find.text("Get your first value"), findsOneWidget);

@@ -6,6 +6,7 @@ import '../features/auth/application/auth_controller.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/onboarding/application/onboarding_controller.dart';
 import '../features/onboarding/presentation/first_value_onboarding_screen.dart';
+import '../features/onboarding/presentation/onboarding_welcome_screen.dart';
 import '../screens/theme_preview_screen.dart';
 import '../theme/app_theme.dart';
 
@@ -57,6 +58,11 @@ class AppRoot extends StatelessWidget {
         );
       case AuthStatus.authenticated:
         if (!onboardingController.completed) {
+          if (!onboardingController.welcomeStepDone) {
+            return OnboardingWelcomeScreen(
+              onContinue: onboardingController.completeWelcomeStep,
+            );
+          }
           return FirstValueOnboardingScreen(
             firstMemoryDone: onboardingController.firstMemoryDone,
             firstQuestionDone: onboardingController.firstQuestionDone,

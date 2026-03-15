@@ -6,7 +6,11 @@ void main() {
     final OnboardingController controller = OnboardingController();
 
     expect(controller.completed, isFalse);
+    expect(controller.welcomeStepDone, isFalse);
     expect(controller.canFinish, isFalse);
+
+    controller.completeWelcomeStep();
+    expect(controller.welcomeStepDone, isTrue);
 
     controller.completeFirstMemory();
     expect(controller.canFinish, isFalse);
