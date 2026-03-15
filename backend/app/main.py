@@ -3,6 +3,7 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -31,6 +32,9 @@ from app.core.settings import get_settings
 configure_logging()
 logger = logging.getLogger(__name__)
 settings = get_settings()
+
+ERROR_STATUS_CODES = {"400", "401", "403", "404", "409", "422", "429", "500", "502", "503"}
+ERROR_CONTENT_SCHEMA_REF = {"$ref": "#/components/schemas/ErrorEnvelope"}
 
 
 app = FastAPI(
@@ -64,6 +68,73 @@ app.include_router(billing_router)
 app.include_router(retention_router)
 app.include_router(coupons_router)
 app.include_router(data_export_router)
+
+
+def _inject_standard_error_responses(schema: dict) -> None:
+    paths = schema.get("paths", {})
+    for path_item in paths.values():
+        if not isinstance(path_item, dict):
+            continue
+        for operation in path_item.values():
+            if not isinstance(operation, dict):
+                continue
+            responses = operation.get("responses", {})
+            if not isinstance(responses, dict):
+                continue
+            for code, response in responses.items():
+                if code not in ERROR_STATUS_CODES:
+                    continue
+                if not isinstance(response, dict):
+                    continue
+                content = response.setdefault("content", {})
+                if "application/json" in content:
+                    continue
+                content["application/json"] = {"schema": ERROR_CONTENT_SCHEMA_REF}
+
+
+def custom_openapi() -> dict:
+    if app.openapi_schema:
+        return app.openapi_schema
+
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    components = schema.setdefault("components", {})
+    component_schemas = components.setdefault("schemas", {})
+    component_schemas["ErrorDetails"] = {
+        "type": "object",
+        "additionalProperties": True,
+        "title": "ErrorDetails",
+    }
+    component_schemas["ErrorObject"] = {
+        "type": "object",
+        "title": "ErrorObject",
+        "required": ["code", "message", "details", "request_id", "retryable"],
+        "properties": {
+            "code": {"type": "string", "title": "Code"},
+            "message": {"type": "string", "title": "Message"},
+            "details": {"$ref": "#/components/schemas/ErrorDetails"},
+            "request_id": {"type": "string", "title": "Request Id"},
+            "retryable": {"type": "boolean", "title": "Retryable"},
+        },
+        "additionalProperties": False,
+    }
+    component_schemas["ErrorEnvelope"] = {
+        "type": "object",
+        "title": "ErrorEnvelope",
+        "required": ["error"],
+        "properties": {"error": {"$ref": "#/components/schemas/ErrorObject"}},
+        "additionalProperties": False,
+    }
+    _inject_standard_error_responses(schema)
+    app.openapi_schema = schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
 
 
 @app.get("/", summary="Service metadata", tags=["Health"])

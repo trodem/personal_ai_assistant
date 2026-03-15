@@ -252,7 +252,7 @@ Use this as your single source of truth for external dependencies and ownership.
 ## P4 - API Endpoints and Contracts
 
 - [x] API folder versioning refactor: move route modules to `backend/app/api/v1/routes` with backward-compatible legacy import layer.
-- [ ] Implement and wire endpoint handlers:
+- [x] Implement and wire endpoint handlers:
 - [x] `POST /api/v1/voice/memory`
 - [x] `POST /api/v1/voice/question`
 - [x] `POST /api/v1/question`
@@ -286,12 +286,12 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
 - [x] Ensure request/response schemas align with `specs/api.yaml`.
 - [x] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
-- [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
-- [ ] Add API contract tests for core success/error responses.
-- [ ] Add streaming API tests (`chunk` ordering, terminal `done` event, fallback on stream failure).
-- [ ] Add compatibility tests for active and previous supported client contract.
-- [ ] Add privileged-policy tests (`last active author protection`, `self-role-change forbidden`, `billing.plan_locked_by_role`).
-- [ ] Add consistent error model and status code mapping.
+- [x] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
+- [x] Add API contract tests for core success/error responses.
+- [x] Add streaming API tests (`chunk` ordering, terminal `done` event, fallback on stream failure).
+- [x] Add compatibility tests for active and previous supported client contract.
+- [x] Add privileged-policy tests (`last active author protection`, `self-role-change forbidden`, `billing.plan_locked_by_role`).
+- [x] Add consistent error model and status code mapping.
 
 ---
 

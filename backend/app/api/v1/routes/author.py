@@ -9,6 +9,7 @@ from app.core.errors import AppError
 from app.repositories.admin_user_repository import (
     AdminUserRecord,
     count_active_authors_for_tenant,
+    get_admin_user_for_tenant,
     list_admin_users_for_tenant,
     update_admin_user_role,
     upsert_admin_user,
@@ -85,10 +86,15 @@ async def update_user_role(
             message="Author cannot change own role.",
         )
 
-    target_before = upsert_admin_user(
+    target_before = get_admin_user_for_tenant(
         tenant_id=current_user.tenant_id,
         user_id=id,
     )
+    if target_before is None:
+        target_before = upsert_admin_user(
+            tenant_id=current_user.tenant_id,
+            user_id=id,
+        )
     if target_before["role"] == "author" and payload.role in {"user", "admin"}:
         if count_active_authors_for_tenant(tenant_id=current_user.tenant_id) <= 1:
             raise AppError(

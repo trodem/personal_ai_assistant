@@ -23,6 +23,7 @@ class ErrorModelContractTests(unittest.TestCase):
         self.assertEqual(map_http_error_code(status.HTTP_401_UNAUTHORIZED), "auth.invalid_token")
         self.assertEqual(map_http_error_code(status.HTTP_403_FORBIDDEN), "auth.forbidden")
         self.assertEqual(map_http_error_code(status.HTTP_404_NOT_FOUND), "memory.not_found")
+        self.assertEqual(map_http_error_code(status.HTTP_409_CONFLICT), "memory.version_conflict")
         self.assertEqual(
             map_http_error_code(status.HTTP_422_UNPROCESSABLE_ENTITY),
             "memory.missing_required_fields",
@@ -50,6 +51,20 @@ class ErrorModelContractTests(unittest.TestCase):
         self.assertIn("details", error)
         self.assertIn("request_id", error)
         self.assertIn("retryable", error)
+
+    def test_openapi_error_responses_use_standard_envelope_schema(self) -> None:
+        schema = self.client.get("/openapi.json").json()
+        self.assertIn("ErrorEnvelope", schema["components"]["schemas"])
+
+        memories_get = schema["paths"]["/api/v1/memories"]["get"]
+        unauthorized = memories_get["responses"]["401"]
+        unauthorized_schema = unauthorized["content"]["application/json"]["schema"]
+        self.assertEqual(unauthorized_schema["$ref"], "#/components/schemas/ErrorEnvelope")
+
+        save_memory = schema["paths"]["/api/v1/memory"]["post"]
+        validation = save_memory["responses"]["422"]
+        validation_schema = validation["content"]["application/json"]["schema"]
+        self.assertEqual(validation_schema["$ref"], "#/components/schemas/ErrorEnvelope")
 
 
 if __name__ == "__main__":

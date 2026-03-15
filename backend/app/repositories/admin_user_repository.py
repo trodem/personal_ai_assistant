@@ -63,6 +63,18 @@ def list_admin_users_for_tenant(*, tenant_id: str) -> list[AdminUserRecord]:
     return [item for item in _ADMIN_USER_RECORDS if item["tenant_id"] == tenant_id]
 
 
+def get_admin_user_for_tenant(
+    *,
+    tenant_id: str,
+    user_id: str,
+) -> AdminUserRecord | None:
+    _require_tenant_id(tenant_id)
+    for item in _ADMIN_USER_RECORDS:
+        if item["tenant_id"] == tenant_id and item["id"] == user_id:
+            return item
+    return None
+
+
 def update_admin_user_status(
     *,
     tenant_id: str,

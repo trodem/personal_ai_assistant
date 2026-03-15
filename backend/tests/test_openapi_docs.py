@@ -94,6 +94,10 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertEqual(delete_memory["summary"], "Delete memory")
         self.assertIn("404", delete_memory["responses"])
 
+        save_memory = schema["paths"]["/api/v1/memory"]["post"]
+        self.assertEqual(save_memory["summary"], "Save confirmed memory")
+        self.assertIn("422", save_memory["responses"])
+
         attachments_post = schema["paths"]["/api/v1/attachments"]["post"]
         self.assertEqual(attachments_post["summary"], "Upload receipt photo attachment")
         self.assertIn("422", attachments_post["responses"])

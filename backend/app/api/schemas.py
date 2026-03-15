@@ -9,6 +9,26 @@ class HealthStatusResponse(BaseModel):
     status: str
 
 
+class ErrorDetails(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+class ErrorObject(BaseModel):
+    code: str
+    message: str
+    details: ErrorDetails
+    request_id: str
+    retryable: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class ErrorEnvelope(BaseModel):
+    error: ErrorObject
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class MemoryRecordResponse(BaseModel):
     id: str
     memory_type: str

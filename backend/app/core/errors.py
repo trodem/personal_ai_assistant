@@ -8,6 +8,19 @@ from starlette import status
 from app.core.request_context import request_id_ctx_var
 
 
+HTTP_STATUS_TO_ERROR_CODE: dict[int, str] = {
+    status.HTTP_400_BAD_REQUEST: "memory.validation_failed",
+    status.HTTP_401_UNAUTHORIZED: "auth.invalid_token",
+    status.HTTP_403_FORBIDDEN: "auth.forbidden",
+    status.HTTP_404_NOT_FOUND: "memory.not_found",
+    status.HTTP_409_CONFLICT: "memory.version_conflict",
+    status.HTTP_422_UNPROCESSABLE_ENTITY: "memory.missing_required_fields",
+    status.HTTP_429_TOO_MANY_REQUESTS: "rate.limit_exceeded",
+    status.HTTP_502_BAD_GATEWAY: "ai.provider_unavailable",
+    status.HTTP_503_SERVICE_UNAVAILABLE: "ai.provider_unavailable",
+}
+
+
 @dataclass
 class ErrorPayload:
     code: str
@@ -54,21 +67,7 @@ class AppError(Exception):
 
 
 def map_http_error_code(status_code: int) -> str:
-    if status_code == status.HTTP_400_BAD_REQUEST:
-        return "memory.validation_failed"
-    if status_code == status.HTTP_401_UNAUTHORIZED:
-        return "auth.invalid_token"
-    if status_code == status.HTTP_403_FORBIDDEN:
-        return "auth.forbidden"
-    if status_code == status.HTTP_404_NOT_FOUND:
-        return "memory.not_found"
-    if status_code == status.HTTP_422_UNPROCESSABLE_ENTITY:
-        return "memory.missing_required_fields"
-    if status_code == status.HTTP_429_TOO_MANY_REQUESTS:
-        return "rate.limit_exceeded"
-    if status_code in {status.HTTP_502_BAD_GATEWAY, status.HTTP_503_SERVICE_UNAVAILABLE}:
-        return "ai.provider_unavailable"
-    return "internal.unexpected_error"
+    return HTTP_STATUS_TO_ERROR_CODE.get(status_code, "internal.unexpected_error")
 
 
 def is_retryable_http_status(status_code: int) -> bool:
