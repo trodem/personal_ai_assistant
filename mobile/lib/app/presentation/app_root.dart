@@ -92,8 +92,17 @@ class AppRoot extends StatelessWidget {
           }
           return FirstValueOnboardingScreen(
             firstMemoryDone: onboardingController.firstMemoryDone,
+            firstMemoryDraft: onboardingController.firstMemoryDraft,
+            firstMemoryProposalReady:
+                onboardingController.firstMemoryProposalReady,
+            firstMemoryError: onboardingController.firstMemoryError,
+            onFirstMemoryDraftChanged: onboardingController.updateFirstMemoryDraft,
+            onPrepareFirstMemoryProposal:
+                onboardingController.prepareFirstMemoryProposal,
+            onConfirmFirstMemory: onboardingController.confirmFirstMemory,
+            onModifyFirstMemory: onboardingController.modifyFirstMemoryProposal,
+            onCancelFirstMemory: onboardingController.cancelFirstMemoryProposal,
             firstQuestionDone: onboardingController.firstQuestionDone,
-            onCompleteFirstMemory: onboardingController.completeFirstMemory,
             onCompleteFirstQuestion: onboardingController.completeFirstQuestion,
             onFinish: onboardingController.finish,
           );

@@ -8,15 +8,29 @@ class FirstValueOnboardingScreen extends StatelessWidget {
   const FirstValueOnboardingScreen({
     super.key,
     required this.firstMemoryDone,
+    required this.firstMemoryDraft,
+    required this.firstMemoryProposalReady,
+    required this.firstMemoryError,
+    required this.onFirstMemoryDraftChanged,
+    required this.onPrepareFirstMemoryProposal,
+    required this.onConfirmFirstMemory,
+    required this.onModifyFirstMemory,
+    required this.onCancelFirstMemory,
     required this.firstQuestionDone,
-    required this.onCompleteFirstMemory,
     required this.onCompleteFirstQuestion,
     required this.onFinish,
   });
 
   final bool firstMemoryDone;
+  final String firstMemoryDraft;
+  final bool firstMemoryProposalReady;
+  final String? firstMemoryError;
+  final ValueChanged<String> onFirstMemoryDraftChanged;
+  final VoidCallback onPrepareFirstMemoryProposal;
+  final VoidCallback onConfirmFirstMemory;
+  final VoidCallback onModifyFirstMemory;
+  final VoidCallback onCancelFirstMemory;
   final bool firstQuestionDone;
-  final VoidCallback onCompleteFirstMemory;
   final VoidCallback onCompleteFirstQuestion;
   final VoidCallback onFinish;
 
@@ -46,11 +60,77 @@ class FirstValueOnboardingScreen extends StatelessWidget {
                   "Example: \"I bought bread for 3 CHF at Coop\". Confirm the extracted memory.",
                 ),
                 const SizedBox(height: AppSpacing.md),
-                AppPrimaryButton(
-                  key: const Key("onboarding-first-memory-button"),
-                  label: firstMemoryDone ? "First memory completed" : "Mark first memory as done",
-                  onPressed: firstMemoryDone ? null : onCompleteFirstMemory,
+                TextField(
+                  key: const Key("onboarding-memory-input"),
+                  decoration: const InputDecoration(
+                    hintText: "I bought bread for 3 CHF at Coop",
+                  ),
+                  onChanged: onFirstMemoryDraftChanged,
                 ),
+                const SizedBox(height: AppSpacing.sm),
+                AppPrimaryButton(
+                  key: const Key("onboarding-memory-extract-button"),
+                  label: firstMemoryDone
+                      ? "First memory completed"
+                      : "Extract memory proposal",
+                  onPressed: firstMemoryDone ? null : onPrepareFirstMemoryProposal,
+                ),
+                if (firstMemoryError != null) ...<Widget>[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    firstMemoryError!,
+                    style: TextStyle(color: Colors.red.shade700),
+                  ),
+                ],
+                if (firstMemoryProposalReady) ...<Widget>[
+                  const SizedBox(height: AppSpacing.md),
+                  AppSurfaceCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Memory proposal",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text("Text: $firstMemoryDraft"),
+                        const SizedBox(height: AppSpacing.xs),
+                        const Text("Actions: Confirm / Modify / Cancel"),
+                        const SizedBox(height: AppSpacing.md),
+                        Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.sm,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 120,
+                              child: AppPrimaryButton(
+                                key: const Key("onboarding-memory-confirm-button"),
+                                label: "Confirm",
+                                onPressed: onConfirmFirstMemory,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 120,
+                              child: AppPrimaryButton(
+                                key: const Key("onboarding-memory-modify-button"),
+                                label: "Modify",
+                                onPressed: onModifyFirstMemory,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 120,
+                              child: AppPrimaryButton(
+                                key: const Key("onboarding-memory-cancel-button"),
+                                label: "Cancel",
+                                onPressed: onCancelFirstMemory,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

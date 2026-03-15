@@ -112,6 +112,23 @@ class SupabaseJwtValidationTests(unittest.TestCase):
         self.assertEqual(user.user_id, "uid-claim-user-1")
         self.assertEqual(user.tenant_id, "tenant-uid")
 
+    def test_get_current_user_maps_supabase_authenticated_role_to_user(self) -> None:
+        token = _fake_jwt("RS256")
+        credentials = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+        with patch(
+            "app.core.auth._decode_with_jwks",
+            return_value={
+                "sub": "supabase-user-1",
+                "role": "authenticated",
+                "mfa_enabled": False,
+                "status": "active",
+                "tenant_id": "tenant-supabase",
+                "exp": 4_102_444_800,
+            },
+        ):
+            user = get_current_user(credentials=credentials, x_tenant_id="tenant-supabase")
+        self.assertEqual(user.role, "user")
+
     def test_get_current_user_rejects_custom_tenant_header_when_token_has_no_tenant_claim(self) -> None:
         token = build_dev_token("user-single-tenant", tenant_id=None)
         credentials = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)

@@ -53,6 +53,18 @@ class I18nConsistencyTests(unittest.TestCase):
         payload = response.json()
         self.assertEqual(payload["error"]["code"], "memory.missing_required_fields")
 
+    def test_profile_language_accepts_supabase_authenticated_role_claim(self) -> None:
+        token = build_dev_token("user-i18n-authenticated-role", tenant_id="tenant-a", role="authenticated")
+        response = self.client.patch(
+            "/api/v1/me/settings/profile",
+            headers=self._headers(token),
+            json={"preferred_language": "de"},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["preferred_language"], "de")
+        self.assertEqual(payload["role"], "user")
+
     def test_flutter_arb_languages_match_backend_supported_languages(self) -> None:
         project_root = Path(__file__).resolve().parents[2]
         arb_dir = project_root / "mobile" / "lib" / "l10n"

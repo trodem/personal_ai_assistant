@@ -66,4 +66,27 @@ void main() {
     controller.completePermissionsStep();
     expect(controller.permissionsStepDone, isTrue);
   });
+
+  test("first memory requires proposal confirmation", () {
+    final OnboardingController controller = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+    );
+
+    controller.prepareFirstMemoryProposal();
+    expect(controller.firstMemoryProposalReady, isFalse);
+    expect(controller.firstMemoryError, isNotNull);
+
+    controller.updateFirstMemoryDraft("I bought bread for 3 CHF at Coop");
+    controller.prepareFirstMemoryProposal();
+    expect(controller.firstMemoryProposalReady, isTrue);
+
+    controller.modifyFirstMemoryProposal();
+    expect(controller.firstMemoryProposalReady, isFalse);
+
+    controller.prepareFirstMemoryProposal();
+    controller.confirmFirstMemory();
+    expect(controller.firstMemoryDone, isTrue);
+    expect(controller.firstMemoryProposalReady, isFalse);
+  });
 }

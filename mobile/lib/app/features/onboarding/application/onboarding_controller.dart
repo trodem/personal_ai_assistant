@@ -49,6 +49,15 @@ class OnboardingController extends ChangeNotifier {
   bool _firstMemoryDone = false;
   bool get firstMemoryDone => _firstMemoryDone;
 
+  String _firstMemoryDraft = "";
+  String get firstMemoryDraft => _firstMemoryDraft;
+
+  bool _firstMemoryProposalReady = false;
+  bool get firstMemoryProposalReady => _firstMemoryProposalReady;
+
+  String? _firstMemoryError;
+  String? get firstMemoryError => _firstMemoryError;
+
   bool _firstQuestionDone = false;
   bool get firstQuestionDone => _firstQuestionDone;
 
@@ -129,6 +138,41 @@ class OnboardingController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateFirstMemoryDraft(String value) {
+    _firstMemoryDraft = value;
+    _firstMemoryError = null;
+    notifyListeners();
+  }
+
+  void prepareFirstMemoryProposal() {
+    _firstMemoryError = null;
+    if (_firstMemoryDraft.trim().isEmpty) {
+      _firstMemoryProposalReady = false;
+      _firstMemoryError = "Please enter a memory sentence before extraction.";
+      notifyListeners();
+      return;
+    }
+    _firstMemoryProposalReady = true;
+    notifyListeners();
+  }
+
+  void confirmFirstMemory() {
+    _firstMemoryProposalReady = false;
+    completeFirstMemory();
+  }
+
+  void modifyFirstMemoryProposal() {
+    _firstMemoryProposalReady = false;
+    notifyListeners();
+  }
+
+  void cancelFirstMemoryProposal() {
+    _firstMemoryDraft = "";
+    _firstMemoryProposalReady = false;
+    _firstMemoryError = null;
+    notifyListeners();
+  }
+
   void completeFirstQuestion() {
     if (_firstQuestionDone) {
       return;
@@ -157,6 +201,9 @@ class OnboardingController extends ChangeNotifier {
     _cameraGranted = false;
     _permissionsError = null;
     _firstMemoryDone = false;
+    _firstMemoryDraft = "";
+    _firstMemoryProposalReady = false;
+    _firstMemoryError = null;
     _firstQuestionDone = false;
     notifyListeners();
   }

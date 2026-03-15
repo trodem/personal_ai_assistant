@@ -69,7 +69,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text("Get your first value"), findsOneWidget);
-    onboardingController.completeFirstMemory();
+    await tester.enterText(
+      find.byKey(const Key("onboarding-memory-input")),
+      "I bought bread for 3 CHF at Coop",
+    );
+    await tester.tap(find.byKey(const Key("onboarding-memory-extract-button")));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key("onboarding-memory-confirm-button")), findsOneWidget);
+    expect(find.byKey(const Key("onboarding-memory-modify-button")), findsOneWidget);
+    expect(find.byKey(const Key("onboarding-memory-cancel-button")), findsOneWidget);
+    await tester.tap(find.byKey(const Key("onboarding-memory-confirm-button")));
+    await tester.pumpAndSettle();
+
     onboardingController.completeFirstQuestion();
     onboardingController.finish();
     await tester.pumpAndSettle();

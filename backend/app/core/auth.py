@@ -29,6 +29,12 @@ class AuthenticatedUser:
 
 bearer_scheme = HTTPBearer(auto_error=False)
 USER_ID_CLAIM_CANDIDATES = ("sub", "user_id", "uid")
+ROLE_CLAIM_TO_INTERNAL_ROLE: dict[str, str] = {
+    # Supabase access tokens commonly use this role for signed-in users.
+    "authenticated": "user",
+    "anon": "user",
+    "service_role": "admin",
+}
 
 
 def _dev_hs256_secret() -> str:
@@ -173,6 +179,7 @@ def _decode_with_jwks(token: str, algorithm: str) -> dict[str, object]:
             signing_key.key,
             algorithms=[algorithm],
             options={"verify_aud": False},
+            leeway=5,
         )
         return dict(payload)
     except AppError:
@@ -205,7 +212,8 @@ def get_current_user(
     token = credentials.credentials.strip()
     payload = _decode_token(token)
     user_id = resolve_internal_user_id(payload)
-    role = str(payload.get("role", "user"))
+    raw_role = str(payload.get("role", "user")).strip().lower()
+    role = ROLE_CLAIM_TO_INTERNAL_ROLE.get(raw_role, raw_role or "user")
     token_mfa_enabled = bool(payload.get("mfa_enabled", False))
     account_status = str(payload.get("status", "active")).lower()
     if account_status not in {"active", "suspended", "canceled"}:
