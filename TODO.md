@@ -210,8 +210,8 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P2 - Database and Migrations
 
-- [ ] Set up migrations (Alembic or equivalent).
-- [ ] Enable `pgvector` extension.
+- [x] Set up migrations (Alembic or equivalent).
+- [x] Enable `pgvector` extension.
 - [ ] Create tables: `users`, `memories`, `memory_versions`, `attachments`, `embeddings`, `qa_interactions`.
 - [ ] Add user billing-policy fields (`role`, `subscription_plan`, `billing_exempt`) with constraints.
 - [ ] Define FKs, constraints, and indexes on critical query fields (`user_id`, `created_at`, `memory_type`).

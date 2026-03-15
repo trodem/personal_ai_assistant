@@ -117,6 +117,9 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Marked P1 task `Backend Dockerfile + local docker-compose with Postgres` as completed in `TODO.md` after compose baseline verification.
 - Added `scripts/startup-smoke-check.ps1` for backend startup smoke validation (`docker compose config`, service health wait, `/health/live` and `/health/ready` checks) and documented it in `README.md`.
 - Marked P1 task `Backend startup smoke test + health checks` as completed in `TODO.md`.
+- Marked P2 task `Set up migrations (Alembic or equivalent)` as completed in `TODO.md` after successful migration smoke cycle (`upgrade -> verify -> downgrade -> verify -> restore`).
+- Added Alembic revision `20260315_0002_enable_pgvector_extension.py` to enable `pgvector` (`vector` extension) and mark rollback support via downgrade.
+- Marked P2 task `Enable pgvector extension` as completed in `TODO.md` after migration upgrade and DB extension verification.
 - Defined team access-role baseline in `TODO.md` (`author`, `admin`, `developer`, `read-only`) and marked the corresponding access/security setup task as completed.
 - Completed environment readiness check `Postgres connection, migration run, and rollback test completed` after validating DB connectivity and running migration smoke (`upgrade -> verify -> downgrade -> verify -> restore`).
 - Completed environment readiness check `Object storage upload/download test completed` after running `scripts/storage-upload-download-smoke.ps1` successfully.
