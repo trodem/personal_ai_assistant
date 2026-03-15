@@ -8,7 +8,7 @@ from starlette import status
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from app.core.auth import _decode_token, _jwks_client, get_current_user
+from app.core.auth import _decode_token, _jwks_client, build_dev_token, get_current_user
 from app.core.errors import AppError
 
 
@@ -111,6 +111,14 @@ class SupabaseJwtValidationTests(unittest.TestCase):
             user = get_current_user(credentials=credentials, x_tenant_id="tenant-uid")
         self.assertEqual(user.user_id, "uid-claim-user-1")
         self.assertEqual(user.tenant_id, "tenant-uid")
+
+    def test_get_current_user_rejects_custom_tenant_header_when_token_has_no_tenant_claim(self) -> None:
+        token = build_dev_token("user-single-tenant", tenant_id=None)
+        credentials = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+        with self.assertRaises(AppError) as exc:
+            get_current_user(credentials=credentials, x_tenant_id="tenant-b2b")
+        self.assertEqual(exc.exception.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(exc.exception.code, "auth.forbidden")
 
 
 if __name__ == "__main__":

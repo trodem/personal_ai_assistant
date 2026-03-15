@@ -308,7 +308,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `admin` and `author` must have `mfa_enabled = true`
 - [x] `user` can opt in/out unless tightened later by policy change
 - [x] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
-- [ ] Add tenant-aware authorization guardrails for future B2B mode (`tenant_id` context propagation + checks).
+- [x] Add tenant-aware authorization guardrails for future B2B mode (`tenant_id` context propagation + checks).
 - [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.
 - [ ] Enforce author safety invariants:
 - [ ] author cannot change own role

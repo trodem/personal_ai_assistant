@@ -220,15 +220,16 @@ def get_current_user(
             code="auth.forbidden",
             message="Account is not active.",
         )
+    normalized_header_tenant = (x_tenant_id or "").strip()
     token_tenant_id = str(payload.get("tenant_id", "")).strip()
     if token_tenant_id:
-        if not x_tenant_id:
+        if not normalized_header_tenant:
             raise AppError(
                 status_code=status.HTTP_403_FORBIDDEN,
                 code="auth.forbidden",
                 message="Tenant context is required.",
             )
-        if x_tenant_id != token_tenant_id:
+        if normalized_header_tenant != token_tenant_id:
             raise AppError(
                 status_code=status.HTTP_403_FORBIDDEN,
                 code="auth.forbidden",
@@ -236,6 +237,12 @@ def get_current_user(
             )
         effective_tenant = token_tenant_id
     else:
+        if normalized_header_tenant and normalized_header_tenant != "tenant-default":
+            raise AppError(
+                status_code=status.HTTP_403_FORBIDDEN,
+                code="auth.forbidden",
+                message="Cross-tenant access is forbidden.",
+            )
         # Single-tenant fallback for personal mode tokens.
         effective_tenant = "tenant-default"
 

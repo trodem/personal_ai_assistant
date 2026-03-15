@@ -41,6 +41,34 @@ class RBACMatrixAlignmentTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("items", response.json())
 
+    def test_admin_users_endpoint_rejects_missing_tenant_header_for_tenant_scoped_token(self) -> None:
+        token = build_dev_token(
+            "admin-missing-tenant",
+            tenant_id="tenant-a",
+            role="admin",
+            mfa_enabled=True,
+        )
+        response = self.client.get(
+            "/api/v1/admin/users",
+            headers={"Authorization": f"Bearer {token}"},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "auth.forbidden")
+
+    def test_admin_users_endpoint_rejects_cross_tenant_header(self) -> None:
+        token = build_dev_token(
+            "admin-cross-tenant",
+            tenant_id="tenant-a",
+            role="admin",
+            mfa_enabled=True,
+        )
+        response = self.client.get(
+            "/api/v1/admin/users",
+            headers={"Authorization": f"Bearer {token}", "x-tenant-id": "tenant-b"},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "auth.forbidden")
+
     def test_author_with_mfa_allowed_on_admin_users_endpoint(self) -> None:
         response = self.client.get(
             "/api/v1/admin/users",
