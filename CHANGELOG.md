@@ -78,6 +78,8 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Implemented `POST /api/v1/me/data-export` to start asynchronous user export jobs (`json/csv/pdf`) with typed response (`job_id`, `status=queued`), added modular data-export route/service, endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.
+- Implemented `POST /api/v1/billing/coupons/apply` with role-locked policy (`admin`/`author` -> `403 billing.plan_locked_by_role`), coupon validation (`422 billing.coupon_invalid`), and typed settings response on success; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `GET /api/v1/me/retention/status` with authenticated retention-status response (`churn_risk`, `recommended_actions`) derived from current effective plan; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `POST /api/v1/billing/subscription/cancel` with mandatory reason payload, role-locked policy (`admin`/`author` -> `403 billing.plan_locked_by_role`), and user plan transition to `free`; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `POST /api/v1/billing/subscription/cancel-preview` with role-locked policy (`admin`/`author` -> `403 billing.plan_locked_by_role`) and typed retention-preview response (`can_pause`, `can_downgrade`, `suggested_offer`, `impact_summary`); added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.

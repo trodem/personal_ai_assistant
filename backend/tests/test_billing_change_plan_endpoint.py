@@ -188,6 +188,47 @@ class BillingChangePlanEndpointTests(unittest.TestCase):
         self.assertEqual(premium_response.json()["churn_risk"], "medium")
         self.assertTrue(len(premium_response.json()["recommended_actions"]) >= 1)
 
+    def test_user_can_apply_coupon(self) -> None:
+        response = self.client.post(
+            "/api/v1/billing/coupons/apply",
+            headers=self.user_headers,
+            json={"code": "welcome10"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("subscription_plan", response.json())
+
+    def test_apply_coupon_is_locked_for_admin(self) -> None:
+        response = self.client.post(
+            "/api/v1/billing/coupons/apply",
+            headers=self.admin_headers,
+            json={"code": "WELCOME10"},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "billing.plan_locked_by_role")
+
+    def test_apply_coupon_is_locked_for_author(self) -> None:
+        response = self.client.post(
+            "/api/v1/billing/coupons/apply",
+            headers=self.author_headers,
+            json={"code": "WELCOME10"},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "billing.plan_locked_by_role")
+
+    def test_apply_coupon_requires_authentication(self) -> None:
+        response = self.client.post("/api/v1/billing/coupons/apply", json={"code": "WELCOME10"})
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["error"]["code"], "auth.missing_token")
+
+    def test_apply_coupon_rejects_invalid_code(self) -> None:
+        response = self.client.post(
+            "/api/v1/billing/coupons/apply",
+            headers=self.user_headers,
+            json={"code": "INVALID"},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json()["error"]["code"], "billing.coupon_invalid")
+
 
 if __name__ == "__main__":
     unittest.main()

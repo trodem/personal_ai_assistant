@@ -39,6 +39,8 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/billing/subscription/cancel-preview", schema["paths"])
         self.assertIn("/api/v1/billing/subscription/cancel", schema["paths"])
         self.assertIn("/api/v1/me/retention/status", schema["paths"])
+        self.assertIn("/api/v1/billing/coupons/apply", schema["paths"])
+        self.assertIn("/api/v1/me/data-export", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -152,6 +154,15 @@ class OpenApiDocsTests(unittest.TestCase):
         retention_status = schema["paths"]["/api/v1/me/retention/status"]["get"]
         self.assertEqual(retention_status["summary"], "Get retention status and suggested actions")
         self.assertIn("401", retention_status["responses"])
+
+        apply_coupon = schema["paths"]["/api/v1/billing/coupons/apply"]["post"]
+        self.assertEqual(apply_coupon["summary"], "Apply coupon code")
+        self.assertIn("403", apply_coupon["responses"])
+        self.assertIn("422", apply_coupon["responses"])
+
+        data_export = schema["paths"]["/api/v1/me/data-export"]["post"]
+        self.assertEqual(data_export["summary"], "Request user data export")
+        self.assertIn("422", data_export["responses"])
 
 
 if __name__ == "__main__":

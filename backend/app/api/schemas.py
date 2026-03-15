@@ -274,6 +274,34 @@ class RetentionStatusResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class ApplyCouponRequest(BaseModel):
+    code: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class DataExportRequest(BaseModel):
+    format: Literal["json", "csv", "pdf"]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class DataExportJobResponse(BaseModel):
+    job_id: str
+    status: Literal["queued", "processing", "completed", "failed"]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class DataExportJobStatusResponse(BaseModel):
+    job_id: str
+    status: Literal["queued", "processing", "completed", "failed"]
+    download_url: str | None = None
+    expires_at: str | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str
