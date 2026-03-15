@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends
+from starlette import status
 
-from app.api.schemas import MemoryListResponse
+from app.api.schemas import DeleteMemoryResponse, MemoryListResponse
 from app.core.auth import AuthenticatedUser, get_current_user
-from app.repositories.memory_repository import list_memories_for_user
+from app.core.errors import AppError
+from app.repositories.memory_repository import list_memories_for_user, soft_delete_memory_for_user
 
 router = APIRouter(prefix="/api/v1", tags=["Memory"])
 
@@ -33,3 +35,31 @@ async def list_memories(current_user: AuthenticatedUser = Depends(get_current_us
         for item in scoped_memories
     ]
     return {"items": items}
+
+
+@router.delete(
+    "/memory/{id}",
+    summary="Delete memory",
+    description="Soft-deletes a memory record scoped to the authenticated user and tenant.",
+    response_model=DeleteMemoryResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        404: {"description": "Memory not found."},
+    },
+)
+async def delete_memory(
+    id: str,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> DeleteMemoryResponse:
+    deleted = soft_delete_memory_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        memory_id=id,
+    )
+    if not deleted:
+        raise AppError(
+            status_code=status.HTTP_404_NOT_FOUND,
+            code="memory.not_found",
+            message="Memory not found.",
+        )
+    return DeleteMemoryResponse(deleted=True)

@@ -23,6 +23,12 @@ class MemoryListResponse(BaseModel):
     items: list[MemoryRecordResponse]
 
 
+class DeleteMemoryResponse(BaseModel):
+    deleted: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class MemoryProposalResponse(BaseModel):
     transcript: str
     memory_type: Literal["expense_event", "inventory_event", "loan_event", "note", "document"]
@@ -62,6 +68,21 @@ class QuestionResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class AnswerFeedbackRequest(BaseModel):
+    answer_id: str
+    sentiment: Literal["like", "dislike"]
+    reason: str | None = None
+    comment: str | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class AcceptedResponse(BaseModel):
+    accepted: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class AttachmentResponse(BaseModel):
     id: str
     file_url: str
@@ -73,6 +94,23 @@ class AttachmentResponse(BaseModel):
     memory_proposal: dict[str, Any] | None = None
 
     model_config = ConfigDict(extra="forbid")
+
+
+class DashboardLatestMemoryResponse(BaseModel):
+    id: str
+    memory_type: str
+    raw_text: str
+    created_at: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class DashboardResponse(BaseModel):
+    total_memories: int
+    memories_by_type: dict[str, int]
+    latest_memory_events: list[DashboardLatestMemoryResponse]
+
+    model_config = ConfigDict(extra="allow")
 
 
 class AdminUserResponse(BaseModel):

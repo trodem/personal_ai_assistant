@@ -253,16 +253,16 @@ Use this as your single source of truth for external dependencies and ownership.
 
 - [x] API folder versioning refactor: move route modules to `backend/app/api/v1/routes` with backward-compatible legacy import layer.
 - [ ] Implement and wire endpoint handlers:
-- [ ] `POST /api/v1/voice/memory`
-- [ ] `POST /api/v1/voice/question`
-- [ ] `POST /api/v1/question`
-- [ ] `POST /api/v1/question/stream` (SSE streaming answer with chunk/done events)
-- [ ] `POST /api/v1/feedback/answers` (like/dislike answer feedback with optional reason/comment)
-- [ ] `POST /api/v1/memory`
-- [ ] `GET /api/v1/memories`
-- [ ] `DELETE /api/v1/memory/{id}`
-- [ ] `POST /api/v1/attachments`
-- [ ] `GET /api/v1/dashboard`
+- [x] `POST /api/v1/voice/memory`
+- [x] `POST /api/v1/voice/question`
+- [x] `POST /api/v1/question`
+- [x] `POST /api/v1/question/stream` (SSE streaming answer with chunk/done events)
+- [x] `POST /api/v1/feedback/answers` (like/dislike answer feedback with optional reason/comment)
+- [x] `POST /api/v1/memory`
+- [x] `GET /api/v1/memories`
+- [x] `DELETE /api/v1/memory/{id}`
+- [x] `POST /api/v1/attachments`
+- [x] `GET /api/v1/dashboard`
 - [ ] `GET /api/v1/admin/users` (admin/author)
 - [ ] `PATCH /api/v1/admin/users/{id}/status` (admin/author: suspend/reactivate/cancel)
 - [ ] `PATCH /api/v1/author/users/{id}/role` (author only: `user` <-> `admin`)

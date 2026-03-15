@@ -71,3 +71,19 @@ def insert_memory_record(record: MemoryRecord) -> None:
     _require_scope(tenant_id=str(record.get("tenant_id", "")), user_id=str(record.get("user_id", "")))
     record.setdefault("structured_data_schema_version", 1)
     _MEMORY_RECORDS.append(record)
+
+
+def soft_delete_memory_for_user(*, tenant_id: str, user_id: str, memory_id: str) -> bool:
+    _require_scope(tenant_id=tenant_id, user_id=user_id)
+    if not memory_id or not memory_id.strip():
+        raise ValueError("memory_id is required for repository queries")
+    for item in _MEMORY_RECORDS:
+        if (
+            item.get("id") == memory_id
+            and item.get("tenant_id") == tenant_id
+            and item.get("user_id") == user_id
+            and item.get("deleted_at") is None
+        ):
+            item["deleted_at"] = datetime.now(timezone.utc).isoformat()
+            return True
+    return False

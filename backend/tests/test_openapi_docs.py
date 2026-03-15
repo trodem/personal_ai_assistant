@@ -22,6 +22,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/health/ready", schema["paths"])
         self.assertIn("/metrics", schema["paths"])
         self.assertIn("/api/v1/memories", schema["paths"])
+        self.assertIn("/api/v1/dashboard", schema["paths"])
         self.assertIn("/api/v1/admin/users", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
@@ -32,8 +33,10 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertEqual(security_schemes["HTTPBearer"]["scheme"], "bearer")
 
         memories_get = schema["paths"]["/api/v1/memories"]["get"]
+        dashboard_get = schema["paths"]["/api/v1/dashboard"]["get"]
         admin_users_get = schema["paths"]["/api/v1/admin/users"]["get"]
         self.assertTrue(memories_get.get("security"))
+        self.assertTrue(dashboard_get.get("security"))
         self.assertTrue(admin_users_get.get("security"))
 
     def test_operations_have_summary_and_responses(self) -> None:
@@ -48,9 +51,29 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("401", memories_get["responses"])
         self.assertIn("403", memories_get["responses"])
 
+        dashboard_get = schema["paths"]["/api/v1/dashboard"]["get"]
+        self.assertEqual(dashboard_get["summary"], "Dashboard statistics")
+        self.assertIn("401", dashboard_get["responses"])
+
         voice_memory_post = schema["paths"]["/api/v1/voice/memory"]["post"]
         self.assertEqual(voice_memory_post["summary"], "Upload voice memory")
         self.assertIn("422", voice_memory_post["responses"])
+
+        voice_question_post = schema["paths"]["/api/v1/voice/question"]["post"]
+        self.assertEqual(voice_question_post["summary"], "Upload voice question")
+        self.assertIn("422", voice_question_post["responses"])
+
+        stream_post = schema["paths"]["/api/v1/question/stream"]["post"]
+        self.assertEqual(stream_post["summary"], "Ask text question with streaming response")
+        self.assertIn("503", stream_post["responses"])
+
+        feedback_post = schema["paths"]["/api/v1/feedback/answers"]["post"]
+        self.assertEqual(feedback_post["summary"], "Submit feedback for AI answer")
+        self.assertIn("422", feedback_post["responses"])
+
+        delete_memory = schema["paths"]["/api/v1/memory/{id}"]["delete"]
+        self.assertEqual(delete_memory["summary"], "Delete memory")
+        self.assertIn("404", delete_memory["responses"])
 
 
 if __name__ == "__main__":

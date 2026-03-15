@@ -78,6 +78,27 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Implemented and wired `GET /api/v1/dashboard` with authenticated user/tenant-scoped metrics (`total_memories`, `memories_by_type`, `latest_memory_events`) via dedicated route/service modules, added endpoint/OpenAPI regression tests, and marked the P4 dashboard endpoint task completed in `TODO.md`.
+- Marked P4 endpoint task `POST /api/v1/attachments` as completed in `TODO.md` after validating receipt-photo upload contract, OCR proposal response, and OpenAPI exposure with green attachment E2E tests.
+- Implemented and wired `DELETE /api/v1/memory/{id}` with user+tenant-scoped soft-delete behavior, `404 memory.not_found` for missing/foreign records, and contract response `{ \"deleted\": true }`.
+- Added delete-path repository support (`soft_delete_memory_for_user`) and typed API response model (`DeleteMemoryResponse`).
+- Added endpoint regression coverage in `backend/tests/test_memory_delete_endpoint.py` (success, not-found, cross-user isolation) and extended OpenAPI docs assertions for delete-memory route.
+- Marked P4 endpoint task `DELETE /api/v1/memory/{id}` as completed in `TODO.md`.
+- Marked P4 endpoint task `GET /api/v1/memories` as completed in `TODO.md` after validating authenticated user/tenant isolation behavior and OpenAPI contract with runtime tests.
+- Marked P4 endpoint task `POST /api/v1/memory` as completed in `TODO.md` after validating confirmation gate, required-fields contract, persistence flow, and OpenAPI exposure with green regression tests.
+- Implemented and wired `POST /api/v1/feedback/answers` with typed request validation (`answer_id`, `sentiment`, optional `reason/comment`), authenticated user scoping, and accepted-response contract (`{\"accepted\": true}`).
+- Added modular feedback handling via `backend/app/services/answer_feedback.py` and operational analytics event emission (`answer_feedback_submitted`).
+- Added endpoint regression coverage in `backend/tests/test_feedback_endpoint.py` (success, auth required, invalid sentiment) and OpenAPI contract assertion for feedback route.
+- Marked P4 endpoint task `POST /api/v1/feedback/answers` as completed in `TODO.md`.
+- Implemented and wired `POST /api/v1/question/stream` SSE endpoint with ordered `chunk` events and terminal `done` event payload (`confidence`, `source_memory_ids`), reusing database-first question flow and safety checks.
+- Added streaming fallback behavior (`503 ai.provider_unavailable`) when stream is explicitly disabled via request header for client fallback handling.
+- Added streaming regression tests in `backend/tests/test_question_streaming.py` and extended OpenAPI assertions to cover `/api/v1/question/stream`.
+- Marked P4 endpoint task `POST /api/v1/question/stream` as completed in `TODO.md`.
+- Marked P4 endpoint task `POST /api/v1/question` as completed in `TODO.md` after validating database-first behavior, moderation/sanitization enforcement, OpenAPI exposure, and AI telemetry/cost metrics with green regression suites.
+- Implemented and wired `POST /api/v1/voice/question` with audio upload validation, Whisper transcription, pre-input moderation/sanitization, database-first answer flow reuse, and post-output safety enforcement.
+- Added regression coverage for voice-question path in `backend/tests/test_voice_question_endpoint.py` (success, moderation block, unsupported audio type) and extended OpenAPI docs checks for `/api/v1/voice/question`.
+- Marked P4 endpoint task `POST /api/v1/voice/question` as completed in `TODO.md`.
+- Marked P4 endpoint task `POST /api/v1/voice/memory` as completed in `TODO.md` after validating router wiring, OpenAPI exposure, upload-validation behavior, and ingestion E2E flow (`test_openapi_docs`, `test_voice_memory_upload_validation`, `test_memory_ingestion_e2e` all green).
 - Marked P3 task `End-to-end test: voice -> extraction -> confirmation -> storage` as completed in `TODO.md` after validating `backend/tests/test_memory_ingestion_e2e.py` green (`voice proposal -> confirmation gate -> persisted memory retrieval`).
 - Completed P3 safety gate for memory extraction flow by enforcing input moderation and sensitive-data sanitization before extraction proposal generation in `POST /api/v1/voice/memory` and attachment OCR proposal path.
 - Extended AI safety regression coverage with voice-memory tests that verify moderation blocking (`moderation.blocked_content`) and transcript redaction (`[REDACTED_EMAIL_1]`) before extraction.
