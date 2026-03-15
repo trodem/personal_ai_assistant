@@ -4,9 +4,11 @@ from fastapi import APIRouter, Depends
 
 from app.api.schemas import (
     AcceptedResponse,
+    DeleteMemoryResponse,
     NotificationPreferences,
     PaymentMethodSetupIntentResponse,
     PaymentMethodsListResponse,
+    UpdatedResponse,
     UpdateNotificationPreferencesRequest,
     UpdateProfileRequest,
     UpdateSecurityRequest,
@@ -20,7 +22,12 @@ from app.services.user_preferences import (
     set_notification_preferences,
     set_preferred_language,
 )
-from app.services.payment_methods import create_setup_intent_client_secret, list_payment_methods_for_user
+from app.services.payment_methods import (
+    create_setup_intent_client_secret,
+    list_payment_methods_for_user,
+    remove_payment_method_for_user,
+    set_default_payment_method_for_user,
+)
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
@@ -174,3 +181,73 @@ async def create_payment_method_setup_intent(
         user_id=current_user.user_id,
     )
     return PaymentMethodSetupIntentResponse(client_secret=client_secret)
+
+
+@router.post(
+    "/payment-methods/{id}/default",
+    summary="Set default payment method",
+    description="Marks a payment method as default for the authenticated user.",
+    response_model=UpdatedResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        403: {"description": "Forbidden. Billing plan is locked by role policy."},
+        404: {"description": "Payment method not found."},
+    },
+)
+async def set_default_payment_method(
+    id: str,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> UpdatedResponse:
+    if current_user.role in {"admin", "author"}:
+        raise AppError(
+            status_code=403,
+            code="billing.plan_locked_by_role",
+            message="Payment methods are unavailable for billing-exempt roles.",
+        )
+    updated = set_default_payment_method_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        payment_method_id=id,
+    )
+    if not updated:
+        raise AppError(
+            status_code=404,
+            code="memory.not_found",
+            message="Payment method not found.",
+        )
+    return UpdatedResponse(updated=True)
+
+
+@router.delete(
+    "/payment-methods/{id}",
+    summary="Remove payment method",
+    description="Removes a payment method for the authenticated user.",
+    response_model=DeleteMemoryResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        403: {"description": "Forbidden. Billing plan is locked by role policy."},
+        404: {"description": "Payment method not found."},
+    },
+)
+async def delete_payment_method(
+    id: str,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> DeleteMemoryResponse:
+    if current_user.role in {"admin", "author"}:
+        raise AppError(
+            status_code=403,
+            code="billing.plan_locked_by_role",
+            message="Payment methods are unavailable for billing-exempt roles.",
+        )
+    deleted = remove_payment_method_for_user(
+        tenant_id=current_user.tenant_id,
+        user_id=current_user.user_id,
+        payment_method_id=id,
+    )
+    if not deleted:
+        raise AppError(
+            status_code=404,
+            code="memory.not_found",
+            message="Payment method not found.",
+        )
+    return DeleteMemoryResponse(deleted=True)

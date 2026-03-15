@@ -31,6 +31,8 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/me/settings/notifications", schema["paths"])
         self.assertIn("/api/v1/me/settings/payment-methods", schema["paths"])
         self.assertIn("/api/v1/me/settings/payment-methods/setup-intent", schema["paths"])
+        self.assertIn("/api/v1/me/settings/payment-methods/{id}/default", schema["paths"])
+        self.assertIn("/api/v1/me/settings/payment-methods/{id}", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -109,6 +111,14 @@ class OpenApiDocsTests(unittest.TestCase):
         settings_payment_methods_setup = schema["paths"]["/api/v1/me/settings/payment-methods/setup-intent"]["post"]
         self.assertEqual(settings_payment_methods_setup["summary"], "Create setup intent for payment method")
         self.assertIn("403", settings_payment_methods_setup["responses"])
+
+        settings_payment_methods_default = schema["paths"]["/api/v1/me/settings/payment-methods/{id}/default"]["post"]
+        self.assertEqual(settings_payment_methods_default["summary"], "Set default payment method")
+        self.assertIn("404", settings_payment_methods_default["responses"])
+
+        settings_payment_methods_delete = schema["paths"]["/api/v1/me/settings/payment-methods/{id}"]["delete"]
+        self.assertEqual(settings_payment_methods_delete["summary"], "Remove payment method")
+        self.assertIn("404", settings_payment_methods_delete["responses"])
 
 
 if __name__ == "__main__":

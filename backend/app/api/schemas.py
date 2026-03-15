@@ -202,6 +202,12 @@ class PaymentMethodSetupIntentResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class UpdatedResponse(BaseModel):
+    updated: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str
