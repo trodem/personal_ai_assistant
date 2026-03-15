@@ -103,6 +103,21 @@ class AppRoot extends StatelessWidget {
             onModifyFirstMemory: onboardingController.modifyFirstMemoryProposal,
             onCancelFirstMemory: onboardingController.cancelFirstMemoryProposal,
             firstQuestionDone: onboardingController.firstQuestionDone,
+            firstQuestionDraft: onboardingController.firstQuestionDraft,
+            firstQuestionAnswer: onboardingController.firstQuestionAnswer,
+            firstQuestionConfidence: onboardingController.firstQuestionConfidence,
+            firstQuestionSourceIds: onboardingController.firstQuestionSourceIds,
+            firstQuestionAnswerReady:
+                onboardingController.firstQuestionAnswerReady,
+            firstQuestionWhyExpanded:
+                onboardingController.firstQuestionWhyExpanded,
+            firstQuestionError: onboardingController.firstQuestionError,
+            onFirstQuestionDraftChanged:
+                onboardingController.updateFirstQuestionDraft,
+            onPrepareFirstQuestionAnswer:
+                onboardingController.prepareFirstQuestionAnswer,
+            onToggleFirstQuestionWhyDisclosure:
+                onboardingController.toggleFirstQuestionWhyDisclosure,
             onCompleteFirstQuestion: onboardingController.completeFirstQuestion,
             onFinish: onboardingController.finish,
           );

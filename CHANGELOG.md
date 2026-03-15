@@ -7,6 +7,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added onboarding step 5 guided first-question flow in Flutter onboarding: question input, guided answer preview, expandable "Why this answer" disclosure (confidence + source IDs), and explicit completion action before finishing onboarding.
 - Added `MFA_ENABLEMENT_CHECKLIST.md` with per-provider MFA/recovery-code evidence tracking and explicit completion criteria for the Day 0 MFA prerequisite task.
 - Completed environment readiness check `Stripe test webhook delivery validated locally` via Stripe CLI local forwarding test (`payment_intent.succeeded`) with confirmed HTTP `200` delivery to a local webhook receiver.
 - Marked TODO container task `Core aggregate queries` as completed after verifying all child aggregate-query items were already completed (`expenses`, `loan balances`, `inventory state`).

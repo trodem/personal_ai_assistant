@@ -81,8 +81,43 @@ void main() {
     await tester.tap(find.byKey(const Key("onboarding-memory-confirm-button")));
     await tester.pumpAndSettle();
 
-    onboardingController.completeFirstQuestion();
-    onboardingController.finish();
+    await tester.enterText(
+      find.byKey(const Key("onboarding-question-input")),
+      "What did I buy today?",
+    );
+    await tester.scrollUntilVisible(
+      find.byKey(const Key("onboarding-question-ask-button")),
+      200.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("onboarding-question-ask-button")));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const Key("onboarding-question-why-toggle-button")),
+      200.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("onboarding-question-why-toggle-button")));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key("onboarding-question-why-panel")), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const Key("onboarding-question-complete-button")),
+      200.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("onboarding-question-complete-button")));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(
+      find.byKey(const Key("onboarding-finish-button")),
+      200.0,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key("onboarding-finish-button")));
     await tester.pumpAndSettle();
 
     expect(find.text("Design System Baseline"), findsOneWidget);

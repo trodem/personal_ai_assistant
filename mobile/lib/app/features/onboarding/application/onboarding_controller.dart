@@ -61,6 +61,27 @@ class OnboardingController extends ChangeNotifier {
   bool _firstQuestionDone = false;
   bool get firstQuestionDone => _firstQuestionDone;
 
+  String _firstQuestionDraft = "";
+  String get firstQuestionDraft => _firstQuestionDraft;
+
+  String _firstQuestionAnswer = "";
+  String get firstQuestionAnswer => _firstQuestionAnswer;
+
+  String _firstQuestionConfidence = "medium";
+  String get firstQuestionConfidence => _firstQuestionConfidence;
+
+  List<String> _firstQuestionSourceIds = const <String>[];
+  List<String> get firstQuestionSourceIds => _firstQuestionSourceIds;
+
+  bool _firstQuestionAnswerReady = false;
+  bool get firstQuestionAnswerReady => _firstQuestionAnswerReady;
+
+  bool _firstQuestionWhyExpanded = false;
+  bool get firstQuestionWhyExpanded => _firstQuestionWhyExpanded;
+
+  String? _firstQuestionError;
+  String? get firstQuestionError => _firstQuestionError;
+
   bool get canFinish => _firstMemoryDone && _firstQuestionDone;
 
   void completeWelcomeStep() {
@@ -177,7 +198,53 @@ class OnboardingController extends ChangeNotifier {
     if (_firstQuestionDone) {
       return;
     }
+    if (!_firstQuestionAnswerReady) {
+      _firstQuestionError =
+          "Ask your first question and review the answer before completing this step.";
+      notifyListeners();
+      return;
+    }
     _firstQuestionDone = true;
+    _firstQuestionError = null;
+    notifyListeners();
+  }
+
+  void updateFirstQuestionDraft(String value) {
+    _firstQuestionDraft = value;
+    _firstQuestionError = null;
+    _firstQuestionAnswerReady = false;
+    _firstQuestionWhyExpanded = false;
+    notifyListeners();
+  }
+
+  void prepareFirstQuestionAnswer() {
+    _firstQuestionError = null;
+    final String trimmedQuestion = _firstQuestionDraft.trim();
+    if (trimmedQuestion.isEmpty) {
+      _firstQuestionAnswerReady = false;
+      _firstQuestionWhyExpanded = false;
+      _firstQuestionError = "Please enter a question before asking the assistant.";
+      notifyListeners();
+      return;
+    }
+
+    const String fallbackAnswer = "Your memory timeline is ready for this question.";
+    final String contextualAnswer = _firstMemoryDraft.trim().isEmpty
+        ? fallbackAnswer
+        : "From your first saved memory: ${_firstMemoryDraft.trim()}";
+    _firstQuestionAnswer = contextualAnswer;
+    _firstQuestionConfidence = "high";
+    _firstQuestionSourceIds = const <String>["onboarding-first-memory"];
+    _firstQuestionAnswerReady = true;
+    _firstQuestionWhyExpanded = false;
+    notifyListeners();
+  }
+
+  void toggleFirstQuestionWhyDisclosure() {
+    if (!_firstQuestionAnswerReady) {
+      return;
+    }
+    _firstQuestionWhyExpanded = !_firstQuestionWhyExpanded;
     notifyListeners();
   }
 
@@ -205,6 +272,13 @@ class OnboardingController extends ChangeNotifier {
     _firstMemoryProposalReady = false;
     _firstMemoryError = null;
     _firstQuestionDone = false;
+    _firstQuestionDraft = "";
+    _firstQuestionAnswer = "";
+    _firstQuestionConfidence = "medium";
+    _firstQuestionSourceIds = const <String>[];
+    _firstQuestionAnswerReady = false;
+    _firstQuestionWhyExpanded = false;
+    _firstQuestionError = null;
     notifyListeners();
   }
 }

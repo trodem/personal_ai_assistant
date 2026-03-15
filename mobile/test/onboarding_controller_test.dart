@@ -24,6 +24,8 @@ void main() {
     controller.completeFirstMemory();
     expect(controller.canFinish, isFalse);
 
+    controller.updateFirstQuestionDraft("What did I buy today?");
+    controller.prepareFirstQuestionAnswer();
     controller.completeFirstQuestion();
     expect(controller.canFinish, isTrue);
 
@@ -88,5 +90,28 @@ void main() {
     controller.confirmFirstMemory();
     expect(controller.firstMemoryDone, isTrue);
     expect(controller.firstMemoryProposalReady, isFalse);
+  });
+
+  test("first question requires guided ask and supports why disclosure", () {
+    final OnboardingController controller = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+    );
+
+    controller.completeFirstQuestion();
+    expect(controller.firstQuestionDone, isFalse);
+    expect(controller.firstQuestionError, isNotNull);
+
+    controller.updateFirstQuestionDraft("What did I buy today?");
+    controller.prepareFirstQuestionAnswer();
+    expect(controller.firstQuestionAnswerReady, isTrue);
+    expect(controller.firstQuestionAnswer, isNotEmpty);
+    expect(controller.firstQuestionSourceIds, isNotEmpty);
+
+    controller.toggleFirstQuestionWhyDisclosure();
+    expect(controller.firstQuestionWhyExpanded, isTrue);
+
+    controller.completeFirstQuestion();
+    expect(controller.firstQuestionDone, isTrue);
   });
 }

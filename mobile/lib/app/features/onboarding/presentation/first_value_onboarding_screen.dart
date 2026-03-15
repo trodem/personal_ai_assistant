@@ -17,6 +17,16 @@ class FirstValueOnboardingScreen extends StatelessWidget {
     required this.onModifyFirstMemory,
     required this.onCancelFirstMemory,
     required this.firstQuestionDone,
+    required this.firstQuestionDraft,
+    required this.firstQuestionAnswer,
+    required this.firstQuestionConfidence,
+    required this.firstQuestionSourceIds,
+    required this.firstQuestionAnswerReady,
+    required this.firstQuestionWhyExpanded,
+    required this.firstQuestionError,
+    required this.onFirstQuestionDraftChanged,
+    required this.onPrepareFirstQuestionAnswer,
+    required this.onToggleFirstQuestionWhyDisclosure,
     required this.onCompleteFirstQuestion,
     required this.onFinish,
   });
@@ -31,6 +41,16 @@ class FirstValueOnboardingScreen extends StatelessWidget {
   final VoidCallback onModifyFirstMemory;
   final VoidCallback onCancelFirstMemory;
   final bool firstQuestionDone;
+  final String firstQuestionDraft;
+  final String firstQuestionAnswer;
+  final String firstQuestionConfidence;
+  final List<String> firstQuestionSourceIds;
+  final bool firstQuestionAnswerReady;
+  final bool firstQuestionWhyExpanded;
+  final String? firstQuestionError;
+  final ValueChanged<String> onFirstQuestionDraftChanged;
+  final VoidCallback onPrepareFirstQuestionAnswer;
+  final VoidCallback onToggleFirstQuestionWhyDisclosure;
   final VoidCallback onCompleteFirstQuestion;
   final VoidCallback onFinish;
 
@@ -142,14 +162,86 @@ class FirstValueOnboardingScreen extends StatelessWidget {
                 Text("Step 2: Ask your first question", style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: AppSpacing.sm),
                 const Text(
-                  "Example: \"What did I buy today?\" and verify the answer with sources.",
+                  "Example: \"What did I buy today?\" Ask once, then review why the answer was produced.",
                 ),
                 const SizedBox(height: AppSpacing.md),
-                AppPrimaryButton(
-                  key: const Key("onboarding-first-question-button"),
-                  label: firstQuestionDone ? "First question completed" : "Mark first question as done",
-                  onPressed: firstQuestionDone ? null : onCompleteFirstQuestion,
+                TextField(
+                  key: const Key("onboarding-question-input"),
+                  decoration: const InputDecoration(
+                    hintText: "What did I buy today?",
+                  ),
+                  onChanged: onFirstQuestionDraftChanged,
                 ),
+                const SizedBox(height: AppSpacing.sm),
+                AppPrimaryButton(
+                  key: const Key("onboarding-question-ask-button"),
+                  label: firstQuestionDone ? "First question completed" : "Ask first question",
+                  onPressed: firstQuestionDone ? null : onPrepareFirstQuestionAnswer,
+                ),
+                if (firstQuestionError != null) ...<Widget>[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    firstQuestionError!,
+                    style: TextStyle(color: Colors.red.shade700),
+                  ),
+                ],
+                if (firstQuestionAnswerReady) ...<Widget>[
+                  const SizedBox(height: AppSpacing.md),
+                  AppSurfaceCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "Assistant answer",
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(firstQuestionAnswer),
+                        const SizedBox(height: AppSpacing.sm),
+                        OutlinedButton(
+                          key: const Key("onboarding-question-why-toggle-button"),
+                          onPressed: onToggleFirstQuestionWhyDisclosure,
+                          child: Text(
+                            firstQuestionWhyExpanded
+                                ? "Hide why this answer"
+                                : "Why this answer",
+                          ),
+                        ),
+                        if (firstQuestionWhyExpanded) ...<Widget>[
+                          const SizedBox(height: AppSpacing.sm),
+                          Container(
+                            key: const Key("onboarding-question-why-panel"),
+                            padding: const EdgeInsets.all(AppSpacing.sm),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(AppRadii.md),
+                              color: Colors.white,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("Confidence: $firstQuestionConfidence"),
+                                const SizedBox(height: AppSpacing.xs),
+                                Text(
+                                  "Sources: ${firstQuestionSourceIds.join(", ")}",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: AppSpacing.md),
+                        AppPrimaryButton(
+                          key: const Key("onboarding-question-complete-button"),
+                          label: firstQuestionDone
+                              ? "First question completed"
+                              : "Complete first question step",
+                          onPressed: firstQuestionDone
+                              ? null
+                              : onCompleteFirstQuestion,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
