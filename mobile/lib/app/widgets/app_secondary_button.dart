@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_tokens.dart';
 
-class AppPrimaryButton extends StatelessWidget {
-  const AppPrimaryButton({
+class AppSecondaryButton extends StatelessWidget {
+  const AppSecondaryButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -15,22 +15,19 @@ class AppPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          backgroundColor: AppColors.accent,
-          foregroundColor: AppColors.onAccent,
-          disabledBackgroundColor: AppColors.border,
+      height: 44,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.ink,
+          side: const BorderSide(color: AppColors.border),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(AppRadii.md)),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         ),
         onPressed: onPressed,
         child: Text(
           label,
-          style: AppTextStyles.buttonPrimary,
+          style: AppTextStyles.buttonSecondary,
         ),
       ),
     );

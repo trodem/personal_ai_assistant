@@ -42,7 +42,7 @@ class OnboardingWelcomeScreen extends StatelessWidget {
               children: <Widget>[
                 Text(
                   "Privacy short notice",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  style: AppTextStyles.sectionTitle,
                 ),
                 SizedBox(height: AppSpacing.sm),
                 Text(

@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: AppSpacing.sm),
                     Text(
                       widget.errorMessage!,
-                      style: TextStyle(color: Colors.red.shade700),
+                      style: AppTextStyles.error,
                     ),
                   ],
                   const SizedBox(height: AppSpacing.md),

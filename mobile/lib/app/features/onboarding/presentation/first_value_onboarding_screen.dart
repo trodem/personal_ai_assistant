@@ -110,7 +110,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     firstMemoryError!,
-                    style: TextStyle(color: Colors.red.shade700),
+                    style: AppTextStyles.error,
                   ),
                 ],
                 if (firstMemoryProposalReady) ...<Widget>[
@@ -193,7 +193,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     firstQuestionError!,
-                    style: TextStyle(color: Colors.red.shade700),
+                    style: AppTextStyles.error,
                   ),
                 ],
                 if (firstQuestionAnswerReady) ...<Widget>[
@@ -225,7 +225,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(AppSpacing.sm),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(AppRadii.md),
-                              color: Colors.white,
+                              color: AppColors.surface,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

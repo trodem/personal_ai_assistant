@@ -78,7 +78,7 @@ class OnboardingLanguageScreen extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
             Text(
               errorMessage!,
-              style: TextStyle(color: Colors.red.shade700),
+              style: AppTextStyles.error,
             ),
           ],
           const SizedBox(height: AppSpacing.lg),

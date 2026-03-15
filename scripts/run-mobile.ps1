@@ -1,5 +1,5 @@
 param(
-  [string]$DeviceId = "emulator-5554",
+  [string]$DeviceId = "RFCR80K8WQV",
   [string]$ApiBaseUrl = "http://10.0.2.2:8000",
   [string]$EnvFile = ".env",
   [switch]$PrintOnly

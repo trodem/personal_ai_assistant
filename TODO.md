@@ -369,7 +369,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Onboarding completion state persisted (`onboarding_completed_at`) to avoid repeating full wizard.
 - [x] Add skip/resume onboarding behavior with deterministic resume point.
 - [x] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
-- [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
+- [x] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
 - [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
 - [x] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
 - [x] Implement AI chat surface states per UX contract (`idle`, `processing`, `needs_clarification`, `ready_to_confirm`, `saved`, `failed`).

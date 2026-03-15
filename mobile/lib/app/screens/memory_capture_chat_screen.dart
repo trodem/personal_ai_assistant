@@ -165,8 +165,8 @@ class _MemoryCaptureChatScreenState extends State<MemoryCaptureChatScreen> {
                         ),
                         child: Text(
                           message.content,
-                          style: TextStyle(
-                            color: isUser ? Colors.white : AppColors.ink,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: isUser ? AppColors.onAccent : AppColors.ink,
                           ),
                         ),
                       ),

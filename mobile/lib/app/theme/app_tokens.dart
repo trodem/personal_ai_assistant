@@ -7,7 +7,9 @@ class AppColors {
   static const Color mutedInk = Color(0xFF5A6573);
   static const Color accent = Color(0xFF1F6F5E);
   static const Color accentStrong = Color(0xFF15574A);
+  static const Color onAccent = Color(0xFFFFFFFF);
   static const Color border = Color(0xFFD8E0E8);
+  static const Color danger = Color(0xFFB42318);
 }
 
 class AppSpacing {
@@ -32,4 +34,27 @@ class AppShadows {
       spreadRadius: -6,
     ),
   ];
+}
+
+class AppTextStyles {
+  static const TextStyle buttonPrimary = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const TextStyle buttonSecondary = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const TextStyle sectionTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+  );
+
+  static const TextStyle error = TextStyle(
+    color: AppColors.danger,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  );
 }
