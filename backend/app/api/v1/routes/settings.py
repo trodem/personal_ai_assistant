@@ -2,9 +2,21 @@ from typing import Literal, cast
 
 from fastapi import APIRouter, Depends
 
-from app.api.schemas import AcceptedResponse, UpdateProfileRequest, UpdateSecurityRequest, UserSettingsResponse
+from app.api.schemas import (
+    AcceptedResponse,
+    NotificationPreferences,
+    UpdateNotificationPreferencesRequest,
+    UpdateProfileRequest,
+    UpdateSecurityRequest,
+    UserSettingsResponse,
+)
 from app.core.auth import AuthenticatedUser, get_current_user
-from app.services.user_preferences import get_preferred_language, set_preferred_language
+from app.services.user_preferences import (
+    get_notification_preferences,
+    get_preferred_language,
+    set_notification_preferences,
+    set_preferred_language,
+)
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
@@ -27,7 +39,9 @@ def _build_settings_response(user: AuthenticatedUser) -> UserSettingsResponse:
         billing_exempt=billing_exempt,
         payment_methods_enabled=not billing_exempt,
         default_payment_method=None,
-        notification_preferences={"in_app": True, "push": False, "email": True},
+        notification_preferences=NotificationPreferences(
+            **get_notification_preferences(user.tenant_id, user.user_id)
+        ),
     )
 
 
@@ -77,3 +91,29 @@ async def update_security_settings(
     _ = payload
     _ = current_user
     return AcceptedResponse(accepted=True)
+
+
+@router.patch(
+    "/notifications",
+    summary="Update notification preferences",
+    description="Updates in-app, push, and email notification preferences for the authenticated user.",
+    response_model=UserSettingsResponse,
+    responses={
+        401: {"description": "Unauthorized. Missing or invalid bearer token."},
+        422: {"description": "Validation error."},
+    },
+)
+async def update_notification_settings(
+    payload: UpdateNotificationPreferencesRequest,
+    current_user: AuthenticatedUser = Depends(get_current_user),
+) -> UserSettingsResponse:
+    set_notification_preferences(
+        current_user.tenant_id,
+        current_user.user_id,
+        {
+            "in_app": payload.preferences.in_app,
+            "push": payload.preferences.push,
+            "email": payload.preferences.email,
+        },
+    )
+    return _build_settings_response(current_user)

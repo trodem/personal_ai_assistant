@@ -165,6 +165,20 @@ class UpdateSecurityRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class NotificationPreferences(BaseModel):
+    in_app: bool
+    push: bool
+    email: bool
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UpdateNotificationPreferencesRequest(BaseModel):
+    preferences: NotificationPreferences
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class UserSettingsResponse(BaseModel):
     user_id: str
     email: str
@@ -177,6 +191,6 @@ class UserSettingsResponse(BaseModel):
     billing_exempt: bool
     payment_methods_enabled: bool
     default_payment_method: dict[str, Any] | None = None
-    notification_preferences: dict[str, bool]
+    notification_preferences: NotificationPreferences
 
     model_config = ConfigDict(extra="forbid")

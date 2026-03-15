@@ -28,6 +28,7 @@ class OpenApiDocsTests(unittest.TestCase):
         self.assertIn("/api/v1/author/users/{id}/role", schema["paths"])
         self.assertIn("/api/v1/author/dashboard", schema["paths"])
         self.assertIn("/api/v1/me/settings/security", schema["paths"])
+        self.assertIn("/api/v1/me/settings/notifications", schema["paths"])
 
     def test_protected_paths_have_bearer_security(self) -> None:
         schema = self.client.get("/openapi.json").json()
@@ -94,6 +95,10 @@ class OpenApiDocsTests(unittest.TestCase):
         settings_security_patch = schema["paths"]["/api/v1/me/settings/security"]["patch"]
         self.assertEqual(settings_security_patch["summary"], "Trigger security-sensitive settings change")
         self.assertIn("422", settings_security_patch["responses"])
+
+        settings_notifications_patch = schema["paths"]["/api/v1/me/settings/notifications"]["patch"]
+        self.assertEqual(settings_notifications_patch["summary"], "Update notification preferences")
+        self.assertIn("422", settings_notifications_patch["responses"])
 
 
 if __name__ == "__main__":
