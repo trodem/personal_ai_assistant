@@ -18,4 +18,9 @@ class InMemoryPermissionsGateway implements DevicePermissionsGateway {
         return cameraGranted;
     }
   }
+
+  @override
+  Future<bool> openSettings() async {
+    return false;
+  }
 }

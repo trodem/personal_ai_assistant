@@ -11,6 +11,7 @@ class OnboardingLanguageScreen extends StatelessWidget {
     required this.selectedLanguage,
     required this.onLanguageChanged,
     required this.onContinue,
+    required this.onSkip,
     required this.isSaving,
     this.errorMessage,
   });
@@ -18,13 +19,23 @@ class OnboardingLanguageScreen extends StatelessWidget {
   final PreferredLanguage selectedLanguage;
   final ValueChanged<PreferredLanguage> onLanguageChanged;
   final VoidCallback onContinue;
+  final VoidCallback onSkip;
   final bool isSaving;
   final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal AI Assistant")),
+      appBar: AppBar(
+        title: const Text("Personal AI Assistant"),
+        actions: <Widget>[
+          TextButton(
+            key: const Key("onboarding-skip-button"),
+            onPressed: onSkip,
+            child: const Text("Skip for now"),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: <Widget>[

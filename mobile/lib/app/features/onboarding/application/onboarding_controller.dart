@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import '../domain/device_permissions_gateway.dart';
 import '../domain/language_preferences_repository.dart';
 import '../domain/onboarding_completion_repository.dart';
+import '../domain/onboarding_resume_point.dart';
+import '../domain/onboarding_resume_repository.dart';
 import '../domain/preferred_language.dart';
 
 class OnboardingController extends ChangeNotifier {
@@ -11,10 +13,12 @@ class OnboardingController extends ChangeNotifier {
     required LanguagePreferencesRepository languagePreferencesRepository,
     required DevicePermissionsGateway devicePermissionsGateway,
     required OnboardingCompletionRepository onboardingCompletionRepository,
+    required OnboardingResumeRepository onboardingResumeRepository,
   }) : _completed = completed,
        _languagePreferencesRepository = languagePreferencesRepository,
        _devicePermissionsGateway = devicePermissionsGateway,
-       _onboardingCompletionRepository = onboardingCompletionRepository;
+       _onboardingCompletionRepository = onboardingCompletionRepository,
+       _onboardingResumeRepository = onboardingResumeRepository;
 
   bool _completed;
   bool get completed => _completed;
@@ -22,11 +26,15 @@ class OnboardingController extends ChangeNotifier {
   final LanguagePreferencesRepository _languagePreferencesRepository;
   final DevicePermissionsGateway _devicePermissionsGateway;
   final OnboardingCompletionRepository _onboardingCompletionRepository;
+  final OnboardingResumeRepository _onboardingResumeRepository;
 
   String? _hydratedUserId;
   String? _hydratingUserId;
   bool _isHydratingCompletion = false;
   bool get isHydratingCompletion => _isHydratingCompletion;
+
+  bool _hasPendingOnboardingResume = false;
+  bool get hasPendingOnboardingResume => _hasPendingOnboardingResume;
 
   bool _welcomeStepDone = false;
   bool get welcomeStepDone => _welcomeStepDone;
@@ -54,6 +62,7 @@ class OnboardingController extends ChangeNotifier {
 
   String? _permissionsError;
   String? get permissionsError => _permissionsError;
+  bool get showPermissionDeniedFallback => !_microphoneGranted && _permissionsError != null;
 
   bool _firstMemoryDone = false;
   bool get firstMemoryDone => _firstMemoryDone;
@@ -93,6 +102,19 @@ class OnboardingController extends ChangeNotifier {
 
   bool get canFinish => _firstMemoryDone && _firstQuestionDone;
 
+  OnboardingResumePoint get deterministicResumePoint {
+    if (!_welcomeStepDone) {
+      return OnboardingResumePoint.welcome;
+    }
+    if (!_languageStepDone) {
+      return OnboardingResumePoint.language;
+    }
+    if (!_permissionsStepDone) {
+      return OnboardingResumePoint.permissions;
+    }
+    return OnboardingResumePoint.firstValue;
+  }
+
   Future<void> hydrateCompletionForUser(String? userId) async {
     if (userId == null || userId.isEmpty) {
       _clearHydrationState();
@@ -109,6 +131,10 @@ class OnboardingController extends ChangeNotifier {
 
     final DateTime? completedAt = await _onboardingCompletionRepository
         .getOnboardingCompletedAt(userId);
+    OnboardingResumePoint? resumePoint;
+    if (completedAt == null) {
+      resumePoint = await _onboardingResumeRepository.getResumePoint(userId);
+    }
 
     if (_hydratingUserId != userId) {
       return;
@@ -117,8 +143,62 @@ class OnboardingController extends ChangeNotifier {
     _hydratedUserId = userId;
     _hydratingUserId = null;
     _isHydratingCompletion = false;
-    _completed = completedAt != null;
+    if (completedAt != null) {
+      _completed = true;
+      _hasPendingOnboardingResume = false;
+      return notifyListeners();
+    }
+
+    if (resumePoint != null) {
+      _applyDeterministicResumePoint(resumePoint);
+      _hasPendingOnboardingResume = true;
+    } else {
+      _clearOnboardingSteps();
+      _hasPendingOnboardingResume = false;
+    }
+    _completed = false;
     notifyListeners();
+  }
+
+  void _applyDeterministicResumePoint(OnboardingResumePoint resumePoint) {
+    _clearOnboardingSteps();
+    switch (resumePoint) {
+      case OnboardingResumePoint.welcome:
+        break;
+      case OnboardingResumePoint.language:
+        _welcomeStepDone = true;
+        break;
+      case OnboardingResumePoint.permissions:
+        _welcomeStepDone = true;
+        _languageStepDone = true;
+        break;
+      case OnboardingResumePoint.firstValue:
+        _welcomeStepDone = true;
+        _languageStepDone = true;
+        _permissionsStepDone = true;
+        break;
+    }
+  }
+
+  void _clearOnboardingSteps() {
+    _welcomeStepDone = false;
+    _languageStepDone = false;
+    _permissionsStepDone = false;
+    _microphoneGranted = false;
+    _cameraGranted = false;
+    _permissionsError = null;
+    _firstMemoryDone = false;
+    _firstMemoryDraft = "";
+    _firstMemoryProposalReady = false;
+    _firstMemoryError = null;
+    _firstQuestionDone = false;
+    _firstQuestionDraft = "";
+    _firstQuestionAnswer = "";
+    _firstQuestionConfidence = "medium";
+    _firstQuestionSourceIds = const <String>[];
+    _firstQuestionAnswerReady = false;
+    _firstQuestionWhyExpanded = false;
+    _firstQuestionError = null;
   }
 
   void _clearHydrationState() {
@@ -127,6 +207,8 @@ class OnboardingController extends ChangeNotifier {
     _hydratingUserId = null;
     _isHydratingCompletion = false;
     _completed = false;
+    _hasPendingOnboardingResume = false;
+    _clearOnboardingSteps();
     if (shouldNotify) {
       notifyListeners();
     }
@@ -137,6 +219,7 @@ class OnboardingController extends ChangeNotifier {
       return;
     }
     _welcomeStepDone = true;
+    _hasPendingOnboardingResume = true;
     notifyListeners();
   }
 
@@ -158,6 +241,7 @@ class OnboardingController extends ChangeNotifier {
         _selectedLanguage,
       );
       _languageStepDone = true;
+      _hasPendingOnboardingResume = true;
     } catch (error) {
       _languageError = error.toString();
     } finally {
@@ -196,6 +280,20 @@ class OnboardingController extends ChangeNotifier {
       return;
     }
     _permissionsStepDone = true;
+    _hasPendingOnboardingResume = true;
+    notifyListeners();
+  }
+
+  Future<void> openPermissionSettings() async {
+    _permissionsError = null;
+    final bool opened = await _devicePermissionsGateway.openSettings();
+    if (!opened) {
+      _permissionsError =
+          "Unable to open system settings. Retry permission request from this screen.";
+    } else {
+      _permissionsError =
+          "System settings opened. Enable microphone permission, then return and retry.";
+    }
     notifyListeners();
   }
 
@@ -204,6 +302,7 @@ class OnboardingController extends ChangeNotifier {
       return;
     }
     _firstMemoryDone = true;
+    _hasPendingOnboardingResume = true;
     notifyListeners();
   }
 
@@ -254,6 +353,31 @@ class OnboardingController extends ChangeNotifier {
     }
     _firstQuestionDone = true;
     _firstQuestionError = null;
+    _hasPendingOnboardingResume = true;
+    notifyListeners();
+  }
+
+  Future<void> skipForNow() async {
+    if (_completed) {
+      return;
+    }
+    final String? userId = _hydratedUserId;
+    if (userId != null && userId.isNotEmpty) {
+      await _onboardingResumeRepository.persistResumePoint(
+        userId: userId,
+        resumePoint: deterministicResumePoint,
+      );
+    }
+    _hasPendingOnboardingResume = true;
+    _completed = true;
+    notifyListeners();
+  }
+
+  void resumeDeferredOnboarding() {
+    if (!_hasPendingOnboardingResume || !_completed) {
+      return;
+    }
+    _completed = false;
     notifyListeners();
   }
 
@@ -306,14 +430,18 @@ class OnboardingController extends ChangeNotifier {
     if (_hydratedUserId == null || _hydratedUserId!.isEmpty) {
       return;
     }
+    await _onboardingResumeRepository.clearResumePoint(_hydratedUserId!);
     await _onboardingCompletionRepository.persistOnboardingCompletedAt(
       userId: _hydratedUserId!,
       completedAt: DateTime.now().toUtc(),
     );
+    _hasPendingOnboardingResume = false;
+    notifyListeners();
   }
 
   void reset() {
     _completed = false;
+    _hasPendingOnboardingResume = false;
     _welcomeStepDone = false;
     _languageStepDone = false;
     _selectedLanguage = PreferredLanguage.en;

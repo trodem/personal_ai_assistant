@@ -28,6 +28,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
     required this.onPrepareFirstQuestionAnswer,
     required this.onToggleFirstQuestionWhyDisclosure,
     required this.onCompleteFirstQuestion,
+    required this.onSkip,
     required this.onFinish,
   });
 
@@ -52,6 +53,7 @@ class FirstValueOnboardingScreen extends StatelessWidget {
   final VoidCallback onPrepareFirstQuestionAnswer;
   final VoidCallback onToggleFirstQuestionWhyDisclosure;
   final VoidCallback onCompleteFirstQuestion;
+  final VoidCallback onSkip;
   final Future<void> Function() onFinish;
 
   @override
@@ -59,7 +61,16 @@ class FirstValueOnboardingScreen extends StatelessWidget {
     final bool canFinish = firstMemoryDone && firstQuestionDone;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal AI Assistant")),
+      appBar: AppBar(
+        title: const Text("Personal AI Assistant"),
+        actions: <Widget>[
+          TextButton(
+            key: const Key("onboarding-skip-button"),
+            onPressed: onSkip,
+            child: const Text("Skip for now"),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: <Widget>[

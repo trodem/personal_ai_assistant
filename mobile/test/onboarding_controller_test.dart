@@ -1,10 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_ai_assistant_mobile/app/features/onboarding/application/onboarding_controller.dart';
+import 'package:personal_ai_assistant_mobile/app/features/onboarding/domain/onboarding_resume_point.dart';
 import 'package:personal_ai_assistant_mobile/app/features/onboarding/domain/preferred_language.dart';
 
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 import 'fakes/fake_onboarding_completion_repository.dart';
+import 'fakes/fake_onboarding_resume_repository.dart';
 
 void main() {
   test("onboarding completes only after first memory and first question", () {
@@ -14,6 +16,7 @@ void main() {
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     expect(controller.completed, isFalse);
@@ -42,6 +45,7 @@ void main() {
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     controller.selectLanguage(PreferredLanguage.de);
@@ -61,6 +65,7 @@ void main() {
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: permissionsGateway,
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     await controller.requestCameraPermission();
@@ -73,11 +78,34 @@ void main() {
     expect(controller.permissionsStepDone, isTrue);
   });
 
+  test("permission denied fallback exposes retry and open settings path", () async {
+    final FakeDevicePermissionsGateway permissionsGateway =
+        FakeDevicePermissionsGateway(
+          microphoneGranted: false,
+          cameraGranted: true,
+          openSettingsResult: true,
+        );
+    final OnboardingController controller = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: permissionsGateway,
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
+    );
+
+    await controller.requestMicrophonePermission();
+    expect(controller.showPermissionDeniedFallback, isTrue);
+
+    await controller.openPermissionSettings();
+    expect(permissionsGateway.openSettingsCalled, isTrue);
+    expect(controller.permissionsError, contains("System settings opened"));
+  });
+
   test("first memory requires proposal confirmation", () {
     final OnboardingController controller = OnboardingController(
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     controller.prepareFirstMemoryProposal();
@@ -102,6 +130,7 @@ void main() {
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     controller.completeFirstQuestion();
@@ -128,6 +157,7 @@ void main() {
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: completionRepository,
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
 
     await controller.hydrateCompletionForUser("user-1");
@@ -146,8 +176,44 @@ void main() {
       languagePreferencesRepository: FakeLanguagePreferencesRepository(),
       devicePermissionsGateway: FakeDevicePermissionsGateway(),
       onboardingCompletionRepository: completionRepository,
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
     await hydratedController.hydrateCompletionForUser("user-1");
     expect(hydratedController.completed, isTrue);
+  });
+
+  test("skip persists deterministic resume point and hydrates same step", () async {
+    final FakeOnboardingResumeRepository resumeRepository =
+        FakeOnboardingResumeRepository();
+    final OnboardingController controller = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: resumeRepository,
+    );
+
+    await controller.hydrateCompletionForUser("user-2");
+    controller.completeWelcomeStep();
+    controller.selectLanguage(PreferredLanguage.it);
+    await controller.persistLanguageStep();
+    await controller.skipForNow();
+
+    expect(controller.completed, isTrue);
+    expect(
+      resumeRepository.resumePointForUser("user-2"),
+      OnboardingResumePoint.permissions,
+    );
+
+    final OnboardingController resumedController = OnboardingController(
+      languagePreferencesRepository: FakeLanguagePreferencesRepository(),
+      devicePermissionsGateway: FakeDevicePermissionsGateway(),
+      onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: resumeRepository,
+    );
+    await resumedController.hydrateCompletionForUser("user-2");
+    expect(resumedController.completed, isFalse);
+    expect(resumedController.welcomeStepDone, isTrue);
+    expect(resumedController.languageStepDone, isTrue);
+    expect(resumedController.permissionsStepDone, isFalse);
   });
 }

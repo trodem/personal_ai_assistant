@@ -10,9 +10,10 @@ import 'fakes/fake_auth_repository.dart';
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 import 'fakes/fake_onboarding_completion_repository.dart';
+import 'fakes/fake_onboarding_resume_repository.dart';
 
 void main() {
-  testWidgets("app boots with themed preview screen", (WidgetTester tester) async {
+  testWidgets("app boots with memory capture chat screen", (WidgetTester tester) async {
     final AuthController authController = AuthController(
       repository: FakeAuthRepository(
         currentUser: const AuthUser(id: "1", email: "dev@example.com"),
@@ -33,15 +34,19 @@ void main() {
           languagePreferencesRepository: FakeLanguagePreferencesRepository(),
           devicePermissionsGateway: FakeDevicePermissionsGateway(),
           onboardingCompletionRepository: completionRepository,
+          onboardingResumeRepository: FakeOnboardingResumeRepository(),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(find.text("Personal AI Assistant"), findsOneWidget);
-    expect(find.text("Design System Baseline"), findsOneWidget);
-    expect(find.byType(TextField), findsOneWidget);
-    expect(find.byType(ElevatedButton), findsOneWidget);
+    expect(find.byKey(const Key("memory-capture-title")), findsOneWidget);
+    expect(find.byKey(const Key("memory-chat-list")), findsOneWidget);
+    expect(find.byKey(const Key("memory-composer-text-field")), findsOneWidget);
+    expect(find.byKey(const Key("memory-composer-attachment-button")), findsOneWidget);
+    expect(find.byKey(const Key("memory-composer-microphone-button")), findsOneWidget);
+    expect(find.byKey(const Key("memory-composer-send-button")), findsOneWidget);
 
     final MaterialApp appWidget = tester.widget<MaterialApp>(find.byType(MaterialApp));
     expect(appWidget.theme?.scaffoldBackgroundColor, isNotNull);

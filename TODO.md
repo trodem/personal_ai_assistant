@@ -367,12 +367,12 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Onboarding step 4: guided first memory capture with explicit confirmation (`Confirm/Modify/Cancel`).
 - [x] Onboarding step 5: guided first question flow with "Why this answer" disclosure.
 - [x] Onboarding completion state persisted (`onboarding_completed_at`) to avoid repeating full wizard.
-- [ ] Add skip/resume onboarding behavior with deterministic resume point.
-- [ ] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
-- [ ] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
-- [ ] Implement AI chat surface states per UX contract (`idle`, `processing`, `needs_clarification`, `ready_to_confirm`, `saved`, `failed`).
-- [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
+- [x] Add skip/resume onboarding behavior with deterministic resume point.
+- [x] Add onboarding fallback path when permission is denied (clear CTA to retry/open OS settings).
 - [ ] Centralize Flutter style tokens (colors, typography, spacing) and enforce usage across all screens.
+- [ ] Build reusable Flutter component library for common UI patterns (buttons, inputs, cards, status blocks).
+- [x] Build chat-style memory capture screen with bottom composer (`text`, `mic`, `send`, `attachment`).
+- [ ] Implement AI chat surface states per UX contract (`idle`, `processing`, `needs_clarification`, `ready_to_confirm`, `saved`, `failed`).
 - [ ] Implement Flutter i18n architecture (arb-based keys, locale resolution, fallback to English).
 - [ ] Add architecture lint/static rules to block business logic inside Flutter widgets/screens.
 - [ ] Attachment button UX: support both `Take Photo` and `Choose from Gallery` for receipt photos.

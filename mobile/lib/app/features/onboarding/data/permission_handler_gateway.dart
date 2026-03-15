@@ -9,6 +9,11 @@ class PermissionHandlerGateway implements DevicePermissionsGateway {
     return status.isGranted;
   }
 
+  @override
+  Future<bool> openSettings() async {
+    return openAppSettings();
+  }
+
   Permission _map(AppPermission permission) {
     switch (permission) {
       case AppPermission.microphone:

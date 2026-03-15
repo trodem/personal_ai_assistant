@@ -7,6 +7,9 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 ## [Unreleased]
 
 ### Added
+- Added a new chat-style memory capture screen with bottom composer controls (`attachment`, `mic`, `text input`, `send`) as the authenticated default app surface after onboarding.
+- Added onboarding permission-denied fallback UX with clear CTAs (`Retry microphone`, `Open settings`) plus controller/device-gateway support for opening OS settings and returning deterministic guidance messages.
+- Added onboarding skip/resume behavior with deterministic resume points: users can skip the wizard (`Skip for now`), resume later from the exact pending step, and continue from a persisted user-scoped resume state.
 - Added persisted onboarding completion state (`onboarding_completed_at`) in Flutter via user-scoped local storage, with hydration on authenticated session to prevent repeating the full onboarding wizard on subsequent app launches/logins.
 - Added onboarding step 5 guided first-question flow in Flutter onboarding: question input, guided answer preview, expandable "Why this answer" disclosure (confidence + source IDs), and explicit completion action before finishing onboarding.
 - Added `MFA_ENABLEMENT_CHECKLIST.md` with per-provider MFA/recovery-code evidence tracking and explicit completion criteria for the Day 0 MFA prerequisite task.

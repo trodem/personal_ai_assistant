@@ -9,10 +9,12 @@ class ThemePreviewScreen extends StatelessWidget {
     super.key,
     this.userEmail,
     this.onLogout,
+    this.onResumeOnboarding,
   });
 
   final String? userEmail;
   final VoidCallback? onLogout;
+  final VoidCallback? onResumeOnboarding;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,14 @@ class ThemePreviewScreen extends StatelessWidget {
             Text(
               "Signed in as $userEmail",
               style: text.bodyMedium,
+            ),
+          ],
+          if (onResumeOnboarding != null) ...<Widget>[
+            const SizedBox(height: AppSpacing.sm),
+            AppPrimaryButton(
+              key: const Key("resume-onboarding-button"),
+              label: "Resume onboarding",
+              onPressed: onResumeOnboarding,
             ),
           ],
           const SizedBox(height: AppSpacing.lg),

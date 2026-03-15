@@ -11,7 +11,7 @@ import '../features/onboarding/presentation/first_value_onboarding_screen.dart';
 import '../features/onboarding/presentation/onboarding_language_screen.dart';
 import '../features/onboarding/presentation/onboarding_permissions_screen.dart';
 import '../features/onboarding/presentation/onboarding_welcome_screen.dart';
-import '../screens/theme_preview_screen.dart';
+import '../screens/memory_capture_chat_screen.dart';
 import '../theme/app_theme.dart';
 
 class AppRoot extends StatelessWidget {
@@ -76,6 +76,9 @@ class AppRoot extends StatelessWidget {
           if (!onboardingController.welcomeStepDone) {
             return OnboardingWelcomeScreen(
               onContinue: onboardingController.completeWelcomeStep,
+              onSkip: () {
+                unawaited(onboardingController.skipForNow());
+              },
             );
           }
           if (!onboardingController.languageStepDone) {
@@ -84,6 +87,9 @@ class AppRoot extends StatelessWidget {
               onLanguageChanged: onboardingController.selectLanguage,
               onContinue: () {
                 onboardingController.persistLanguageStep();
+              },
+              onSkip: () {
+                unawaited(onboardingController.skipForNow());
               },
               isSaving: onboardingController.isSavingLanguage,
               errorMessage: onboardingController.languageError,
@@ -100,6 +106,14 @@ class AppRoot extends StatelessWidget {
                 onboardingController.requestCameraPermission();
               },
               onContinue: onboardingController.completePermissionsStep,
+              onOpenSettings: () {
+                onboardingController.openPermissionSettings();
+              },
+              showPermissionDeniedFallback:
+                  onboardingController.showPermissionDeniedFallback,
+              onSkip: () {
+                unawaited(onboardingController.skipForNow());
+              },
               errorMessage: onboardingController.permissionsError,
             );
           }
@@ -132,6 +146,9 @@ class AppRoot extends StatelessWidget {
             onToggleFirstQuestionWhyDisclosure:
                 onboardingController.toggleFirstQuestionWhyDisclosure,
             onCompleteFirstQuestion: onboardingController.completeFirstQuestion,
+            onSkip: () {
+              unawaited(onboardingController.skipForNow());
+            },
             onFinish: onboardingController.finish,
           );
         }
@@ -142,8 +159,11 @@ class AppRoot extends StatelessWidget {
   Widget _buildScreen(AppScreen screen) {
     switch (screen) {
       case AppScreen.themePreview:
-        return ThemePreviewScreen(
+        return MemoryCaptureChatScreen(
           userEmail: authController.user?.email,
+          onResumeOnboarding: onboardingController.hasPendingOnboardingResume
+              ? onboardingController.resumeDeferredOnboarding
+              : null,
           onLogout: () async {
             await authController.signOut();
             onboardingController.reset();

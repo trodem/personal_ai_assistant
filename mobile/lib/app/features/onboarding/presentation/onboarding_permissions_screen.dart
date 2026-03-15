@@ -12,6 +12,9 @@ class OnboardingPermissionsScreen extends StatelessWidget {
     required this.onRequestMicrophone,
     required this.onRequestCamera,
     required this.onContinue,
+    required this.onOpenSettings,
+    required this.showPermissionDeniedFallback,
+    required this.onSkip,
     this.errorMessage,
   });
 
@@ -20,12 +23,24 @@ class OnboardingPermissionsScreen extends StatelessWidget {
   final VoidCallback onRequestMicrophone;
   final VoidCallback onRequestCamera;
   final VoidCallback onContinue;
+  final VoidCallback onOpenSettings;
+  final bool showPermissionDeniedFallback;
+  final VoidCallback onSkip;
   final String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal AI Assistant")),
+      appBar: AppBar(
+        title: const Text("Personal AI Assistant"),
+        actions: <Widget>[
+          TextButton(
+            key: const Key("onboarding-skip-button"),
+            onPressed: onSkip,
+            child: const Text("Skip for now"),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: <Widget>[
@@ -65,6 +80,47 @@ class OnboardingPermissionsScreen extends StatelessWidget {
             Text(
               errorMessage!,
               style: TextStyle(color: Colors.red.shade700),
+            ),
+          ],
+          if (showPermissionDeniedFallback) ...<Widget>[
+            const SizedBox(height: AppSpacing.md),
+            AppSurfaceCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Microphone permission is denied",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  const Text(
+                    "Use Retry to request permission again or open OS settings to enable microphone access manually.",
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 170,
+                        child: AppPrimaryButton(
+                          key: const Key("permissions-retry-microphone-button"),
+                          label: "Retry microphone",
+                          onPressed: onRequestMicrophone,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 170,
+                        child: AppPrimaryButton(
+                          key: const Key("permissions-open-settings-button"),
+                          label: "Open settings",
+                          onPressed: onOpenSettings,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
           const SizedBox(height: AppSpacing.lg),

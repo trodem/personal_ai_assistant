@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:personal_ai_assistant_mobile/app/core/state/app_state_controller.dart';
 import 'package:personal_ai_assistant_mobile/app/features/auth/application/auth_controller.dart';
@@ -10,9 +11,10 @@ import 'fakes/fake_auth_repository.dart';
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 import 'fakes/fake_onboarding_completion_repository.dart';
+import 'fakes/fake_onboarding_resume_repository.dart';
 
 void main() {
-  testWidgets('App renders baseline title', (WidgetTester tester) async {
+  testWidgets('App renders memory capture title', (WidgetTester tester) async {
     final AuthController authController = AuthController(
       repository: FakeAuthRepository(
         currentUser: const AuthUser(id: "1", email: "dev@example.com"),
@@ -33,11 +35,13 @@ void main() {
           languagePreferencesRepository: FakeLanguagePreferencesRepository(),
           devicePermissionsGateway: FakeDevicePermissionsGateway(),
           onboardingCompletionRepository: completionRepository,
+          onboardingResumeRepository: FakeOnboardingResumeRepository(),
         ),
       ),
     );
     await tester.pumpAndSettle();
 
     expect(find.text('Personal AI Assistant'), findsOneWidget);
+    expect(find.byKey(const Key("memory-capture-title")), findsOneWidget);
   });
 }

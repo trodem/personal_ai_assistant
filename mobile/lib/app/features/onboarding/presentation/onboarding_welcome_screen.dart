@@ -8,14 +8,25 @@ class OnboardingWelcomeScreen extends StatelessWidget {
   const OnboardingWelcomeScreen({
     super.key,
     required this.onContinue,
+    required this.onSkip,
   });
 
   final VoidCallback onContinue;
+  final VoidCallback onSkip;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Personal AI Assistant")),
+      appBar: AppBar(
+        title: const Text("Personal AI Assistant"),
+        actions: <Widget>[
+          TextButton(
+            key: const Key("onboarding-skip-button"),
+            onPressed: onSkip,
+            child: const Text("Skip for now"),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
         children: <Widget>[

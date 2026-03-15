@@ -10,6 +10,7 @@ import 'fakes/fake_auth_repository.dart';
 import 'fakes/fake_device_permissions_gateway.dart';
 import 'fakes/fake_language_preferences_repository.dart';
 import 'fakes/fake_onboarding_completion_repository.dart';
+import 'fakes/fake_onboarding_resume_repository.dart';
 
 void main() {
   testWidgets("login and logout flow works with auth controller", (
@@ -26,6 +27,7 @@ void main() {
       languagePreferencesRepository: languageRepository,
       devicePermissionsGateway: permissionsGateway,
       onboardingCompletionRepository: FakeOnboardingCompletionRepository(),
+      onboardingResumeRepository: FakeOnboardingResumeRepository(),
     );
     await authController.loadSession();
 
@@ -122,7 +124,8 @@ void main() {
     await tester.tap(find.byKey(const Key("onboarding-finish-button")));
     await tester.pumpAndSettle();
 
-    expect(find.text("Design System Baseline"), findsOneWidget);
+    expect(find.byKey(const Key("memory-capture-title")), findsOneWidget);
+    expect(find.byKey(const Key("memory-composer-text-field")), findsOneWidget);
     expect(find.byKey(const Key("logout-button")), findsOneWidget);
 
     await tester.tap(find.byKey(const Key("logout-button")));
