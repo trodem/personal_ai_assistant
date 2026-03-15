@@ -331,14 +331,14 @@ Use this as your single source of truth for external dependencies and ownership.
 
 ## P6 - Query Engine (Database-First)
 
-- [ ] Align question behaviors and edge cases with `docs/query-contract.md`.
-- [ ] Equivalent text-query endpoint for testing and fallback.
-- [ ] Intent detection oriented to SQL queries/aggregations.
-- [ ] Enforce strict rule: calculations in backend, never in LLM.
-- [ ] Implement deterministic rule for "latest/last": `ORDER BY when DESC LIMIT 1`.
-- [ ] Implement ambiguity handling with clarification question before final answer.
-- [ ] Implement no-result fallback response (no fabrication).
-- [ ] Define and enforce multi-currency policy (no silent conversion; explicit aggregation rules by currency).
+- [x] Align question behaviors and edge cases with `docs/query-contract.md`.
+- [x] Equivalent text-query endpoint for testing and fallback.
+- [x] Intent detection oriented to SQL queries/aggregations.
+- [x] Enforce strict rule: calculations in backend, never in LLM.
+- [x] Implement deterministic rule for "latest/last": `ORDER BY when DESC LIMIT 1`.
+- [x] Implement ambiguity handling with clarification question before final answer.
+- [x] Implement no-result fallback response (no fabrication).
+- [x] Define and enforce multi-currency policy (no silent conversion; explicit aggregation rules by currency).
 - [ ] Core aggregate queries:
 - [ ] expenses by period/category/object
 - [ ] loan balances (who owes what)

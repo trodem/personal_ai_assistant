@@ -1,8 +1,8 @@
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import Any
 
-
-OUT_OF_SCOPE_KEYWORDS = ("weather", "news", "market", "stock", "bitcoin")
+from app.services.question_intent import detect_query_intent
 
 
 @dataclass(frozen=True)
@@ -23,16 +23,29 @@ def _as_float(value: Any) -> float | None:
 
 
 def _sorted_by_latest(memories: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    # ORDER BY when DESC LIMIT 1 semantics are emulated with created_at sorting for MVP fixtures.
-    return sorted(memories, key=lambda m: str(m.get("created_at", "")), reverse=True)
+    # Enforce deterministic ORDER BY when DESC LIMIT 1 semantics.
+    return sorted(memories, key=_latest_sort_key, reverse=True)
 
 
-def _currency_constraint(question: str) -> str | None:
-    lowered = question.lower()
-    for token in ("chf", "eur", "usd"):
-        if token in lowered:
-            return token.upper()
-    return None
+def _parse_datetime(value: Any) -> datetime:
+    if isinstance(value, datetime):
+        return value if value.tzinfo is not None else value.replace(tzinfo=timezone.utc)
+    if not isinstance(value, str):
+        return datetime.min.replace(tzinfo=timezone.utc)
+    parsed_raw = value.strip()
+    if not parsed_raw:
+        return datetime.min.replace(tzinfo=timezone.utc)
+    try:
+        parsed = datetime.fromisoformat(parsed_raw.replace("Z", "+00:00"))
+    except ValueError:
+        return datetime.min.replace(tzinfo=timezone.utc)
+    return parsed if parsed.tzinfo is not None else parsed.replace(tzinfo=timezone.utc)
+
+
+def _latest_sort_key(memory: dict[str, Any]) -> tuple[datetime, datetime]:
+    structured_when = _parse_datetime(memory.get("structured_data", {}).get("when"))
+    created_at = _parse_datetime(memory.get("created_at"))
+    return (structured_when, created_at)
 
 
 def _expense_totals_by_currency(
@@ -55,9 +68,9 @@ def _expense_totals_by_currency(
 
 
 def compute_structured_result(question: str, memories: list[dict[str, Any]]) -> StructuredQuestionResult:
-    lowered = question.lower().strip()
+    intent = detect_query_intent(question)
 
-    if any(token in lowered for token in OUT_OF_SCOPE_KEYWORDS):
+    if intent.kind == "out_of_scope":
         return StructuredQuestionResult(
             kind="out_of_scope",
             value=0.0,
@@ -66,17 +79,17 @@ def compute_structured_result(question: str, memories: list[dict[str, Any]]) -> 
             currency_totals={},
         )
 
-    if "last" in lowered or "latest" in lowered:
-        if "spend" not in lowered and "service" not in lowered and "expense" not in lowered:
-            return StructuredQuestionResult(
-                kind="ambiguous_intent",
-                value=0.0,
-                source_memory_ids=[],
-                confidence="low",
-                currency_totals={},
-                clarification_question="Do you mean your last expense or another last record?",
-            )
+    if intent.kind == "ambiguous_intent":
+        return StructuredQuestionResult(
+            kind="ambiguous_intent",
+            value=0.0,
+            source_memory_ids=[],
+            confidence="low",
+            currency_totals={},
+            clarification_question=intent.clarification_question,
+        )
 
+    if intent.kind == "latest_expense_lookup":
         latest_expense = next(
             (
                 memory
@@ -104,8 +117,8 @@ def compute_structured_result(question: str, memories: list[dict[str, Any]]) -> 
             currency_totals={currency: round(amount, 2)},
         )
 
-    if "how much" in lowered and "spend" in lowered:
-        totals, source_ids = _expense_totals_by_currency(memories, _currency_constraint(lowered))
+    if intent.kind == "expense_aggregation":
+        totals, source_ids = _expense_totals_by_currency(memories, intent.currency_constraint)
         if not source_ids:
             return StructuredQuestionResult(
                 kind="no_result",

@@ -83,6 +83,51 @@ class QuestionEngineDatabaseFirstTests(unittest.TestCase):
         self.assertIn("19.00 CHF", payload["answer"])
         self.assertEqual(len(payload["source_memory_ids"]), 1)
 
+    def test_latest_query_orders_by_structured_when_desc_not_created_at(self) -> None:
+        first = self.client.post(
+            "/api/v1/memory",
+            headers=self.headers,
+            json={
+                "memory_type": "expense_event",
+                "raw_text": "I paid 30 CHF for yearly service",
+                "structured_data": {
+                    "item": "service-newer-when",
+                    "amount": 30.0,
+                    "currency": "CHF",
+                    "when": "2026-01-10T10:00:00Z",
+                },
+                "confirmed": True,
+            },
+        )
+        self.assertEqual(first.status_code, 200)
+
+        second = self.client.post(
+            "/api/v1/memory",
+            headers=self.headers,
+            json={
+                "memory_type": "expense_event",
+                "raw_text": "I paid 5 CHF for snack",
+                "structured_data": {
+                    "item": "service-older-when",
+                    "amount": 5.0,
+                    "currency": "CHF",
+                    "when": "2025-01-10T10:00:00Z",
+                },
+                "confirmed": True,
+            },
+        )
+        self.assertEqual(second.status_code, 200)
+
+        response = self.client.post(
+            "/api/v1/question",
+            headers=self.headers,
+            json={"question": "How much was my latest expense?"},
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("30.00 CHF", payload["answer"])
+        self.assertEqual(payload["source_memory_ids"], [first.json()["id"]])
+
     def test_ambiguous_last_query_returns_clarification_error(self) -> None:
         response = self.client.post(
             "/api/v1/question",

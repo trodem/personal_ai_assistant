@@ -46,10 +46,15 @@ def _answer_question_from_text(
     )
     structured = compute_structured_result(question_text, scoped_memories)
     if structured.kind == "ambiguous_intent":
+        clarification_question = structured.clarification_question or "Question is ambiguous."
         raise AppError(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             code="query.ambiguous_intent",
-            message=structured.clarification_question or "Question is ambiguous.",
+            message=clarification_question,
+            details={
+                "clarification_question": clarification_question,
+                "clarification_questions": [clarification_question],
+            },
         )
 
     preferred_language = get_preferred_language(current_user.tenant_id, current_user.user_id)
@@ -85,10 +90,10 @@ def _answer_question_from_text(
     )
     record_ai_usage(
         use_case="answer_generation",
-        provider="openai",
-        model_id="gpt-4o-mini",
-        model_version="mvp-v1",
-        prompt_version="answer_generation_v1",
+        provider="backend",
+        model_id="deterministic-question-engine",
+        model_version="v1",
+        prompt_version="backend_deterministic_answer_v1",
         user_plan=plan_for_role(current_user.role),
         user_id=current_user.user_id,
         token_in=token_in,
