@@ -179,6 +179,23 @@ class UpdateNotificationPreferencesRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+class InAppNotificationRecord(BaseModel):
+    id: str
+    event_type: Literal["security_event", "billing_event", "system_event"]
+    title: str
+    body: str
+    read: bool
+    created_at: str
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class InAppNotificationsListResponse(BaseModel):
+    items: list[InAppNotificationRecord]
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class PaymentMethodRecord(BaseModel):
     id: str
     brand: str

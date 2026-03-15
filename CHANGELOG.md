@@ -78,6 +78,7 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 - Baseline `.env.example` with Supabase/OpenAI/Stripe and runtime configuration placeholders for local bootstrap.
 
 ### Changed
+- Implemented `GET /api/v1/notifications` with authenticated user-scoped in-app feed retrieval (`unread_only`, `limit`), added modular notifications route/service and endpoint/OpenAPI regression tests, and marked the related P4 TODO task as completed.
 - Implemented `DELETE /api/v1/me/settings/payment-methods/{id}` with typed `{deleted: true}` response, role-based billing lock (`admin`/`author`), and `404` handling for missing payment methods; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `POST /api/v1/me/settings/payment-methods/{id}/default` with typed `{updated: true}` response, role-based billing lock (`admin`/`author`), and `404` handling when payment method is missing; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.
 - Implemented `POST /api/v1/me/settings/payment-methods/setup-intent` with typed setup-intent response (`client_secret`), role-based billing lock (`admin`/`author` -> `403 billing.plan_locked_by_role`), and deterministic setup-intent service output; added endpoint/OpenAPI regression tests and marked the related P4 TODO task as completed.

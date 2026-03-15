@@ -275,7 +275,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `POST /api/v1/me/settings/payment-methods/setup-intent` (provider setup intent for add/update)
 - [x] `POST /api/v1/me/settings/payment-methods/{id}/default` (set default payment method)
 - [x] `DELETE /api/v1/me/settings/payment-methods/{id}` (remove payment method)
-- [ ] `GET /api/v1/notifications` (in-app notifications feed)
+- [x] `GET /api/v1/notifications` (in-app notifications feed)
 - [ ] `POST /api/v1/notifications/{id}/read` (mark notification as read)
 - [ ] `POST /api/v1/billing/subscription/change-plan` (`free` <-> `premium`)
 - [ ] `POST /api/v1/billing/subscription/cancel-preview` (churn prevention preview)
