@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from app.api.schemas import DataExportJobResponse
+from app.api.schemas import DataExportJobResponse, DataExportJobStatusResponse
 
 _EXPORT_JOBS: dict[tuple[str, str], dict[str, str]] = {}
 
@@ -17,3 +17,16 @@ def start_data_export_job(*, tenant_id: str, user_id: str, export_format: str) -
     jobs[job_id] = "queued"
     _EXPORT_JOBS[key] = jobs
     return DataExportJobResponse(job_id=job_id, status="queued")
+
+
+def get_data_export_job_for_user(
+    *,
+    tenant_id: str,
+    user_id: str,
+    job_id: str,
+) -> DataExportJobStatusResponse | None:
+    jobs = _EXPORT_JOBS.get(_settings_key(tenant_id, user_id), {})
+    status = jobs.get(job_id)
+    if status is None:
+        return None
+    return DataExportJobStatusResponse(job_id=job_id, status=status)

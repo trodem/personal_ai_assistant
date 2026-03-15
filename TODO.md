@@ -283,7 +283,7 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] `GET /api/v1/me/retention/status` (churn risk + recommended retention actions)
 - [x] `POST /api/v1/billing/coupons/apply` (coupon apply for eligible users)
 - [x] `POST /api/v1/me/data-export` (start export job: `json/csv/pdf`)
-- [ ] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
+- [x] `GET /api/v1/me/data-export/{job_id}` (export status + signed URL)
 - [ ] Ensure request/response schemas align with `specs/api.yaml`.
 - [ ] Define explicit API contract from receipt attachment OCR output to memory proposal creation (no implicit hidden transition).
 - [ ] Return `422 memory.missing_required_fields` when save is attempted with incomplete required fields.
