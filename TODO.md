@@ -303,10 +303,10 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Add mandatory auth middleware for protected endpoints.
 - [x] Auto-provision user on first access.
 - [x] Map token claims -> internal `user_id`.
-- [ ] Implement 2FA/TOTP enrollment and verification flow in security settings.
-- [ ] Enforce 2FA policy by role:
-- [ ] `admin` and `author` must have `mfa_enabled = true`
-- [ ] `user` can opt in/out unless tightened later by policy change
+- [x] Implement 2FA/TOTP enrollment and verification flow in security settings.
+- [x] Enforce 2FA policy by role:
+- [x] `admin` and `author` must have `mfa_enabled = true`
+- [x] `user` can opt in/out unless tightened later by policy change
 - [ ] Add role-based access control (`user`, `admin`, `author`) and enforce on privileged endpoints.
 - [ ] Add tenant-aware authorization guardrails for future B2B mode (`tenant_id` context propagation + checks).
 - [ ] Add user account status control (`active`, `suspended`, `canceled`) and block access when suspended/canceled.

@@ -14,6 +14,7 @@ from starlette import status
 from app.core.errors import AppError
 from app.core.request_context import tenant_id_ctx_var, user_id_ctx_var
 from app.repositories.admin_user_repository import upsert_admin_user
+from app.services.mfa_security import get_effective_mfa_enabled
 from app.core.settings import get_settings
 
 
@@ -205,7 +206,7 @@ def get_current_user(
     payload = _decode_token(token)
     user_id = resolve_internal_user_id(payload)
     role = str(payload.get("role", "user"))
-    mfa_enabled = bool(payload.get("mfa_enabled", False))
+    token_mfa_enabled = bool(payload.get("mfa_enabled", False))
     account_status = str(payload.get("status", "active")).lower()
     if account_status not in {"active", "suspended", "canceled"}:
         raise AppError(
@@ -244,6 +245,11 @@ def get_current_user(
             code="auth.forbidden",
             message="Tenant context is required.",
         )
+    mfa_enabled = get_effective_mfa_enabled(
+        tenant_id=effective_tenant,
+        user_id=user_id,
+        token_mfa_enabled=token_mfa_enabled,
+    )
 
     upsert_admin_user(
         tenant_id=effective_tenant,

@@ -43,6 +43,83 @@ class SettingsSecurityEndpointTests(unittest.TestCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["error"]["code"], "memory.missing_required_fields")
 
+    def test_enable_and_verify_2fa_flow_updates_settings_state(self) -> None:
+        start = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "enable_2fa"},
+        )
+        self.assertEqual(start.status_code, 200)
+        self.assertEqual(start.json(), {"accepted": True})
+
+        missing_code = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "verify_2fa"},
+        )
+        self.assertEqual(missing_code.status_code, 422)
+        self.assertEqual(missing_code.json()["error"]["code"], "memory.missing_required_fields")
+
+        invalid_code = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "verify_2fa", "totp_code": "000000"},
+        )
+        self.assertEqual(invalid_code.status_code, 422)
+        self.assertEqual(invalid_code.json()["error"]["code"], "memory.validation_failed")
+
+        verify = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "verify_2fa", "totp_code": "123456"},
+        )
+        self.assertEqual(verify.status_code, 200)
+        self.assertEqual(verify.json(), {"accepted": True})
+
+        settings = self.client.get("/api/v1/me/settings", headers=self.headers)
+        self.assertEqual(settings.status_code, 200)
+        self.assertTrue(settings.json()["mfa_enabled"])
+
+    def test_disable_and_verify_2fa_flow_updates_settings_state(self) -> None:
+        enable = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "enable_2fa"},
+        )
+        self.assertEqual(enable.status_code, 200)
+        verify_enable = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "verify_2fa", "totp_code": "123456"},
+        )
+        self.assertEqual(verify_enable.status_code, 200)
+
+        disable = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "disable_2fa"},
+        )
+        self.assertEqual(disable.status_code, 200)
+        verify_disable = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "verify_2fa", "totp_code": "123456"},
+        )
+        self.assertEqual(verify_disable.status_code, 200)
+
+        settings = self.client.get("/api/v1/me/settings", headers=self.headers)
+        self.assertEqual(settings.status_code, 200)
+        self.assertFalse(settings.json()["mfa_enabled"])
+
+    def test_disable_2fa_without_enabled_state_is_rejected(self) -> None:
+        response = self.client.patch(
+            "/api/v1/me/settings/security",
+            headers=self.headers,
+            json={"action": "disable_2fa"},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json()["error"]["code"], "memory.validation_failed")
+
 
 if __name__ == "__main__":
     unittest.main()

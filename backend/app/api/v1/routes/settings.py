@@ -24,6 +24,11 @@ from app.services.payment_methods import (
     remove_payment_method_for_user,
     set_default_payment_method_for_user,
 )
+from app.services.mfa_security import (
+    start_disable_2fa,
+    start_enable_2fa,
+    verify_2fa_challenge,
+)
 
 router = APIRouter(prefix="/api/v1/me/settings", tags=["Settings"])
 
@@ -71,8 +76,37 @@ async def update_security_settings(
     payload: UpdateSecurityRequest,
     current_user: AuthenticatedUser = Depends(get_current_user),
 ) -> AcceptedResponse:
-    _ = payload
-    _ = current_user
+    if payload.action == "enable_2fa":
+        start_enable_2fa(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            current_enabled=current_user.mfa_enabled,
+        )
+    elif payload.action == "disable_2fa":
+        if current_user.role in {"admin", "author"}:
+            raise AppError(
+                status_code=403,
+                code="auth.mfa_required",
+                message="Admin and Author roles must keep 2FA enabled.",
+            )
+        start_disable_2fa(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            current_enabled=current_user.mfa_enabled,
+        )
+    elif payload.action == "verify_2fa":
+        if not payload.totp_code or not payload.totp_code.strip():
+            raise AppError(
+                status_code=422,
+                code="memory.missing_required_fields",
+                message="Missing required field for 2FA verification.",
+                details={"missing_required_fields": ["totp_code"]},
+            )
+        verify_2fa_challenge(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+            totp_code=payload.totp_code,
+        )
     return AcceptedResponse(accepted=True)
 
 
