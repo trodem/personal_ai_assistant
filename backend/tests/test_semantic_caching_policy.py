@@ -69,6 +69,19 @@ class SemanticCachingPolicyTests(unittest.TestCase):
         self._save_expense(5.0, "CHF")
         self.assertEqual(get_user_cache_size(self.tenant_id, self.user_id), 0)
 
+    def test_memory_delete_invalidates_user_cache(self) -> None:
+        self._save_expense(18.0, "CHF")
+        ask = self.client.post("/api/v1/question", headers=self.headers, json={"question": "How much did I spend?"})
+        self.assertEqual(ask.status_code, 200)
+        self.assertEqual(get_user_cache_size(self.tenant_id, self.user_id), 1)
+
+        memories_response = self.client.get("/api/v1/memories", headers=self.headers)
+        self.assertEqual(memories_response.status_code, 200)
+        memory_id = memories_response.json()["items"][0]["id"]
+        delete_response = self.client.delete(f"/api/v1/memory/{memory_id}", headers=self.headers)
+        self.assertEqual(delete_response.status_code, 200)
+        self.assertEqual(get_user_cache_size(self.tenant_id, self.user_id), 0)
+
     def test_volatile_and_default_ttl_constants_are_policy_aligned(self) -> None:
         self.assertEqual(DEFAULT_TTL_HOURS, 24)
         self.assertEqual(VOLATILE_TTL_HOURS, 1)

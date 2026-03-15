@@ -10,19 +10,28 @@ from app.api.schemas import QuestionResponse, TextQuestionRequest
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
 from app.repositories.memory_repository import list_memories_for_user
+from app.repositories.embedding_repository import list_embeddings_for_user
 from app.services.question_engine import (
+    StructuredQuestionResult,
     compute_structured_result,
-    format_answer_from_structured_result,
 )
+from app.services.question_answer_generation import generate_natural_language_answer
 from app.services.semantic_cache import (
     extract_filter_context,
     get_cached_answer,
     put_cached_answer,
 )
 from app.services.user_preferences import get_preferred_language
-from app.core.llmops import estimate_tokens_and_cost, plan_for_role, record_ai_usage
+from app.core.llmops import (
+    estimate_tokens_and_cost,
+    plan_for_role,
+    record_ai_usage,
+    record_question_path_ai_telemetry,
+)
 from app.services.ai_safety import enforce_input_safety, enforce_output_safety
 from app.services.audio_upload import read_and_validate_audio_upload
+from app.services.question_context_builder import build_minimal_answer_context
+from app.services.semantic_retrieval import find_semantic_memory_match
 from app.services.whisper_transcription import transcribe_audio_with_whisper
 
 router = APIRouter(prefix="/api/v1", tags=["Voice"])
@@ -35,6 +44,7 @@ def _answer_question_from_text(
     session_id: str,
     current_user: AuthenticatedUser,
 ) -> QuestionResponse:
+    user_plan = plan_for_role(current_user.role)
     question_text = enforce_input_safety(
         text=question_text,
         path=path,
@@ -45,6 +55,31 @@ def _answer_question_from_text(
         user_id=current_user.user_id,
     )
     structured = compute_structured_result(question_text, scoped_memories)
+    if structured.kind == "no_result":
+        scoped_embeddings = list_embeddings_for_user(
+            tenant_id=current_user.tenant_id,
+            user_id=current_user.user_id,
+        )
+        semantic_match = find_semantic_memory_match(
+            question=question_text,
+            memories=scoped_memories,
+            embeddings=scoped_embeddings,
+        )
+        if semantic_match is not None:
+            structured = StructuredQuestionResult(
+                kind="semantic_match",
+                value=0.0,
+                source_memory_ids=[str(semantic_match["memory_id"])],
+                confidence="high" if float(semantic_match["score"]) >= 0.85 else "medium",
+                currency_totals={},
+                details={
+                    "matched_memory": semantic_match.get("raw_text", ""),
+                    "matched_where": str(
+                        (semantic_match.get("structured_data") or {}).get("where", "")
+                    ).strip(),
+                    "semantic_score": semantic_match.get("score", 0.0),
+                },
+            )
     if structured.kind == "ambiguous_intent":
         clarification_question = structured.clarification_question or "Question is ambiguous."
         raise AppError(
@@ -71,22 +106,51 @@ def _answer_question_from_text(
             context_signature=context_signature,
         )
     if cached is not None:
+        enforce_output_safety(
+            text=cached.answer,
+            path=path,
+            session_id=session_id,
+        )
+        record_question_path_ai_telemetry(
+            question_path=path,
+            feature="cache_hit",
+            user_plan=user_plan,
+            token_in=0,
+            token_out=0,
+            estimated_cost=0.0,
+            user_id=current_user.user_id,
+        )
         return QuestionResponse(
             answer=cached.answer,
             confidence=cached.confidence,  # type: ignore[arg-type]
             source_memory_ids=cached.source_memory_ids,
         )
 
+    answer_context = build_minimal_answer_context(
+        question=question_text,
+        preferred_language=preferred_language,
+        structured_result=structured,
+    )
     answer_generation_start = perf_counter()
-    answer = format_answer_from_structured_result(structured, preferred_language)
+    answer = generate_natural_language_answer(structured, preferred_language)
     enforce_output_safety(
         text=answer,
         path=path,
         session_id=session_id,
     )
     token_in, token_out, estimated_cost = estimate_tokens_and_cost(
-        input_text=question_text,
+        input_text=answer_context,
         output_text=answer,
+    )
+    feature = "semantic_fallback" if structured.kind == "semantic_match" else "structured_sql"
+    record_question_path_ai_telemetry(
+        question_path=path,
+        feature=feature,
+        user_plan=user_plan,
+        token_in=token_in,
+        token_out=token_out,
+        estimated_cost=estimated_cost,
+        user_id=current_user.user_id,
     )
     record_ai_usage(
         use_case="answer_generation",
@@ -94,7 +158,7 @@ def _answer_question_from_text(
         model_id="deterministic-question-engine",
         model_version="v1",
         prompt_version="backend_deterministic_answer_v1",
-        user_plan=plan_for_role(current_user.role),
+        user_plan=user_plan,
         user_id=current_user.user_id,
         token_in=token_in,
         token_out=token_out,

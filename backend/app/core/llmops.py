@@ -47,6 +47,7 @@ logger = logging.getLogger("app.core.llmops")
 
 _MetricKey = tuple[str, str, str, str, str, str, str]
 _UserMetricKey = tuple[str, str, str]
+_QuestionPathMetricKey = tuple[str, str, str, str, str]
 _ERROR_CLASS_PROVIDER = "provider"
 
 _REQUESTS_TOTAL: DefaultDict[_MetricKey, int] = defaultdict(int)
@@ -58,6 +59,9 @@ _LATENCY_MS_TOTAL: DefaultDict[_MetricKey, float] = defaultdict(float)
 _LATENCY_MS_LAST: DefaultDict[_MetricKey, float] = defaultdict(float)
 _USER_TOKEN_TOTAL: DefaultDict[_UserMetricKey, int] = defaultdict(int)
 _USER_COST_TOTAL: DefaultDict[_UserMetricKey, float] = defaultdict(float)
+_QUESTION_PATH_REQUESTS_TOTAL: DefaultDict[_QuestionPathMetricKey, int] = defaultdict(int)
+_QUESTION_PATH_TOKEN_TOTAL: DefaultDict[_QuestionPathMetricKey, int] = defaultdict(int)
+_QUESTION_PATH_COST_TOTAL: DefaultDict[_QuestionPathMetricKey, float] = defaultdict(float)
 _PLAN_TOKEN_TOTAL: DefaultDict[str, int] = defaultdict(int)
 _TOKEN_BUDGET_BREACHES_TOTAL: DefaultDict[str, int] = defaultdict(int)
 _DAILY_COST_TOTAL: DefaultDict[str, float] = defaultdict(float)
@@ -213,6 +217,27 @@ def record_ai_usage(
     )
 
 
+def record_question_path_ai_telemetry(
+    *,
+    question_path: str,
+    feature: str,
+    user_plan: str,
+    token_in: int,
+    token_out: int,
+    estimated_cost: float,
+    user_id: str | None = None,
+) -> None:
+    if not user_id:
+        return
+    env = get_settings().app_env
+    user_hash = _user_hash(user_id)
+    key = (env, user_hash, user_plan, question_path, feature)
+    total_tokens = max(0, token_in) + max(0, token_out)
+    _QUESTION_PATH_REQUESTS_TOTAL[key] += 1
+    _QUESTION_PATH_TOKEN_TOTAL[key] += total_tokens
+    _QUESTION_PATH_COST_TOTAL[key] += max(0.0, estimated_cost)
+
+
 def reset_llmops_usage_metrics() -> None:
     _REQUESTS_TOTAL.clear()
     _ERRORS_TOTAL.clear()
@@ -223,6 +248,9 @@ def reset_llmops_usage_metrics() -> None:
     _LATENCY_MS_LAST.clear()
     _USER_TOKEN_TOTAL.clear()
     _USER_COST_TOTAL.clear()
+    _QUESTION_PATH_REQUESTS_TOTAL.clear()
+    _QUESTION_PATH_TOKEN_TOTAL.clear()
+    _QUESTION_PATH_COST_TOTAL.clear()
     _PLAN_TOKEN_TOTAL.clear()
     _TOKEN_BUDGET_BREACHES_TOTAL.clear()
     _DAILY_COST_TOTAL.clear()
@@ -275,6 +303,12 @@ def render_llmops_prometheus() -> str:
         "# TYPE llmops_user_token_total counter",
         "# HELP llmops_user_estimated_cost_total User-scoped estimated cost totals for cost visibility.",
         "# TYPE llmops_user_estimated_cost_total counter",
+        "# HELP llmops_question_path_requests_total Question-path AI requests by user and feature.",
+        "# TYPE llmops_question_path_requests_total counter",
+        "# HELP llmops_question_path_token_total Question-path token totals by user and feature.",
+        "# TYPE llmops_question_path_token_total counter",
+        "# HELP llmops_question_path_estimated_cost_total Question-path estimated cost totals by user and feature.",
+        "# TYPE llmops_question_path_estimated_cost_total counter",
         "# HELP llmops_token_budget_limit Configured token budget limit by user plan.",
         "# TYPE llmops_token_budget_limit gauge",
         "# HELP llmops_token_budget_used Consumed token budget by user plan.",
@@ -333,6 +367,24 @@ def render_llmops_prometheus() -> str:
         lines.append(
             f"llmops_user_estimated_cost_total{{{labels}}} "
             f'{format(_USER_COST_TOTAL.get(user_key, 0.0), ".8f")}'
+        )
+    for key, request_total in sorted(_QUESTION_PATH_REQUESTS_TOTAL.items()):
+        q_env, user_hash, user_plan, question_path, feature = key
+        labels = (
+            f'environment="{q_env}",'
+            f'user_hash="{user_hash}",'
+            f'user_plan="{user_plan}",'
+            f'question_path="{question_path}",'
+            f'feature="{feature}"'
+        )
+        lines.append(f"llmops_question_path_requests_total{{{labels}}} {request_total}")
+        lines.append(
+            f"llmops_question_path_token_total{{{labels}}} "
+            f'{_QUESTION_PATH_TOKEN_TOTAL.get(key, 0)}'
+        )
+        lines.append(
+            f"llmops_question_path_estimated_cost_total{{{labels}}} "
+            f'{format(_QUESTION_PATH_COST_TOTAL.get(key, 0.0), ".8f")}'
         )
 
     for user_plan in ("free", "premium"):

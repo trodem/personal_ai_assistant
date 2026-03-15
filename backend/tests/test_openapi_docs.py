@@ -215,6 +215,12 @@ class OpenApiDocsTests(unittest.TestCase):
         proposal_schema = schema["components"]["schemas"]["AttachmentMemoryProposal"]
         self.assertEqual(proposal_schema["properties"]["source_context"]["default"], "receipt_ocr")
 
+    def test_question_response_contract_requires_confidence_and_provenance(self) -> None:
+        schema = self.client.get("/openapi.json").json()
+        question_response = schema["components"]["schemas"]["QuestionResponse"]
+        required_fields = set(question_response["required"])
+        self.assertEqual(required_fields, {"answer", "confidence", "source_memory_ids"})
+
 
 if __name__ == "__main__":
     unittest.main()

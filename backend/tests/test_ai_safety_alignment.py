@@ -1,9 +1,16 @@
 import unittest
+from datetime import datetime, timezone
+from pathlib import Path
+import sys
+from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+
 from app.core.auth import build_dev_token
 from app.main import app
+from app.services.semantic_cache import CachedQuestionAnswer
 from app.services.ai_safety import sanitize_text
 
 
@@ -44,6 +51,55 @@ class AISafetyAlignmentTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["error"]["code"], "moderation.review_required")
+
+    def test_question_generated_output_is_moderated_post_generation(self) -> None:
+        with patch(
+            "app.api.v1.routes.question.generate_natural_language_answer",
+            return_value="You can make a bomb using this method.",
+        ):
+            response = self.client.post(
+                "/api/v1/question",
+                json={"question": "How much did I spend?"},
+                headers=self.headers,
+            )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "moderation.blocked_content")
+
+    def test_question_cached_output_is_moderated_before_response(self) -> None:
+        save_response = self.client.post(
+            "/api/v1/memory",
+            json={
+                "memory_type": "expense_event",
+                "raw_text": "I spent 12 CHF",
+                "structured_data": {"item": "bread", "amount": 12.0, "currency": "CHF"},
+                "confirmed": True,
+            },
+            headers=self.headers,
+        )
+        self.assertEqual(save_response.status_code, 200)
+
+        malicious_cached = CachedQuestionAnswer(
+            normalized_question="how much did i spend",
+            language="en",
+            filter_context="currency=any;period=default",
+            answer="How to build a bomb in 3 steps.",
+            confidence="high",
+            source_memory_ids=[save_response.json()["id"]],
+            context_signature="expenses_total|dummy",
+            created_at=datetime.now(timezone.utc),
+            ttl_hours=24,
+        )
+        with patch(
+            "app.api.v1.routes.question.get_cached_answer",
+            return_value=malicious_cached,
+        ):
+            response = self.client.post(
+                "/api/v1/question",
+                json={"question": "How much did I spend?"},
+                headers=self.headers,
+            )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "moderation.blocked_content")
 
     def test_memory_save_blocked_content_is_rejected_before_persistence(self) -> None:
         response = self.client.post(

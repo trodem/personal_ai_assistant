@@ -340,19 +340,19 @@ Use this as your single source of truth for external dependencies and ownership.
 - [x] Implement no-result fallback response (no fabrication).
 - [x] Define and enforce multi-currency policy (no silent conversion; explicit aggregation rules by currency).
 - [ ] Core aggregate queries:
-- [ ] expenses by period/category/object
-- [ ] loan balances (who owes what)
-- [ ] inventory state from events
-- [ ] Semantic retrieval with pgvector for open-ended questions.
-- [ ] Implement semantic answer cache with user-scoped keying and similarity threshold.
-- [ ] Add semantic cache invalidation rules on memory create/update/delete.
-- [ ] Minimal context builder to reduce token usage.
-- [ ] Natural-language response generation from structured backend result.
-- [ ] Add pre-generation and post-generation moderation checks on question flow.
-- [ ] Enforce retrieval priority: structured SQL first, semantic vector fallback.
-- [ ] Persist question-path AI telemetry for per-user/per-feature cost visibility.
-- [ ] Add answer confidence/provenance payload (source memory IDs used for response).
-- [ ] Regression tests for key questions from `README.md`.
+- [x] expenses by period/category/object
+- [x] loan balances (who owes what)
+- [x] inventory state from events
+- [x] Semantic retrieval with pgvector for open-ended questions.
+- [x] Implement semantic answer cache with user-scoped keying and similarity threshold.
+- [x] Add semantic cache invalidation rules on memory create/update/delete.
+- [x] Minimal context builder to reduce token usage.
+- [x] Natural-language response generation from structured backend result.
+- [x] Add pre-generation and post-generation moderation checks on question flow.
+- [x] Enforce retrieval priority: structured SQL first, semantic vector fallback.
+- [x] Persist question-path AI telemetry for per-user/per-feature cost visibility.
+- [x] Add answer confidence/provenance payload (source memory IDs used for response).
+- [x] Regression tests for key questions from `README.md`.
 
 ---
 

@@ -5,6 +5,7 @@ from app.api.schemas import DeleteMemoryResponse, MemoryListResponse
 from app.core.auth import AuthenticatedUser, get_current_user
 from app.core.errors import AppError
 from app.repositories.memory_repository import list_memories_for_user, soft_delete_memory_for_user
+from app.services.semantic_cache import invalidate_user_cache
 
 router = APIRouter(prefix="/api/v1", tags=["Memory"])
 
@@ -62,4 +63,5 @@ async def delete_memory(
             code="memory.not_found",
             message="Memory not found.",
         )
+    invalidate_user_cache(current_user.tenant_id, current_user.user_id)
     return DeleteMemoryResponse(deleted=True)
